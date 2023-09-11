@@ -5,7 +5,7 @@ import Slider from "../Slider/Slider";
 
 const Home = () => {
   return (
-    <div className="mt-20">
+    <div className="mt-20 md:container mx-auto">
       <h1>This is home</h1>
       <Slider/>
       <Doctors/>
