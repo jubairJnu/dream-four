@@ -17,7 +17,7 @@ const Login = () => {
       {/* ---- */}
 
       <div className="hero min-h-screen ">
-        <div className="hero-content flex-col lg:flex-row">
+        <div className="hero-content flex-col lg:flex-row ">
           <div className="text-center lg:text-left">
 
             <div className="w-1/2 mx-auto">
@@ -26,7 +26,7 @@ const Login = () => {
 
 
           </div>
-          <div className="card flex-shrink-0 w-1/2 max-w-sm shadow-2xl bg-base-100">
+          <div className="card flex-shrink-0 md:w-1/2 w-full max-w-sm shadow-2xl bg-base-100">
             <h1 className="text-5xl text-center p-4 font-bold">Login now!</h1>
             <div className="card-body">
               {/* form */}
