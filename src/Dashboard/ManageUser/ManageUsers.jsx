@@ -5,17 +5,17 @@ const ManageUsers = () => {
   return (
     <div className="w-full ">
       <h1 className="text-center text-red-500 text-2xl">Manage User</h1>
-      <div className="flex justify-end mr-5 p-3 ">
+      <div className="flex justify-end md:mr-5 md:p-3 ">
         <Link to="/dashboard/signup">
-          <button className="btn btn-neutral">Create User</button></Link>
+          <button className="btn btn-neutral btn-sm">Create User</button></Link>
 
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="">
         <table className="table">
           {/* head */}
           <thead>
-            <tr className="text-[20px] bg-[#1653B2] text-white ">
+            <tr className="md:text-[20px] bg-[#1653B2] text-white ">
               <th>
                 #
               </th>
@@ -33,7 +33,7 @@ const ManageUsers = () => {
               </th>
               <td>
 
-                <div className="mask mask-squircle w-12 h-12">
+                <div className="mask mask-squircle md:w-12 h-12">
                   <img src="/tailwind-css-component-profile-2@56w.png" alt="image" />
                 </div>
 

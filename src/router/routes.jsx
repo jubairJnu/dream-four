@@ -10,6 +10,7 @@ import ManageUsers from "../Dashboard/ManageUser/ManageUsers";
 import ManageDoctors from "../Dashboard/ManageDoctors/ManageDoctors";
 import ManageServices from "../Dashboard/Manageservice/ManageServices";
 import SignUp from "../component/SignUp/SignUp";
+import Receipt from "../pages/homes/Receipt/Receipt";
 
 
 const routes = createBrowserRouter([
@@ -24,6 +25,10 @@ const routes = createBrowserRouter([
       {
         path:'login',
         element:<Login></Login>
+      },
+      {
+        path:'receipt',
+        element:<Receipt></Receipt>
       }
     ]
   },

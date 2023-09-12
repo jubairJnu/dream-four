@@ -4,7 +4,6 @@ import { AuthContext } from "../../../Provider/AuthProvider";
 
 
 const Header = () => {
-
   const { user, logOut } = useContext(AuthContext);
 
   const handleLogOut = () => {
@@ -26,10 +25,22 @@ const Header = () => {
             <li><Link>Our Service</Link></li>
             <li> <Link>Doctor Corner</Link> </li>
             <li> <Link> About Us </Link> </li>
+            {
+              user &&                
+              <>
+              <li className=" hover:bg-white rounded-md hover:font-semibold ">
+                <Link to="/dashboard"> Dashboard </Link> </li>            
+              <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
+                <Link to="/receipt"> Receipt Entry </Link> </li>  
+              </>          
+
+            }
           </ul>
         </div>
         <Link to="/" className="btn btn-ghost normal-case text-xl">Dream Four Hospital </Link>
       </div>
+
+
       <div className="navbar-center hidden lg:flex ">
         <ul className="menu menu-horizontal px-1 text-[20px] ">
           <li className="hover:bg-white rounded-md hover:font-semibold">
@@ -37,18 +48,27 @@ const Header = () => {
 
           <li className="hover:bg-white rounded-md hover:font-semibold"> <Link>Doctor Corner</Link> </li>
           <li className="hover:bg-white rounded-md hover:font-semibold "> <Link> About Us </Link> </li>
-          </ul>
+
+          {
+              user &&                
+                <>
+                <li className=" hover:bg-white rounded-md hover:font-semibold ">
+                  <Link to="/dashboard"> Dashboard </Link> </li>            
+                <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
+                  <Link to="/receipt"> Receipt Entry </Link> </li>  
+                </>          
+
+            }
+                    </ul>
 </div>
           {/* condition for users login */}
 
           <div className="navbar-end">
           <div>
           {
-              user ? <div >
-                <li className="hover:bg-white rounded-md hover:font-semibold mr-3 ">
-                  <Link to="/dashboard"> Dashboard </Link> </li>
+              user ? 
                 <button onClick={handleLogOut} className="btn btn-ghost">Log Out</button>
-              </div> : <>
+               : <>
                 <Link to='/login'>Login</Link></>
 
             }

@@ -2,7 +2,7 @@
 
 const Footer = () => {
   return (
-    <footer className="footer mt-36 mb-7 p-4  bottom-0 right-0 z-20   bg-[#1653B2] text-neutral-content">
+    <footer className="footer mt-36  p-4   bg-[#1653B2] text-neutral-content">
   <aside>
     <h1>Dream Four Hospital</h1>
     <p>ACME Industries Ltd.<br/>Providing reliable tech since 1992</p>

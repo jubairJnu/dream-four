@@ -9,7 +9,7 @@ const auth = getAuth(app);
 // *** atuh provider routes
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // authentication system
 
@@ -48,6 +48,7 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     user,
     loading,
+    setLoading,
     createUser,
     login,
     logOut,
