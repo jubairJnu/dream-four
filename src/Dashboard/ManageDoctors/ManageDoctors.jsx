@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AddDoctModal from "./AddDoctModal";
-
+import './table.css'
 
 const ManageDoctors = () => {
   const [totalDoctors, setTotalDoctors] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleSubmit = event =>{
+  const handleSubmit = event => {
     console.log(event);
   }
-  const handleAddDoct =() =>{
+  const handleAddDoct = () => {
     openModal();
   }
 
@@ -22,6 +22,12 @@ const ManageDoctors = () => {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    fetch('../../../public/doctors.json')
+      .then(res => res.json())
+      .then(data => setTotalDoctors(data))
+  }, [])
+
   return (
     <div className="w-full ">
       <h1 className="text-center text-purple-500 text-2xl">Manage Doctor</h1>
@@ -30,9 +36,9 @@ const ManageDoctors = () => {
           <p className="text-xl font-semibold"> Total Doctor = {totalDoctors?.length}</p>
         </div>
         <div>
-        
+
           <button onClick={handleAddDoct} className="btn btn-neutral btn-sm">Add Doctor</button>
-          <AddDoctModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit}  />
+          <AddDoctModal isOpen={isModalOpen} onClose={closeModal} onSubmit={handleSubmit} />
         </div>
 
       </div>
@@ -41,38 +47,56 @@ const ManageDoctors = () => {
         <table className="table">
           {/* head */}
           <thead>
-            <tr className="md:text-[20px] bg-[#1653B2] text-white ">
+            <tr className="md:text-[15px] text-center bg-[#1653B2] text-white ">
               <th>
                 #
               </th>
-              <th>Image</th>
+              <th >Image</th>
               <th>Name</th>
+              <th>Mobile</th>
               <th>Schedule</th>
+              <th>Fees</th>
+              <th>Time</th>
+              <th >Education</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {/* row 1 */}
-            <tr>
-              <th>
+            {
+              totalDoctors?.map((doct, index) => <tr key={doct.id}>
+                <th>
+                  {index + 1}
+                </th>
+                <td>
 
-              </th>
-              <td>
-
-                <div className="mask mask-squircle md:w-12 h-12">
-                  <img src="/tailwind-css-component-profile-2@56w.png" alt="image" />
-                </div>
+                  <div className="mask mask-squircle md:w-12 h-12">
+                    <img src="/tailwind-css-component-profile-2@56w.png" alt="image" />
+                  </div>
 
 
-              </td>
-              <td>
-                <p>Name</p>
-              </td>
-              <td>Purple</td>
-              <th>
-                inactive
-              </th>
-            </tr>
+                </td>
+                <td>
+                  <p>{doct?.name}  </p>
+                </td>
+                <td>{doct?.mobile} </td>
+                <th>
+                  {doct?.schedule}
+                </th>
+                <th>
+                  {doct?.fees} tk
+                </th>
+                <th>
+                  {doct?.time}
+                </th>
+                <th >
+                  {doct?.education}
+                </th>
+                <th>
+                  inactive
+                </th>
+              </tr>)
+            }
 
           </tbody>
 
