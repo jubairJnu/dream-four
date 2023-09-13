@@ -1,40 +1,48 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import Modal from "../../../component/Modal";
 
 const Receipt = () => {
   const [services, setServices] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { register, handleSubmit,reset,formState:{errors}, watch } = useForm();
+
+  // modal-----
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   const onSubmit = (data) =>{
     const {patient, phone,doctor,service,total,paid } = data;
     const newReceipt = {patient, phone,doctor,service,total:parseFloat(total),paid:parseFloat(paid) }
     console.log(newReceipt);
-    // Swal.fire({
-    //   title: 'Are you sure?',
-    //   text: "You cannot edit it!",
-    //   icon: 'warning',
-    //   showCancelButton: true,
-    //   confirmButtonColor: '#3085d6',
-    //   cancelButtonColor: '#d33',
-    //   confirmButtonText: 'Yes, delete it!'
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     Swal.fire(
-    //       'Deleted!',
-    //       'Your file has been deleted.',
-    //       'success'
-    //     )
-    //   }
-    // })
+        Swal.fire({
+      title: 'Are you sure?',
+      text: "You cannot edit it!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Submit'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        openModal();
+      }
+    })
   }
 
   return (
-    <div className="container mx-auto mt-24">
+    <div className="container mx-auto mt-24 border bg-purple-50">
       <h1 className="text-center font-bold text-2xl">Receipt Entry</h1>
       <div className=" px-10 ">
-        <div className="   w-full max-w-md shadow-2xl p-4 ">
+        <div className=" bg-white  w-full max-w-md shadow-2xl p-4 ">
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control">
               <label className="label">
@@ -118,6 +126,7 @@ const Receipt = () => {
             <div className="flex justify-center">
 
               <input className="btn btn-primary btn-sm mt-3 " type="submit" value="Submit" />
+              <Modal isOpen={isModalOpen} onClose={closeModal}  />
             </div>
           </form>
         </div>
