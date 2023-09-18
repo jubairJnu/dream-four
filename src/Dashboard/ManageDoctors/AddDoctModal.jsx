@@ -47,7 +47,7 @@ const AddDoctModal = ({ isOpen, onClose }) => {
                   <span className="label-text font-semibold text-yellow-400">Schedule*</span>
 
                 </label>
-                <select defaultValue="pick One" {...register("schedule", { required: true })} className="select select-bordered">
+                <select defaultValue="pick One" {...register("schedule", { required: true, })} className="select select-bordered">
                   <option disabled >Pick One</option>
                   <option> শনি </option>
                   <option> রবি </option>
