@@ -26,7 +26,8 @@ const Receipt = () => {
     const { patient, phone, doctor, service, total, paid } = data;
     const currentDate = new Date();
     const UserName = user.displayName;
-    const newReceipt = { patient,user:UserName, Date: currentDate, phone, doctor, service, total: parseFloat(total), paid: parseFloat(paid) }
+    const userEmail = user.email;
+    const newReceipt = { patient,user:UserName, email:userEmail, Date: currentDate, phone, doctor, service, total: parseFloat(total), paid: parseFloat(paid) }
     console.log(newReceipt);
     Swal.fire({
       title: 'Are you sure?',

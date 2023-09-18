@@ -11,6 +11,7 @@ import ManageDoctors from "../Dashboard/ManageDoctors/ManageDoctors";
 import ManageServices from "../Dashboard/Manageservice/ManageServices";
 import SignUp from "../component/SignUp/SignUp";
 import Receipt from "../pages/homes/Receipt/Receipt";
+import PrivateRoutes from "./PrivateRoutes";
 
 
 const routes = createBrowserRouter([
@@ -28,29 +29,29 @@ const routes = createBrowserRouter([
       },
       {
         path:'receipt',
-        element:<Receipt></Receipt>
+        element:<PrivateRoutes><Receipt></Receipt></PrivateRoutes>
       }
     ]
   },
   {
     path:'dashboard',
-    element:<Dashboard/>,
+    element:<PrivateRoutes><Dashboard/></PrivateRoutes>,
     children:[
       {
         path:"manageuser",
-        element:<ManageUsers/>
+        element:<PrivateRoutes><ManageUsers/></PrivateRoutes>
       },
       {
         path:"managedoctor",
-        element:<ManageDoctors/>
+        element:<PrivateRoutes><ManageDoctors/></PrivateRoutes>
       },
       {
         path:'manageservice',
-        element:<ManageServices/>
+        element:<PrivateRoutes><ManageServices/></PrivateRoutes>
       },
       {
         path:'signup',
-        element:<SignUp></SignUp>
+        element:<PrivateRoutes><SignUp></SignUp></PrivateRoutes>
       }
     ]
   }
