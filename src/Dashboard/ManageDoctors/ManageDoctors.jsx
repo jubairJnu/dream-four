@@ -22,7 +22,7 @@ const ManageDoctors = () => {
   };
 
   useEffect(() => {
-    fetch('../../../public/doctors.json')
+    fetch('http://localhost:5000/doctors')
       .then(res => res.json())
       .then(data => setTotalDoctors(data))
   }, [])
@@ -70,7 +70,7 @@ const ManageDoctors = () => {
                 <td>
 
                   <div className="mask mask-squircle md:w-12 h-12">
-                    <img src="/tailwind-css-component-profile-2@56w.png" alt="image" />
+                    <img src={doct.image} alt="image" />
                   </div>
 
 

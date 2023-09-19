@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Modal from "../../../component/Modal";
@@ -12,6 +12,14 @@ const Receipt = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
 
+  // doctor fetch;
+
+  useEffect(()=>{
+    fetch('http://localhost:5000/doctors')
+    .then(res => res.json())
+    .then(data => setDoctors(data))
+  },[])
+
   // modal-----
 
   const openModal = () => {
@@ -24,10 +32,19 @@ const Receipt = () => {
 
   const onSubmit = (data) => {
     const { patient, phone, doctor, service, total, paid } = data;
-    const currentDate = new Date();
+
+    const date = new Date();
+
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based
+    const year = date.getFullYear();
+
+
+    const formattedDate = `${day}/${month}/${year}`;
+
     const UserName = user.displayName;
     const userEmail = user.email;
-    const newReceipt = { patient,user:UserName, email:userEmail, Date: currentDate, phone, doctor, service, total: parseFloat(total), paid: parseFloat(paid) }
+    const newReceipt = { patient, user: UserName, email: userEmail, date: formattedDate, phone, doctor, service, total: parseFloat(total), paid: parseFloat(paid) }
     console.log(newReceipt);
     Swal.fire({
       title: 'Are you sure?',
@@ -39,6 +56,26 @@ const Receipt = () => {
       confirmButtonText: 'Submit'
     }).then((result) => {
       if (result.isConfirmed) {
+        fetch('http://localhost:5000/receipt-entry', {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+
+          },
+          body: JSON.stringify(newReceipt)
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.insertedId) {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Added Successfully',
+                showConfirmButton: false,
+                timer: 1500
+              })
+            }
+          })
         reset();
         setFormData(newReceipt)
         openModal();
@@ -136,7 +173,7 @@ const Receipt = () => {
             <div className="flex justify-center">
 
               <input className="btn btn-primary btn-sm mt-3 " type="submit" value="Submit" />
-              <Modal isOpen={isModalOpen} onClose={closeModal} formData={formData}/>
+              <Modal isOpen={isModalOpen} onClose={closeModal} formData={formData} />
             </div>
           </form>
         </div>

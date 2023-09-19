@@ -12,6 +12,7 @@ import ManageServices from "../Dashboard/Manageservice/ManageServices";
 import SignUp from "../component/SignUp/SignUp";
 import Receipt from "../pages/homes/Receipt/Receipt";
 import PrivateRoutes from "./PrivateRoutes";
+import IncomeLedger from "../Dashboard/IncomeLedger";
 
 
 const routes = createBrowserRouter([
@@ -52,6 +53,10 @@ const routes = createBrowserRouter([
       {
         path:'signup',
         element:<PrivateRoutes><SignUp></SignUp></PrivateRoutes>
+      },
+      {
+        path:'incomeledger',
+        element:<PrivateRoutes> <IncomeLedger/> </PrivateRoutes>
       }
     ]
   }

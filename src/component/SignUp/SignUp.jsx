@@ -1,16 +1,17 @@
 import { useForm } from "react-hook-form";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import Swal from "sweetalert2";
 const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const SignUp = () => {
-  const { createUser,  updateUserProfile } = useContext(AuthContext);
+const [erro, setErro] = useState('');
+  const { createUser, user, updateUserProfile,setLoading} = useContext(AuthContext);
   const { register, handleSubmit,reset } = useForm();
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
 
   const onSubmit = (data) => {
-    const formData = new FormData();
+        const formData = new FormData();
     formData.append('image', (data.image[0]));
     fetch(img_hosting_url, {
       method: 'POST',
@@ -18,42 +19,50 @@ const SignUp = () => {
     })
       .then(res => res.json())
       .then(responseImage => {
-        const imageUrl = responseImage.data.display_url
-        createUser(data.email, data.password)
+        const imageUrl = responseImage.data.display_url;
+        const {name, email} = data;
+    const UserInfo = {name, email,image:imageUrl, role:'staff'}
+    console.log(UserInfo);
+        createUser(email, data.password)
           .then(result => {
             const signedUser = result.user;
             console.log(signedUser);
-                updateUserProfile(data.name, imageUrl)
+                updateUserProfile(name, imageUrl)
                   .then(() => {
-                    reset();
-                      const Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-              })
-
-              Toast.fire({
-                icon: 'success',
-                title: 'User Created Successfully'
-              })
+                    fetch('http://localhost:5000/users',{
+                      method:"POST",
+                      headers:{
+                        'content-type': 'application/json',
+                      },
+                      body:JSON.stringify(UserInfo)
+                    })
+                    .then(res => res.json())
+                    .then(data => { 
+                      console.log('data from host',data);                     
+                      if(data.insertedId){
+                        Swal.fire({
+                          position: 'top-end',
+                          icon: 'success',
+                          title: 'Registered Successfully',
+                          showConfirmButton: false,
+                          timer: 1500
+                        })
+                        reset();
+                      }
+                    })
+                    
             })
           })
           .catch(err => {
-            console.log(err.message)
+            setErro(err.message)
 
           })
       })
-    // .catch(err => {
-    //   setLoading(false)
-    //   console.log(err.message)
+    .catch(err => {
+      setLoading(false)
+      console.log(err.message)
 
-    // })
+    })
 
 
 
@@ -107,10 +116,10 @@ const SignUp = () => {
             </div>
             <div className="mt-4">
               <label className="label">
-                <span className="label-text font-semibold">Photo (optional) </span>
+                <span className="label-text font-semibold">Photo * </span>
               </label>
               <input
-                {...register("image", {})}
+                {...register("image", )}
                 type="file"
                 className="file-input w-full"
               />

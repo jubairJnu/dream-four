@@ -1,12 +1,38 @@
 import { useForm } from "react-hook-form";
+const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const AddDoctModal = ({ isOpen, onClose }) => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
+
+
   const onSubmit = data => {
-    const { name,mobile, schedule, education ,time, fees, description, image } = data;
-    const doctInfo = { name,mobile, schedule,education ,time, fees, description, image };
-    console.log('info from modal', doctInfo);
+    const formData = new FormData();
+    formData.append('image', (data.image[0]));
+    fetch(img_hosting_url, {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(responseImage => {
+      const imageUrl = responseImage.data.display_url;
+    const { name,mobile, schedule, education ,time, fees, description } = data;
+    const doctInfo = { name,mobile, schedule,education ,time, fees, description, image:imageUrl };
+    fetch('http://localhost:5000/doctor',{
+      method:"POST",
+      headers:{
+        'content-type': 'application/json',
+      },
+      body:JSON.stringify(doctInfo)
+    })
+    .then(res => res.json())
+    .then(data =>{
+      console.log('doctor', data);
+    })
+    })
+   
   }
+
 
 
 
@@ -112,7 +138,7 @@ const AddDoctModal = ({ isOpen, onClose }) => {
           </div>
 
         </div>
-        {/* Add more form fields as needed */}
+       
 
       </div>
     </div>
