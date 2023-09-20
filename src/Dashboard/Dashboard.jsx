@@ -36,15 +36,28 @@ const Dashboard = () => {
         </div>
         <div className="drawer-side">
           <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+          <ul className="menu p-4 w-80 min-h-full bg-blue-200 text-base-content">
             {/* Sidebar content here */}
+            <div className="flex flex-col items-center">
+              <h1 className="text-xl font-semibold py-4">Dashboard</h1>
+              <img className="mask mask-circle w-24 h-24" src={user?.photoURL} alt="" />
 
+              <div className="indicator mt-5">
+                <span className="indicator-item badge badge-secondary">{currentUser?.role}</span>
+                <h3 className="mt-1 mr-5 text-[20px]"> {user?.displayName} </h3>
+              </div>
+
+            </div>
+
+            <div className="divider"></div>
             {
               currentUser && currentUser.role == 'admin' &&
               <div>
                 <li><NavLink to='/dashboard/manageuser'>Manage User</NavLink>  </li>
                 <li> <NavLink to="/dashboard/managedoctor"> Manage Doctor </NavLink> </li>
                 <li> <NavLink to="/dashboard/manageservice"> Manage Service </NavLink> </li>
+                <li> <NavLink to="/dashboard/incomeledger"> Income Ledger
+                </NavLink> </li>
               </div>}
             {
               currentUser && currentUser.role === 'owner' &&

@@ -12,13 +12,15 @@ const Doctors = () => {
   },[])
 
   return (
-    <div className="mt-16">
+    <div className="mt-24">
       <h1 className='text-xl text-center font-bold' >Our Doctor</h1>
       <div className="grid md:grid-cols-2">
-    {
+   <div className="grid md:grid-cols-3 xl:grid-cols-4 gap-4 mt-10">
+   {
       doctrs?.map(doctr => <DoctorCards key={doctr._id}
       doctr={doctr}/> )
-    }  
+    } 
+    </div> 
     
       </div>
     </div>

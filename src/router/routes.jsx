@@ -14,6 +14,7 @@ import Receipt from "../pages/homes/Receipt/Receipt";
 import PrivateRoutes from "./PrivateRoutes";
 import IncomeLedger from "../Dashboard/IncomeLedger";
 import Services from "../pages/homes/services/Services";
+import Doctors from "../pages/homes/DoctorCorner/Doctors";
 
 
 
@@ -37,6 +38,10 @@ const routes = createBrowserRouter([
       {
         path:'service',
         element:<Services/>
+      },
+      {
+        path:'doctor',
+        element:<Doctors/>
       }
     ]
   },

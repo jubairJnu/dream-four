@@ -23,7 +23,7 @@ const Header = () => {
           </label>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-[#1653B2] rounded-box w-52">
             <li><Link to="/service">Our Service</Link></li>
-            <li> <Link>Doctor Corner</Link> </li>
+            <li> <Link to="/doctor">Doctor Corner</Link> </li>
             <li> <Link> About Us </Link> </li>
             {
               user &&                
@@ -46,7 +46,8 @@ const Header = () => {
           <li className="hover:bg-white rounded-md hover:font-semibold">
             <Link to="/service">Our Service</Link></li>
 
-          <li className="hover:bg-white rounded-md hover:font-semibold"> <Link>Doctor Corner</Link> </li>
+          <li className="hover:bg-white rounded-md hover:font-semibold"> 
+          <Link to="/doctor">Doctor Corner</Link> </li>
           <li className="hover:bg-white rounded-md hover:font-semibold "> <Link> About Us </Link> </li>
 
           {
