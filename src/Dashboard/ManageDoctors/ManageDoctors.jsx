@@ -63,7 +63,7 @@ const ManageDoctors = () => {
           <tbody>
             {/* row 1 */}
             {
-              totalDoctors?.map((doct, index) => <tr key={doct.id}>
+              totalDoctors?.map((doct, index) => <tr key={doct._id}>
                 <th>
                   {index + 1}
                 </th>

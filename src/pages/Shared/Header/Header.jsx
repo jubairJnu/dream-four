@@ -22,7 +22,7 @@ const Header = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
           </label>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-[#1653B2] rounded-box w-52">
-            <li><Link>Our Service</Link></li>
+            <li><Link to="/service">Our Service</Link></li>
             <li> <Link>Doctor Corner</Link> </li>
             <li> <Link> About Us </Link> </li>
             {
@@ -44,7 +44,7 @@ const Header = () => {
       <div className="navbar-center hidden lg:flex ">
         <ul className="menu menu-horizontal px-1 text-[20px] ">
           <li className="hover:bg-white rounded-md hover:font-semibold">
-            <Link>Our Service</Link></li>
+            <Link to="/service">Our Service</Link></li>
 
           <li className="hover:bg-white rounded-md hover:font-semibold"> <Link>Doctor Corner</Link> </li>
           <li className="hover:bg-white rounded-md hover:font-semibold "> <Link> About Us </Link> </li>

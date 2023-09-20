@@ -11,6 +11,12 @@ const Receipt = () => {
   const [formData, setFormData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
+  useEffect(()=>{
+    fetch('http://localhost:5000/services')
+    .then(res => res.json())
+    .then(data => setServices(data))
+  },[])
+
 
   // doctor fetch;
 
