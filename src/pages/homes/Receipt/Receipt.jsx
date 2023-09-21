@@ -38,19 +38,34 @@ const Receipt = () => {
 
   const onSubmit = (data) => {
     const { patient, phone, doctor, service, total, paid } = data;
-
+  
     const date = new Date();
+const year = date.getFullYear();
+const month = (date.getMonth() + 1).toString().padStart(2, '0');
+const day = date.getDate().toString().padStart(2, '0');
+const hours = '00';
+const minutes = '00';
+const seconds = '00';
+const milliseconds = '000';
 
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Months are zero-based
-    const year = date.getFullYear();
+// Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
+const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
-
-    const formattedDate = `${day}/${month}/${year}`;
-
+  
     const UserName = user.displayName;
     const userEmail = user.email;
-    const newReceipt = { patient, user: UserName, email: userEmail, date: formattedDate, phone, doctor, service, total: parseFloat(total), paid: parseFloat(paid) }
+    const newReceipt = {
+      patient,
+      user: UserName,
+      email: userEmail,
+      date: formattedDate,
+      phone,
+      doctor,
+      service,
+      total: parseFloat(total),
+      paid: parseFloat(paid)
+    };
+  
     console.log(newReceipt);
     Swal.fire({
       title: 'Are you sure?',
