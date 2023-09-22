@@ -20,6 +20,10 @@ const IncomeLedger = () => {
     calculateTotalPrice();
   }, [Incomes]);
 
+  // handlechange
+
+  
+
 
   const handleSearch = event => {
     event.preventDefault();

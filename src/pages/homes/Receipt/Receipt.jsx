@@ -9,22 +9,40 @@ const Receipt = () => {
   const [services, setServices] = useState([]);
   const [doctors, setDoctors] = useState([]);
   const [formData, setFormData] = useState([]);
+  const [totalInprice, settotalInPrice] = useState([]);
+  const [inamount, setinamount] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors }, watch } = useForm();
-  useEffect(()=>{
+  const { register, handleSubmit, reset, formState: { errors }, watch, } = useForm();
+  useEffect(() => {
     fetch('http://localhost:5000/services')
-    .then(res => res.json())
-    .then(data => setServices(data))
-  },[])
+      .then(res => res.json())
+      .then(data => setServices(data))
+  }, [])
+
+  // change handle
+ const handleDiscountChange = e =>{
+  const discountField = e.target.value;
+ const grandTotal = inamount - discountField;
+ console.log("total", grandTotal)
+ settotalInPrice(grandTotal);
+ }
+
+const handleTotalChange = e =>{
+  const amountField = e.target.value;
+  setinamount(amountField)
+  console.log(amountField);
+  
+
+}
 
 
   // doctor fetch;
 
-  useEffect(()=>{
+  useEffect(() => {
     fetch('http://localhost:5000/doctors')
-    .then(res => res.json())
-    .then(data => setDoctors(data))
-  },[])
+      .then(res => res.json())
+      .then(data => setDoctors(data))
+  }, [])
 
   // modal-----
 
@@ -37,21 +55,18 @@ const Receipt = () => {
   };
 
   const onSubmit = (data) => {
-    const { patient, phone, doctor, service, total, paid } = data;
-  
+    const { patient, phone, amount, doctor, service, total, paid, discount } = data;
+
     const date = new Date();
-const year = date.getFullYear();
-const month = (date.getMonth() + 1).toString().padStart(2, '0');
-const day = date.getDate().toString().padStart(2, '0');
-const hours = '00';
-const minutes = '00';
-const seconds = '00';
-const milliseconds = '000';
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
 
-// Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
-const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
-  
+    // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
+    const formattedDate = `${year}-${month}-${day}`;
+
+
     const UserName = user.displayName;
     const userEmail = user.email;
     const newReceipt = {
@@ -62,10 +77,12 @@ const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${
       phone,
       doctor,
       service,
+      discount: parseFloat(discount),
+      amount: parseFloat(amount),
       total: parseFloat(total),
       paid: parseFloat(paid)
     };
-  
+
     console.log(newReceipt);
     Swal.fire({
       title: 'Are you sure?',
@@ -105,90 +122,133 @@ const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${
   }
 
   return (
-    <div className="container mx-auto mt-24 border bg-purple-50">
+    <div className="container mx-auto mt-24  ">
       <h1 className="text-center font-bold text-2xl">Receipt Entry</h1>
       <div className=" px-10 ">
-        <div className=" bg-white  w-full max-w-md shadow-2xl p-4 ">
+        <div className=" bg-white  shadow-2xl p-4 ">
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text md:text-[18px] font-semibold">Patient Name * </span>
-              </label>
-              <input
-                {...register("patient", { required: true, })}
-                type="text"
-                placeholder="Your Name"
-                className="input input-bordered input-primary"
-              />
-              {errors.patient && <span className="text-red-500">this field is required</span>}
+            <div className="md:flex justify-between ">
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">Patient Name * </span>
+                </label>
+                <input
+                  {...register("patient", { required: true, })}
+                  type="text"
+                  placeholder="Your Name"
+                  className="input input-bordered w-full input-primary"
+                />
+                {errors.patient && <span className="text-red-500">this field is required</span>}
+              </div>
+
+              <div className="form-control md:ms-6 w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">Phone Number*</span>
+                </label>
+                <input
+                  {...register("phone", { required: true, })}
+                  type="number"
+                  placeholder="phone number"
+                  className="input input-bordered input-primary "
+                />
+                {errors.phone && <span className="text-red-500">this field is required</span>}
+              </div>
             </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text md:text-[18px] font-semibold">Phone Number*</span>
-              </label>
-              <input
-                {...register("phone", { required: true, })}
-                type="number"
-                placeholder="phone number"
-                className="input input-bordered input-primary "
-              />
-              {errors.phone && <span className="text-red-500">this field is required</span>}
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold">Doctor *</span>
-              </label>
-              <select defaultValue="pick One" {...register("doctor", { required: false })} className="select select-bordered select-primary">
-                <option disabled >Pick One</option>
-                {
-                  doctors?.map(doctor => <option key={doctor._id}> {doctor.name} </option>)
-                }
-
-              </select>
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold">Service *</span>
-              </label>
-              <select defaultValue="pick One" {...register("service", { required: false })} className="select select-bordered select-primary">
-                <option disabled >Pick One</option>
-                {
-                  services?.map(service => <option key={service._id}> {service.name} </option>)
-                }
-              </select>
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text md:text-[18px] font-semibold">Total Amount * </span>
-              </label>
-              <input
-                {...register("total", { required: true, valueAsNumber: true })}
-                type="number"
-                placeholder="Your Name"
-                className="input input-bordered input-primary"
-              />
-            </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text md:text-[18px] font-semibold">Pay Now * </span>
-              </label>
-              <input
-                {...register("paid", {
-                  required: true, maxLength: 5, valueAsNumber: true, validate: data => {
-                    if (watch('total') < data) {
-                      return "Paid amount is bigger than total"
-                    }
+            <div className="md:flex justify-between">
+              <div className="form-control  w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px]  font-semibold">Doctor *</span>
+                </label>
+                <select defaultValue="pick One" {...register("doctor", { required: false })} className="select select-bordered select-primary">
+                  <option disabled >Pick One</option>
+                  {
+                    doctors?.map(doctor => <option key={doctor._id}> {doctor.name} </option>)
                   }
-                })}
-                type="number"
-                placeholder="Enter Amount"
-                className="input input-bordered input-primary"
-              />
-              <p className="text-red-500"> {errors.paid?.message} </p>
+
+                </select>
+              </div>
+              <div className="form-control md:ms-6 w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px]  font-semibold">Service *</span>
+                </label>
+                <select defaultValue="pick One" {...register("service", { required: false })} className="select select-bordered select-primary">
+                  <option disabled >Pick One</option>
+                  {
+                    services?.map(service => <option key={service._id}> {service.name} </option>)
+                  }
+                </select>
+              </div>
+            </div>
+
+            <div className="md:flex justify-between">
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">Amount * </span>
+                </label>
+                <input
+                  {...register("amount", { required: true, valueAsNumber: true })}
+                  type="number"
+                  placeholder="Amount"
+                    onChange={handleTotalChange}
+                    // ref={control.register}
+                  className="input input-bordered input-primary"
+                />
+              </div>
+              <div className="form-control md:ms-6 w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">Total Amount * </span>
+                </label>
+                <input
+                  {...register("total", { required: false, valueAsNumber: true })}
+                  type="number"
+                  placeholder="Total Amount"
+                  value={totalInprice}
+                  readOnly
+                 
+                  className="input input-bordered input-primary bg-slate-200"
+                />
+              </div>
+            </div>
+
+            <div className="md:flex justify-between">
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">Discount </span>
+                </label>
+                <input
+                  {...register("discount", {
+                    required: false, maxLength: 5, valueAsNumber: true, validate: data => {
+                      if (watch('total') < data) {
+                        return "Paid amount is bigger than total"
+                      }
+                    }
+                  })}
+                  type="number"
+                  placeholder="Enter Amount"
+                  onChange={handleDiscountChange}
+                  className="input input-bordered input-primary"
+                />
+                <p className="text-red-500"> {errors.paid?.message} </p>
+              </div>
+              <div className="form-control md:ms-6 w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">Pay Now * </span>
+                </label>
+                <input
+                  {...register("paid", {
+                    required: true, maxLength: 5, valueAsNumber: true, validate: data => {
+                      if (watch('total') < data) {
+                        return "Paid amount is bigger than total"
+                      }
+                    }
+                  })}
+                  type="number"
+                  placeholder="Enter Amount"
+                  className="input input-bordered input-primary "
+                />
+                <p className="text-red-500"> {errors.paid?.message} </p>
+              </div>
             </div>
 
             <div className="flex justify-center">
