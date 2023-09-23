@@ -18,7 +18,7 @@ const AddServiceModal = ({ isOpen, onClose }) => {
       const imageUrl = responseImage.data.display_url;
     const { name,price,  description } = data;
     const serviceInfo = { name, price, description, image:imageUrl };
-    fetch('http://localhost:5000/services-entry',{
+    fetch('https://dream-four-server.vercel.app/services-entry',{
       method:"POST",
       headers:{
         'content-type': 'application/json',

@@ -8,7 +8,7 @@ const Dashboard = () => {
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch('http://localhost:5000/users')
+    fetch('https://dream-four-server.vercel.app/users')
       .then(res => res.json())
       .then(data => {
         console.log(data);

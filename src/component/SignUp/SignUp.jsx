@@ -29,7 +29,7 @@ const [erro, setErro] = useState('');
             console.log(signedUser);
                 updateUserProfile(name, imageUrl)
                   .then(() => {
-                    fetch('http://localhost:5000/users',{
+                    fetch('https://dream-four-server.vercel.app/users',{
                       method:"POST",
                       headers:{
                         'content-type': 'application/json',

@@ -40,7 +40,7 @@ const IncomeLedger = () => {
     params.append('endDate', endedDate);
 
     // Use the URLSearchParams object in the fetch request
-    fetch(`http://localhost:5000/all-incomeledger?${params.toString()}`)
+    fetch(`https://dream-four-server.vercel.app/all-incomeledger?${params.toString()}`)
       .then(res => res.json())
       .then(data => {
         setIncomes(data)

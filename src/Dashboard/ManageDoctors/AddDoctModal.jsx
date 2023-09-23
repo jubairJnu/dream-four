@@ -18,7 +18,7 @@ const AddDoctModal = ({ isOpen, onClose }) => {
       const imageUrl = responseImage.data.display_url;
     const { name,mobile, schedule, education ,time, fees, description } = data;
     const doctInfo = { name,mobile, schedule,education ,time, fees, description, image:imageUrl };
-    fetch('http://localhost:5000/doctor',{
+    fetch('https://dream-four-server.vercel.app/doctor',{
       method:"POST",
       headers:{
         'content-type': 'application/json',

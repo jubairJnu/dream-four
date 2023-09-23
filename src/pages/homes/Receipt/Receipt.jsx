@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
+import numberToWords from 'number-to-words';
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Modal from "../../../component/Modal";
 import { AuthContext } from "../../../Provider/AuthProvider";
+import ReceiptTable from "./ReceiptTable";
 
 const Receipt = () => {
   const { user } = useContext(AuthContext);
@@ -11,35 +13,49 @@ const Receipt = () => {
   const [formData, setFormData] = useState([]);
   const [totalInprice, settotalInPrice] = useState([]);
   const [inamount, setinamount] = useState([]);
+  const [priceField, setpriceField] = useState([]);
+  const [coverted, setcoverted] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { register, handleSubmit, reset, formState: { errors }, watch, } = useForm();
   useEffect(() => {
-    fetch('http://localhost:5000/services')
+    fetch('https://dream-four-server.vercel.app/services')
       .then(res => res.json())
       .then(data => setServices(data))
   }, [])
 
+  // handle price in word
+
+  const handlePriceWord = event => {
+    const paidField = event.target.value;
+    setpriceField(paidField);
+    console.log(paidField)
+
+    const convert = numberToWords.toWords(paidField)
+    console.log(convert)
+    setcoverted(convert);
+  }
+
   // change handle
- const handleDiscountChange = e =>{
-  const discountField = e.target.value;
- const grandTotal = inamount - (0 || discountField);
- console.log("total", grandTotal)
- settotalInPrice(grandTotal);
- }
+  const handleDiscountChange = e => {
+    const discountField = e.target.value;
+    const grandTotal = inamount - (0 || discountField);
+    console.log("total", grandTotal)
+    settotalInPrice(grandTotal);
+  }
 
-const handleTotalChange = e =>{
-  const amountField = e.target.value;
-  setinamount(amountField)
-  console.log(amountField);
-  
+  const handleTotalChange = e => {
+    const amountField = e.target.value;
+    setinamount(amountField)
+    console.log(amountField);
 
-}
+
+  }
 
 
   // doctor fetch;
 
   useEffect(() => {
-    fetch('http://localhost:5000/doctors')
+    fetch('https://dream-four-server.vercel.app/doctors')
       .then(res => res.json())
       .then(data => setDoctors(data))
   }, [])
@@ -79,7 +95,7 @@ const handleTotalChange = e =>{
       service,
       discount: parseFloat(discount),
       amount: parseFloat(amount),
-      total: parseFloat(total),
+      total: totalInprice,
       paid: parseFloat(paid)
     };
 
@@ -94,7 +110,7 @@ const handleTotalChange = e =>{
       confirmButtonText: 'Submit'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('http://localhost:5000/receipt-entry', {
+        fetch('https://dream-four-server.vercel.app/receipt-entry', {
           method: 'POST',
           headers: {
             'content-type': 'application/json'
@@ -190,8 +206,8 @@ const handleTotalChange = e =>{
                   {...register("amount", { required: true, valueAsNumber: true })}
                   type="number"
                   placeholder="Amount"
-                    onChange={handleTotalChange}
-                    // ref={control.register}
+                  onChange={handleTotalChange}
+                  // ref={control.register}
                   className="input input-bordered input-primary"
                 />
               </div>
@@ -204,8 +220,7 @@ const handleTotalChange = e =>{
                   type="number"
                   placeholder="Total Amount"
                   value={totalInprice}
-                 
-                 
+                  readOnly
                   className="input input-bordered input-primary bg-slate-200"
                 />
               </div>
@@ -218,15 +233,15 @@ const handleTotalChange = e =>{
                 </label>
                 <input
                   {...register("discount", {
-                 
+
                   })}
                   type="number"
                   placeholder="Enter Amount"
                   onChange={handleDiscountChange}
-               
+
                   className="input input-bordered input-primary"
                 />
-              
+
               </div>
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
@@ -242,9 +257,12 @@ const handleTotalChange = e =>{
                   })}
                   type="number"
                   placeholder="Enter Amount"
+                  value={priceField}
+                  onChange={handlePriceWord}
                   className="input input-bordered input-primary "
                 />
                 <p className="text-red-500"> {errors.paid?.message} </p>
+                <p className="my-4"> <span className="font-bold text-blue-700">In Word:</span> {coverted} tk only  </p>
               </div>
             </div>
 
@@ -257,6 +275,7 @@ const handleTotalChange = e =>{
         </div>
 
       </div>
+      <ReceiptTable formData={formData} />
     </div>
   );
 };
