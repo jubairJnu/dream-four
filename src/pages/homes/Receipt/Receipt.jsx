@@ -22,7 +22,7 @@ const Receipt = () => {
   // change handle
  const handleDiscountChange = e =>{
   const discountField = e.target.value;
- const grandTotal = inamount - discountField;
+ const grandTotal = inamount - (0 || discountField);
  console.log("total", grandTotal)
  settotalInPrice(grandTotal);
  }
@@ -204,7 +204,7 @@ const handleTotalChange = e =>{
                   type="number"
                   placeholder="Total Amount"
                   value={totalInprice}
-                  readOnly
+                 
                  
                   className="input input-bordered input-primary bg-slate-200"
                 />
@@ -218,18 +218,15 @@ const handleTotalChange = e =>{
                 </label>
                 <input
                   {...register("discount", {
-                    required: false, maxLength: 5, valueAsNumber: true, validate: data => {
-                      if (watch('total') < data) {
-                        return "Paid amount is bigger than total"
-                      }
-                    }
+                 
                   })}
                   type="number"
                   placeholder="Enter Amount"
                   onChange={handleDiscountChange}
+               
                   className="input input-bordered input-primary"
                 />
-                <p className="text-red-500"> {errors.paid?.message} </p>
+              
               </div>
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
@@ -238,7 +235,7 @@ const handleTotalChange = e =>{
                 <input
                   {...register("paid", {
                     required: true, maxLength: 5, valueAsNumber: true, validate: data => {
-                      if (watch('total') < data) {
+                      if (totalInprice < data) {
                         return "Paid amount is bigger than total"
                       }
                     }
