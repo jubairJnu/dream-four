@@ -57,9 +57,9 @@ const IncomeLedger = () => {
     <div className="w-full ">
       <h1 className="text-center text-purple-500 text-2xl mb-8">Income Ledger</h1>
       <div >
-        <form onSubmit={handleSearch} className="flex justify-center items-center mb-10 gap-3">
+        <form onSubmit={handleSearch} className="md:flex justify-center items-center mb-10 gap-3 ">
 
-          <div className="form-control">
+          <div className="form-control sm:my-2">
 
             <label className="input-group">
               <span className="bg-[#1653B2] text-white ">Start Date</span>
@@ -67,7 +67,7 @@ const IncomeLedger = () => {
             </label>
           </div>
           {/*  */}
-          <div className="form-control">
+          <div className="form-control my-2">
 
             <label className="input-group">
               <span className="bg-[#1653B2] text-white ">End Date</span>
@@ -90,8 +90,8 @@ const IncomeLedger = () => {
         </form>
       </div>
 
-      <div>
-        <table className="table">
+      <div className="overflow-x-auto">
+        <table className="table ">
           {/* head */}
           <thead>
             <tr className="md:text-[20px] bg-[#1653B2] text-white ">

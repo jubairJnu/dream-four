@@ -40,7 +40,7 @@ const Dashboard = () => {
             {/* Sidebar content here */}
             <div className="flex flex-col items-center">
               <h1 className="text-xl font-semibold py-4">Dashboard</h1>
-              <img className="mask mask-circle w-24 h-24" src={user?.photoURL} alt="" />
+              <img className="mask mask-circle w-24 h-24 border-4 border-purple-500 rounded-full " src={user?.photoURL} alt="Image" />
 
               <div className="indicator mt-5">
                 <span className="indicator-item badge badge-secondary">{currentUser?.role}</span>

@@ -19,6 +19,7 @@ const [erro, setErro] = useState('');
     })
       .then(res => res.json())
       .then(responseImage => {
+        
         const imageUrl = responseImage.data.display_url;
         const {name, email} = data;
     const UserInfo = {name, email,image:imageUrl, role:'staff'}
