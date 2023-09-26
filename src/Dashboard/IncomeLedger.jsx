@@ -7,13 +7,15 @@ const IncomeLedger = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchResult, setSearchResult] = useState([]);
+  const [selectedUser, setSelectedUser] = useState('All');
+
   const [totalPrice, setTotalPrice] = useState(0); // 
 
   const usersName = useLoaderData();
- 
+
 
   const calculateTotalPrice = () => {
-       const total = Incomes.reduce((accumulator, income) => {
+    const total = Incomes.reduce((accumulator, income) => {
       return accumulator + parseFloat(income.paid);
     }, 0);
     setTotalPrice(total);
@@ -26,10 +28,10 @@ const IncomeLedger = () => {
 
   // handlechange
 
-  
 
 
-  const handleSearch = event => {
+
+  const handleSearch = (event) => {
     event.preventDefault();
     const form = event.target;
     const startedDate = form.startDate.value;
@@ -43,18 +45,23 @@ const IncomeLedger = () => {
     params.append('startDate', startedDate);
     params.append('endDate', endedDate);
 
+    // Include the selected user in the query only if it's not 'All'
+    if (selectedUser !== 'All') {
+      params.append('user', selectedUser);
+    }
+
     // Use the URLSearchParams object in the fetch request
     fetch(`https://dream-four-server.vercel.app/all-incomeledger?${params.toString()}`)
-      .then(res => res.json())
-      .then(data => {
-        setIncomes(data)
-        console.log(data)
+      .then((res) => res.json())
+      .then((data) => {
+        setIncomes(data);
+        console.log(data);
       })
-      .catch(error => console.error(error));
+      .catch((error) => console.error(error));
 
     console.log(startDate);
-    
   };
+
 
 
   return (
@@ -82,12 +89,20 @@ const IncomeLedger = () => {
           <div className="form-control">
             <div className="input-group">
               <span className="bg-[#1653B2] text-white ">Users</span>
-              <select name="users" className="select select-bordered">
-              <option>All</option>
-                {usersName.map(user => <option key={user._id}> {user?.name}</option> )}
-                
-                
+              <select
+                name="users"
+                className="select select-bordered"
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+              >
+                <option value="All">All</option>
+                {usersName.map((user) => (
+                  <option key={user._id} value={user.name}>
+                    {user.name}
+                  </option>
+                ))}
               </select>
+
 
             </div>
           </div>
@@ -146,7 +161,7 @@ const IncomeLedger = () => {
               <td>
 
               </td>
-              <td> 
+              <td>
                 Total
               </td>
               <td >

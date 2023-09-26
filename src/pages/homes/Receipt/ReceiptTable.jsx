@@ -18,7 +18,7 @@ const ReceiptTable = ({ formData }) => {
   };
 
   const handleView = (receipt) => {    
-      fetch(`http://localhost:5000/all-receipt/${receipt._id}`)
+      fetch(`https://dream-four-server.vercel.app/all-receipt/${receipt._id}`)
         .then(res => res.json())
         .then(data =>{ 
         setselectedReceipt(data)
