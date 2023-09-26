@@ -8,6 +8,7 @@ const Login = () => {
   const { login, loading, setLoading } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogin = event => {
+    setLoading(true);
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
@@ -16,16 +17,18 @@ const Login = () => {
     login(email, password)
       .then(result => {
         const loggedUser = result.user;
+        setLoading(false)
         navigate('/')
       })
       .catch(error => {
+        setLoading(false)
         console.log(error.message);
       })
 
   }
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 container mx-auto">
 
       {/* ---- */}
 
@@ -39,20 +42,20 @@ const Login = () => {
 
 
           </div>
-          <div className="card flex-shrink-0 md:w-1/2 w-full max-w-sm shadow-2xl bg-base-100">
-            <h1 className="text-5xl text-center p-4 font-bold">Login now!</h1>
+          <div className="card md:shrink-0 md:w-96 max-w-sm shadow-2xl bg-base-100">
+            <h1 className="md:text-5xl text-center md:p-4 font-bold">Login now!</h1>
             <div className="card-body">
               {/* form */}
               <form onSubmit={handleLogin}>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text text-[20px]">Email</span>
+                    <span className="label-text md:text-[20px]">Email</span>
                   </label>
                   <input type="text" placeholder="email" name="email" className="input input-bordered" />
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text text-[20px]">Password</span>
+                    <span className="label-text md:text-[20px]">Password</span>
                   </label>
                   <input type="password" name="password" placeholder="password" className="input input-bordered" />
                   <label className="label">

@@ -3,7 +3,7 @@
 const ServiceCard = ({service}) => {
   const {  image, name,price } = service;
   return (
-    <div className="card w-96 mt-16 bg-base-100 shadow-xl group">
+    <div className="container mx-auto card w-80 mt-16 bg-base-100 shadow-xl group">
     <figure className="px-10 pt-10">
       <img src={image} alt="Shoes" className="group-hover:scale-110 transition" />
     </figure>

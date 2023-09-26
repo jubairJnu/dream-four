@@ -12,10 +12,10 @@ const Doctors = () => {
   },[])
 
   return (
-    <div className="mt-24">
-      <h1 className='text-xl text-center font-bold' >Our Doctor</h1>
-      <div className="grid md:grid-cols-2">
-   <div className="grid md:grid-cols-3 xl:grid-cols-4 gap-4 mt-10">
+    <div className="mt-24 md:px-6">
+      <h1 className='text-xl text-center font-bold ' >Our Doctor</h1>
+    
+   <div className="grid md:grid-cols-3 xl:grid-cols-4 gap-4 mt-6"> 
    {
       doctrs?.map(doctr => <DoctorCards key={doctr._id}
       doctr={doctr}/> )
@@ -23,7 +23,7 @@ const Doctors = () => {
     </div> 
     
       </div>
-    </div>
+   
   );
 };
 
