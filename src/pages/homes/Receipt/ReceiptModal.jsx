@@ -2,9 +2,24 @@ import { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
 
-const ReceiptModal = ({ isOpen, onClose, recentReceipt }) => {
+const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
+  console.log("receipt modal", selectedReceipt)
   const receiptRef = useRef();
+
   if (!isOpen) return null;
+  const formatDate = (date) => {
+    const options = { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
+
+  // handle
+  const handlePrint = () => {
+    if (receiptRef.current) {
+      // Trigger the print action
+      receiptRef.current.handlePrint();
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-end z-10 right-0 top-0 left-80">
       <div
@@ -23,19 +38,20 @@ const ReceiptModal = ({ isOpen, onClose, recentReceipt }) => {
         <div className="modal-body p-4">
           {/* Your modal content goes here */}
           <div className=" mt-20 mx-5" ref={receiptRef}>
-            <p><small> {recentReceipt.date} </small></p>
+            <small><p>print Date: {isOpen ? formatDate(new Date()) : ''}  </p></small>
+            <p> Receipt Date: <small> {selectedReceipt.date} </small></p>
           <div className="grid grid-cols-2 gap-2 mb-2">
             <div className="form-control">
               <label className="label">
                 <span className=" text-black">Patient Name</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={recentReceipt.patient} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt.patient} readOnly />
             </div>
             <div className="form-control">
               <label className="label">
                 <span className="text-black">Phone Number</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={recentReceipt.phone} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt.phone} readOnly />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2 ">
@@ -43,13 +59,13 @@ const ReceiptModal = ({ isOpen, onClose, recentReceipt }) => {
               <label className="label">
                 <span className="text-black">Appointment To</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={recentReceipt?.doctor} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt?.doctor} readOnly />
             </div>
             <div className="form-control">
               <label className="label">
                 <span className="text-black">Service Name</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={recentReceipt.service} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt.service} readOnly />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2 mb-2">
@@ -58,18 +74,18 @@ const ReceiptModal = ({ isOpen, onClose, recentReceipt }) => {
               <label className="label">
                 <span className="text-black">Total amount</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={recentReceipt?.total} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt?.total} readOnly />
             </div>
 
             <div className="form-control">
               <label className="label">
                 <span className="text-black">Paid amount</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={recentReceipt.paid} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt.paid} readOnly />
             </div>
           </div>
           <p> prepared by</p>
-          <p> {recentReceipt.user}</p>
+          <p> {selectedReceipt.user}</p>
           </div>
 
           {/* <h3 className="font-bold text-lg">Hello!</h3>
@@ -83,9 +99,15 @@ const ReceiptModal = ({ isOpen, onClose, recentReceipt }) => {
 
             </form>
             <ReactToPrint
-       trigger={() =>  <button className="btn btn-warning ">Print</button>}
-       content={() => receiptRef.current}
-     />
+          trigger={() => (
+            <button onClick={handlePrint} className="btn btn-warning">
+              Print
+            </button>
+          )}
+          content={() => receiptRef.current}
+          onBeforePrint={onClose} // Close the modal before printing
+          onAfterPrint={onClose} // Close the modal after printing
+        />
             
           </div>
         </div>

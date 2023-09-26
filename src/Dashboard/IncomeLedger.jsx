@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
 
 
 const IncomeLedger = () => {
@@ -6,7 +7,10 @@ const IncomeLedger = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [searchResult, setSearchResult] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0); // Step 1: Create a state for the total price
+  const [totalPrice, setTotalPrice] = useState(0); // 
+
+  const usersName = useLoaderData();
+ 
 
   const calculateTotalPrice = () => {
        const total = Incomes.reduce((accumulator, income) => {
@@ -79,8 +83,10 @@ const IncomeLedger = () => {
             <div className="input-group">
               <span className="bg-[#1653B2] text-white ">Users</span>
               <select name="users" className="select select-bordered">
-                <option>T-shirts</option>
-                <option>Mugs</option>
+              <option>All</option>
+                {usersName.map(user => <option key={user._id}> {user?.name}</option> )}
+                
+                
               </select>
 
             </div>

@@ -3,9 +3,16 @@ import ReactToPrint from "react-to-print";
 
 
 const Modal = ({ isOpen, onClose, formData }) => {
-
-  if (!isOpen) return null;
   const printRef = useRef();
+  if (!isOpen) return null;
+  
+
+  const handlePrint = () => {
+    if (printRef.current) {
+      // Trigger the print action
+      printRef.current.handlePrint();
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-end z-10 right-0 top-0 left-80">
@@ -85,9 +92,15 @@ const Modal = ({ isOpen, onClose, formData }) => {
 
             </form>
             <ReactToPrint
-       trigger={() =>  <button className="btn btn-warning ">Print</button>}
-       content={() => printRef.current}
-     />
+          trigger={() => (
+            <button onClick={handlePrint} className="btn btn-warning">
+              Print
+            </button>
+          )}
+          content={() => printRef.current}
+          onBeforePrint={onClose} // Close the modal before printing
+          onAfterPrint={onClose} // Close the modal after printing
+        />
             
           </div>
         </div>

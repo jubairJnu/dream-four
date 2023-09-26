@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const AddServiceModal = ({ isOpen, onClose }) => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
 
 
@@ -28,6 +29,17 @@ const AddServiceModal = ({ isOpen, onClose }) => {
     .then(res => res.json())
     .then(data =>{
       console.log('doctor', data);
+      if (data.insertedId) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Added Successfully',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+      reset();
+      onClose();
     })
     })
    

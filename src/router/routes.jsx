@@ -51,7 +51,8 @@ const routes = createBrowserRouter([
     children:[
       {
         path:"manageuser",
-        element:<PrivateRoutes><ManageUsers/></PrivateRoutes>
+        element:<PrivateRoutes><ManageUsers/></PrivateRoutes>,
+        
       },
       {
         path:"managedoctor",
@@ -67,7 +68,8 @@ const routes = createBrowserRouter([
       },
       {
         path:'incomeledger',
-        element:<PrivateRoutes> <IncomeLedger/> </PrivateRoutes>
+        element:<PrivateRoutes> <IncomeLedger/> </PrivateRoutes>,
+        loader:()=> fetch('https://dream-four-server.vercel.app/users')
       }
     ]
   }

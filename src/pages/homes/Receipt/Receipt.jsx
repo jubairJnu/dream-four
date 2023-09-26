@@ -132,7 +132,7 @@ const Receipt = () => {
           })
         reset();
         setFormData(newReceipt)
-        // openModal();
+        openModal();
       }
     })
   }

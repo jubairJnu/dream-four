@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
 import AddServiceModal from "./AddServiceModal";
+import { HiChevronDown, HiPencilSquare, HiTrash } from "react-icons/hi2";
+import { AiOutlineStop } from "react-icons/ai";
 
 
 const ManageServices = () => {
@@ -81,7 +83,19 @@ useEffect( () =>{
                 </td>
                 <td>{tservice.price}</td>
                 <th>
-                  inactive
+                <div className="dropdown dropdown-bottom">
+                  <label tabIndex={0} className="btn m-1 bg-[#1653B2]
+                   text-white">Action <HiChevronDown/> </label>
+                  <ul tabIndex={0} className="dropdown-content z-[1] menu p-1 shadow rounded-box w-32 h-10  bg-base-100">
+                    <li><button title="Update" className="text-[16px] hover:scale-110 hover:bg-green-500 hover:text-white text-green-600"> <HiPencilSquare/> </button></li>
+                    <li>
+                      <button title="Delete" className="text-[16px] hover:scale-110 hover:bg-red-500 hover:text-white text-red-600"> <HiTrash/> </button></li>
+                    
+                    <li>
+                      <button title="inactive" className="text-[16px] hover:scale-110 hover:bg-red-500 hover:text-white text-red-600"> <AiOutlineStop/> </button></li>
+                    
+                  </ul>
+                </div>
                 </th>
               </tr> )
             }

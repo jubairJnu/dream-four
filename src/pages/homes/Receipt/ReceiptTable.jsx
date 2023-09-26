@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ReceiptModal from './ReceiptModal';
 const ReceiptTable = ({ formData }) => {
   const [recentReceipt, setRecentReceipt] = useState([]);
+  const [selectedReceipt, setselectedReceipt] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const lastReceipt = recentReceipt.slice(-5)
 
@@ -16,11 +17,11 @@ const ReceiptTable = ({ formData }) => {
     setIsModalOpen(false);
   };
 
-  const handleView = () => {    
-      fetch('https://dream-four-server.vercel.app/all-receipt')
+  const handleView = (receipt) => {    
+      fetch(`http://localhost:5000/all-receipt/${receipt._id}`)
         .then(res => res.json())
         .then(data =>{ 
-          setRecentReceipt(data)
+        setselectedReceipt(data)
           console.log('modal',data)});
    
     openModal()
@@ -71,8 +72,8 @@ const ReceiptTable = ({ formData }) => {
                 {receipts?.user}
               </th>
               <th>
-                <button onClick={handleView}>View</button>
-              <ReceiptModal isOpen={isModalOpen} onClose={closeModal} recentReceipt={recentReceipt} />
+                <button onClick={()=> handleView(receipts)}>View</button>
+              <ReceiptModal isOpen={isModalOpen} onClose={closeModal} selectedReceipt={selectedReceipt} />
               </th>
 
 
