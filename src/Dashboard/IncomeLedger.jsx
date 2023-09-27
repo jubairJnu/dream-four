@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { DownloadTableExcel } from "react-export-table-to-excel";
 import { useLoaderData } from "react-router-dom";
 
 
@@ -8,6 +9,8 @@ const IncomeLedger = () => {
   const [endDate, setEndDate] = useState('');
   const [searchResult, setSearchResult] = useState([]);
   const [selectedUser, setSelectedUser] = useState('All');
+
+  const tableRef = useRef(null);
 
   const [totalPrice, setTotalPrice] = useState(0); // 
 
@@ -110,9 +113,22 @@ const IncomeLedger = () => {
           </input></button>
         </form>
       </div>
+{/* excel download buttton */}
+<DownloadTableExcel
+filename="income ledger"
+sheet="income"
+currentTableRef={tableRef.current}
+>
+<button className="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-2 mb-2 rounded-md hover:bg-gradient-to-r hover:from-violet-500 hover:to-fuchsia-500">
+  Download
+</button>
+
+</DownloadTableExcel>
+
+
 
       <div className="overflow-x-auto">
-        <table className="table ">
+        <table ref={tableRef} className="table ">
           {/* head */}
           <thead>
             <tr className="md:text-[20px] bg-[#1653B2] text-white ">
