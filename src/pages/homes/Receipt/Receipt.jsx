@@ -15,6 +15,7 @@ const Receipt = () => {
   const [inamount, setinamount] = useState([]);
   const [priceField, setpriceField] = useState([]);
   const [coverted, setcoverted] = useState([]);
+  const [Order, setOrder] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { register, handleSubmit, reset, formState: { errors }, watch, } = useForm();
   useEffect(() => {
@@ -115,7 +116,7 @@ const Receipt = () => {
       confirmButtonText: 'Submit'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('http://localhost:5000/receipt-entry', {
+        fetch('https://dream-four-server.vercel.app/receipt-entry', {
           method: 'POST',
           headers: {
             'content-type': 'application/json'
@@ -125,7 +126,11 @@ const Receipt = () => {
         })
           .then(res => res.json())
           .then(data => {
+
             if (data.insertedId) {
+              const orderId = data.OrderId; // Assuming your response contains the OrderId
+              console.log('OrderId:', orderId);
+              setOrder(orderId)
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -133,9 +138,12 @@ const Receipt = () => {
                 showConfirmButton: false,
                 timer: 1500
               })
+
+
             }
           })
         reset();
+
         setFormData(newReceipt)
         openModal();
       }
@@ -274,7 +282,7 @@ const Receipt = () => {
             <div className="flex justify-center">
 
               <input className="btn btn-primary btn-sm mt-3 " type="submit" value="Submit" />
-              <Modal isOpen={isModalOpen} onClose={closeModal} formData={formData} />
+              <Modal isOpen={isModalOpen} onClose={closeModal} formData={formData} Order={Order} />
             </div>
           </form>
         </div>

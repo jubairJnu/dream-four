@@ -2,7 +2,7 @@ import { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
 
-const Modal = ({ isOpen, onClose, formData }) => {
+const Modal = ({ isOpen, onClose, formData, Order }) => {
   const printRef = useRef();
   if (!isOpen) return null;
   const formatDate = (date) => {
@@ -46,9 +46,9 @@ const Modal = ({ isOpen, onClose, formData }) => {
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="text-black">Phone Number</span>
+                <span className="text-black">Order Id</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={formData.phone} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={Order} readOnly />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2 ">
