@@ -5,7 +5,10 @@ import ReactToPrint from "react-to-print";
 const Modal = ({ isOpen, onClose, formData }) => {
   const printRef = useRef();
   if (!isOpen) return null;
-  
+  const formatDate = (date) => {
+    const options = { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
 
   const handlePrint = () => {
     if (printRef.current) {
@@ -32,6 +35,7 @@ const Modal = ({ isOpen, onClose, formData }) => {
         <div className="modal-body p-4">
           {/* Your modal content goes here */}
           <div className=" mt-20 mx-5" ref={printRef}>
+          <small><p>print Date: {isOpen ? formatDate(new Date()) : ''}  </p></small>
             <p><small> {formData.date} </small></p>
           <div className="grid grid-cols-2 gap-2 mb-2">
             <div className="form-control">
@@ -76,9 +80,10 @@ const Modal = ({ isOpen, onClose, formData }) => {
               </label>
               <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={formData.paid} readOnly />
             </div>
+            <p className="capitalize">In Word: {formData?.inWord} tk only </p>
           </div>
           <p> prepared by</p>
-          <p> {formData.user}</p>
+          <p > {formData.user} </p>
           </div>
 
           {/* <h3 className="font-bold text-lg">Hello!</h3>

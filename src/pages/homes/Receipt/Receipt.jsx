@@ -33,6 +33,10 @@ const Receipt = () => {
     const convert = numberToWords.toWords(paidField)
     console.log(convert)
     setcoverted(convert);
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   inWord: convert,
+    // }));
   }
 
   // change handle
@@ -96,7 +100,8 @@ const Receipt = () => {
       discount: parseFloat(discount),
       amount: parseFloat(amount),
       total: totalInprice,
-      paid: parseFloat(paid)
+      paid: parseFloat(paid),
+      inWord: coverted
     };
 
     console.log(newReceipt);
@@ -110,7 +115,7 @@ const Receipt = () => {
       confirmButtonText: 'Submit'
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('https://dream-four-server.vercel.app/receipt-entry', {
+        fetch('http://localhost:5000/receipt-entry', {
           method: 'POST',
           headers: {
             'content-type': 'application/json'
@@ -262,7 +267,7 @@ const Receipt = () => {
                   className="input input-bordered input-primary "
                 />
                 <p className="text-red-500"> {errors.paid?.message} </p>
-                <p className="my-4"> <span className="font-bold text-blue-700">In Word:</span> {coverted} tk only  </p>
+                <p className="my-4 capitalize"> <span className="font-bold text-blue-700 ">In Word:</span > {coverted} Tk Only  </p>
               </div>
             </div>
 

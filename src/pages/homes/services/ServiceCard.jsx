@@ -1,3 +1,4 @@
+import LazyLoad from "react-lazy-load";
 
 
 const ServiceCard = ({service}) => {
@@ -5,7 +6,9 @@ const ServiceCard = ({service}) => {
   return (
     <div className="container mx-auto card w-80 mt-16 bg-base-100 shadow-xl group">
     <figure className="px-10 pt-10">
-      <img src={image} alt="Shoes" className="group-hover:scale-110 transition" />
+     <LazyLoad height={200}>
+     <img src={image} alt="Shoes" className="group-hover:scale-110 transition" />
+     </LazyLoad>
     </figure>
     <div className="card-body items-center text-center">
       <h2 className="card-title">Name: {name} </h2>

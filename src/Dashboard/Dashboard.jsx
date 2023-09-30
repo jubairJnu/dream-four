@@ -1,11 +1,20 @@
 import { useContext, useEffect, useState } from "react";
-import { FaHome } from "react-icons/fa";
-import { NavLink, Outlet } from "react-router-dom";
+import { FaHome, FaUserCog } from "react-icons/fa";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
-  const { user } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
+
+
+  const handleLogOut = () => {
+    logOut()
+      .then({})
+      .catch(error => {
+        console.log(error);
+      })
+  }
 
   useEffect(() => {
     fetch('https://dream-four-server.vercel.app/users')
@@ -29,6 +38,7 @@ const Dashboard = () => {
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col items-center justify-center">
           {/* Page content here */}
+          welcome to your dashboard
           <Outlet />
 
           <label htmlFor="my-drawer-2" className="btn btn-primary drawer-button lg:hidden">Open drawer</label>
@@ -81,6 +91,15 @@ const Dashboard = () => {
 
             <div className="divider"></div>
             <li><NavLink to='/'><FaHome />Home</NavLink></li>
+            <div className="dropdown dropdown-bottom">
+             <li><Link className="flex" ><FaUserCog /> Profile</Link> </li>
+              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li className="bg-[#2048ca] rounded-md text-white"><a>Change Password</a></li>
+                <li className="bg-[#b2163d] rounded-md text-white mt-2">
+                  <button onClick={handleLogOut}>Log Out</button></li>
+              </ul>
+            </div>
+            
           </ul>
 
 

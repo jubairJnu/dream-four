@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import ReceiptModal from './ReceiptModal';
+import Loading from '../../../component/Loading';
 const ReceiptTable = ({ formData }) => {
   const [recentReceipt, setRecentReceipt] = useState([]);
   const [selectedReceipt, setselectedReceipt] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const lastReceipt = recentReceipt.slice(-5)
+  const [isLoading, setIsLoading] = useState(true);
+  const lastReceipt = recentReceipt.slice(-5).reverse()
 
 
 
@@ -30,13 +32,17 @@ const ReceiptTable = ({ formData }) => {
   useEffect(() => {
     fetch('https://dream-four-server.vercel.app/all-receipt')
       .then(res => res.json())
-      .then(data => setRecentReceipt(data));
+      .then(data =>
+        {setIsLoading(false)
+         setRecentReceipt(data)});
   }, [])
 
   return (
     <div className='my-10'>
+        <h3 className='text-xl font-bold mb-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white  p-2'>Last Five Receipt</h3>
       <table className="table">
         {/* head */}
+      
         <thead>
           <tr className="md:text-[20px] bg-[#1653B2] text-white ">
             <th>
@@ -51,37 +57,41 @@ const ReceiptTable = ({ formData }) => {
 
           </tr>
         </thead>
-        <tbody >
+       {
+        isLoading? <Loading/> : <> 
+         <tbody >
 
-          {
-            lastReceipt?.map((receipts, index) => <tr key={receipts._id}>
-              <th>
-                {index + 1}
-              </th>
-              <td>
-                {receipts?.orderId}
-              </td>
-              <td>
-                <p>{receipts?.paid}tk  </p>
-              </td>
-              <td>{receipts?.service} </td>
-              <th>
-                {receipts?.date}
-              </th>
-              <th>
-                {receipts?.user}
-              </th>
-              <th>
-                <button onClick={()=> handleView(receipts)}>View</button>
-              <ReceiptModal isOpen={isModalOpen} onClose={closeModal} selectedReceipt={selectedReceipt} />
-              </th>
-
-
-            </tr>)
-          }
+{
+  lastReceipt?.map((receipts, index) => <tr key={receipts._id}>
+    <th>
+      {index + 1}
+    </th>
+    <td>
+      {receipts?.OrderId}
+    </td>
+    <td>
+      <p>{receipts?.paid}tk  </p>
+    </td>
+    <td>{receipts?.service} </td>
+    <th>
+      {receipts?.date}
+    </th>
+    <th>
+      {receipts?.user}
+    </th>
+    <th>
+      <button onClick={()=> handleView(receipts)}>View</button>
+    <ReceiptModal isOpen={isModalOpen} onClose={closeModal} selectedReceipt={selectedReceipt} />
+    </th>
 
 
-        </tbody>
+  </tr>)
+}
+
+
+</tbody>
+        </>
+       }
 
 
       </table>

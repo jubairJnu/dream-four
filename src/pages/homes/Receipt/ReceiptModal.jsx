@@ -3,7 +3,7 @@ import ReactToPrint from "react-to-print";
 
 
 const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
-  console.log("receipt modal", selectedReceipt)
+  // console.log("receipt modal", selectedReceipt)
   const receiptRef = useRef();
 
   if (!isOpen) return null;
@@ -49,9 +49,9 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
             </div>
             <div className="form-control">
               <label className="label">
-                <span className="text-black">Phone Number</span>
+                <span className="text-black">Order Id</span>
               </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt.phone} readOnly />
+              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt?.OrderId} readOnly />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-2 ">
@@ -82,6 +82,7 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                 <span className="text-black">Paid amount</span>
               </label>
               <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={selectedReceipt.paid} readOnly />
+              <p className="capitalize"> In word: {selectedReceipt.inWord} tk only</p>
             </div>
           </div>
           <p> prepared by</p>

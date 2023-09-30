@@ -5,13 +5,13 @@ import Swal from "sweetalert2";
 const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const SignUp = () => {
-const [erro, setErro] = useState('');
-  const { createUser, user, updateUserProfile,setLoading} = useContext(AuthContext);
-  const { register, handleSubmit,reset } = useForm();
+  const [erro, setErro] = useState('');
+  const { createUser, user, updateUserProfile, setLoading } = useContext(AuthContext);
+  const { register, handleSubmit, reset } = useForm();
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
 
   const onSubmit = (data) => {
-        const formData = new FormData();
+    const formData = new FormData();
     formData.append('image', (data.image[0]));
     fetch(img_hosting_url, {
       method: 'POST',
@@ -19,51 +19,51 @@ const [erro, setErro] = useState('');
     })
       .then(res => res.json())
       .then(responseImage => {
-        
+
         const imageUrl = responseImage.data.display_url;
-        const {name, email} = data;
-    const UserInfo = {name, email,image:imageUrl, role:'staff'}
-    console.log(UserInfo);
+        const { name, email } = data;
+        const UserInfo = { name, email, image: imageUrl, role: 'staff' }
+        console.log(UserInfo);
         createUser(email, data.password)
           .then(result => {
             const signedUser = result.user;
             console.log(signedUser);
-                updateUserProfile(name, imageUrl)
-                  .then(() => {
-                    fetch('https://dream-four-server.vercel.app/users',{
-                      method:"POST",
-                      headers:{
-                        'content-type': 'application/json',
-                      },
-                      body:JSON.stringify(UserInfo)
-                    })
-                    .then(res => res.json())
-                    .then(data => { 
-                      console.log('data from host',data);                     
-                      if(data.insertedId){
-                        Swal.fire({
-                          position: 'top-end',
-                          icon: 'success',
-                          title: 'Registered Successfully',
-                          showConfirmButton: false,
-                          timer: 1500
-                        })
-                        reset();
-                      }
-                    })
-                    
-            })
-          })
-          .catch(err => {
-            setErro(err.message)
+            updateUserProfile(name, imageUrl)
+              .then(() => {
+                fetch('https://dream-four-server.vercel.app/users', {
+                  method: "POST",
+                  headers: {
+                    'content-type': 'application/json',
+                  },
+                  body: JSON.stringify(UserInfo)
+                })
+                  .then(res => res.json())
+                  .then(data => {
+                    console.log('data from host', data);
+                    if (data.message == "already exisit") {
+                      alert('User Already Exists')
+                    }
+                    else if (data.insertedId) {
+                      Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Registered Successfully',
+                        showConfirmButton: false,
+                        timer: 1500
+                      })
+                      reset();
+                    }
+                  })
 
+              })
           })
+
       })
-    .catch(err => {
-      setLoading(false)
-      console.log(err.message)
+      .catch(err => {
+        setLoading(false)
+        console.log(err.message)
 
-    })
+      })
 
 
 
@@ -120,7 +120,7 @@ const [erro, setErro] = useState('');
                 <span className="label-text font-semibold">Photo * </span>
               </label>
               <input
-                {...register("image", )}
+                {...register("image",)}
                 type="file"
                 className="file-input w-full"
               />
