@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
-import numberToWords from 'number-to-words';
+import numberToWords from "number-to-words";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Modal from "../../../component/Modal";
@@ -17,53 +18,56 @@ const Receipt = () => {
   const [coverted, setcoverted] = useState([]);
   const [Order, setOrder] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { register, handleSubmit, reset, formState: { errors }, watch, } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    watch,
+  } = useForm();
   useEffect(() => {
-    fetch('https://dream-four-server.vercel.app/services')
-      .then(res => res.json())
-      .then(data => setServices(data))
-  }, [])
+    fetch("https://dream-four-server.vercel.app/services")
+      .then((res) => res.json())
+      .then((data) => setServices(data));
+  }, []);
 
   // handle price in word
 
-  const handlePriceWord = event => {
+  const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-    console.log(paidField)
+    console.log(paidField);
 
-    const convert = numberToWords.toWords(paidField)
-    console.log(convert)
+    const convert = numberToWords.toWords(paidField);
+    console.log(convert);
     setcoverted(convert);
     // setFormData((prevFormData) => ({
     //   ...prevFormData,
     //   inWord: convert,
     // }));
-  }
+  };
 
   // change handle
-  const handleDiscountChange = e => {
+  const handleDiscountChange = (e) => {
     const discountField = e.target.value;
     const grandTotal = inamount - (0 || discountField);
-    console.log("total", grandTotal)
+    console.log("total", grandTotal);
     settotalInPrice(grandTotal);
-  }
+  };
 
-  const handleTotalChange = e => {
+  const handleTotalChange = (e) => {
     const amountField = e.target.value;
-    setinamount(amountField)
+    setinamount(amountField);
     console.log(amountField);
-
-
-  }
-
+  };
 
   // doctor fetch;
 
   useEffect(() => {
-    fetch('https://dream-four-server.vercel.app/doctors')
-      .then(res => res.json())
-      .then(data => setDoctors(data))
-  }, [])
+    fetch("https://dream-four-server.vercel.app/doctors")
+      .then((res) => res.json())
+      .then((data) => setDoctors(data));
+  }, []);
 
   // modal-----
 
@@ -76,17 +80,16 @@ const Receipt = () => {
   };
 
   const onSubmit = (data) => {
-    const { patient, phone, amount, doctor, service, total, paid, discount } = data;
+    const { patient, phone, amount, doctor, service, total, paid, discount } =
+      data;
 
     const date = new Date();
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
 
     // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
     const formattedDate = `${year}-${month}-${day}`;
-
 
     const UserName = user.displayName;
     const userEmail = user.email;
@@ -94,61 +97,62 @@ const Receipt = () => {
       patient,
       user: UserName,
       email: userEmail,
-      date: formattedDate,
       phone,
       doctor,
       service,
-      discount: parseFloat(discount),
       amount: parseFloat(amount),
       total: totalInprice,
-      paid: parseFloat(paid),
-      inWord: coverted
+      paymentInfo: [
+        {
+          date: formattedDate,
+          discount: parseFloat(discount),
+
+          paid: parseFloat(paid),
+          inWord: coverted,
+        },
+      ],
     };
 
     console.log(newReceipt);
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You cannot edit it!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Submit'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Submit",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch('https://dream-four-server.vercel.app/receipt-entry', {
-          method: 'POST',
+        fetch("https://dream-four-server.vercel.app/receipt-entry", {
+          method: "POST",
           headers: {
-            'content-type': 'application/json'
-
+            "content-type": "application/json",
           },
-          body: JSON.stringify(newReceipt)
+          body: JSON.stringify(newReceipt),
         })
-          .then(res => res.json())
-          .then(data => {
-
+          .then((res) => res.json())
+          .then((data) => {
             if (data.insertedId) {
               const orderId = data.OrderId; // Assuming your response contains the OrderId
-              console.log('OrderId:', orderId);
-              setOrder(orderId)
+              console.log("OrderId:", orderId);
+              setOrder(orderId);
               Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Added Successfully',
+                position: "top-end",
+                icon: "success",
+                title: "Added Successfully",
                 showConfirmButton: false,
-                timer: 1500
-              })
-
-
+                timer: 1500,
+              });
             }
-          })
+          });
         reset();
 
-        setFormData(newReceipt)
+        setFormData(newReceipt);
         openModal();
       }
-    })
-  }
+    });
+  };
 
   return (
     <div className="container mx-auto mt-24  ">
@@ -159,53 +163,72 @@ const Receipt = () => {
             <div className="md:flex justify-between ">
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px] font-semibold">Patient Name * </span>
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Patient Name *{" "}
+                  </span>
                 </label>
                 <input
-                  {...register("patient", { required: true, })}
+                  {...register("patient", { required: true })}
                   type="text"
                   placeholder="Your Name"
                   className="input input-bordered w-full input-primary"
                 />
-                {errors.patient && <span className="text-red-500">this field is required</span>}
+                {errors.patient && (
+                  <span className="text-red-500">this field is required</span>
+                )}
               </div>
 
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px] font-semibold">Phone Number*</span>
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Phone Number*
+                  </span>
                 </label>
                 <input
-                  {...register("phone", { required: true, })}
+                  {...register("phone", { required: true })}
                   type="number"
                   placeholder="phone number"
                   className="input input-bordered input-primary "
                 />
-                {errors.phone && <span className="text-red-500">this field is required</span>}
+                {errors.phone && (
+                  <span className="text-red-500">this field is required</span>
+                )}
               </div>
             </div>
 
             <div className="md:flex justify-between">
               <div className="form-control  w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px]  font-semibold">Doctor *</span>
+                  <span className="label-text md:text-[18px]  font-semibold">
+                    Doctor *
+                  </span>
                 </label>
-                <select defaultValue="pick One" {...register("doctor", { required: false })} className="select select-bordered select-primary">
-                  <option disabled >Pick One</option>
-                  {
-                    doctors?.map(doctor => <option key={doctor._id}> {doctor.name} </option>)
-                  }
-
+                <select
+                  defaultValue="pick One"
+                  {...register("doctor", { required: false })}
+                  className="select select-bordered select-primary"
+                >
+                  <option disabled>Pick One</option>
+                  {doctors?.map((doctor) => (
+                    <option key={doctor._id}> {doctor.name} </option>
+                  ))}
                 </select>
               </div>
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px]  font-semibold">Service *</span>
+                  <span className="label-text md:text-[18px]  font-semibold">
+                    Service *
+                  </span>
                 </label>
-                <select defaultValue="pick One" {...register("service", { required: false })} className="select select-bordered select-primary">
-                  <option disabled >Pick One</option>
-                  {
-                    services?.map(service => <option key={service._id}> {service.name} </option>)
-                  }
+                <select
+                  defaultValue="pick One"
+                  {...register("service", { required: false })}
+                  className="select select-bordered select-primary"
+                >
+                  <option disabled>Pick One</option>
+                  {services?.map((service) => (
+                    <option key={service._id}> {service.name} </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -213,10 +236,15 @@ const Receipt = () => {
             <div className="md:flex justify-between">
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px] font-semibold">Amount * </span>
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Amount *{" "}
+                  </span>
                 </label>
                 <input
-                  {...register("amount", { required: true, valueAsNumber: true })}
+                  {...register("amount", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
                   type="number"
                   placeholder="Amount"
                   onChange={handleTotalChange}
@@ -226,10 +254,15 @@ const Receipt = () => {
               </div>
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px] font-semibold">Total Amount * </span>
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Total Amount *{" "}
+                  </span>
                 </label>
                 <input
-                  {...register("total", { required: false, valueAsNumber: true })}
+                  {...register("total", {
+                    required: false,
+                    valueAsNumber: true,
+                  })}
                   type="number"
                   placeholder="Total Amount"
                   value={totalInprice}
@@ -242,31 +275,34 @@ const Receipt = () => {
             <div className="md:flex justify-between">
               <div className="form-control w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px] font-semibold">Discount </span>
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Discount{" "}
+                  </span>
                 </label>
                 <input
-                  {...register("discount", {
-
-                  })}
+                  {...register("discount", {})}
                   type="number"
                   placeholder="Enter Amount"
                   onChange={handleDiscountChange}
-
                   className="input input-bordered input-primary"
                 />
-
               </div>
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
-                  <span className="label-text md:text-[18px] font-semibold">Pay Now * </span>
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Pay Now *{" "}
+                  </span>
                 </label>
                 <input
                   {...register("paid", {
-                    required: true, maxLength: 5, valueAsNumber: true, validate: data => {
+                    required: true,
+                    maxLength: 5,
+                    valueAsNumber: true,
+                    validate: (data) => {
                       if (totalInprice < data) {
-                        return "Paid amount is bigger than total"
+                        return "Paid amount is bigger than total";
                       }
-                    }
+                    },
                   })}
                   type="number"
                   placeholder="Enter Amount"
@@ -275,18 +311,31 @@ const Receipt = () => {
                   className="input input-bordered input-primary "
                 />
                 <p className="text-red-500"> {errors.paid?.message} </p>
-                <p className="my-4 capitalize"> <span className="font-bold text-blue-700 ">In Word:</span > {coverted} Tk Only  </p>
+                <p className="my-4 capitalize">
+                  {" "}
+                  <span className="font-bold text-blue-700 ">
+                    In Word:
+                  </span>{" "}
+                  {coverted} Tk Only{" "}
+                </p>
               </div>
             </div>
 
             <div className="flex justify-center">
-
-              <input className="btn btn-primary btn-sm mt-3 " type="submit" value="Submit" />
-              <Modal isOpen={isModalOpen} onClose={closeModal} formData={formData} Order={Order} />
+              <input
+                className="btn btn-primary btn-sm mt-3 "
+                type="submit"
+                value="Submit"
+              />
+              <Modal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                formData={formData}
+                Order={Order}
+              />
             </div>
           </form>
         </div>
-
       </div>
       <ReceiptTable formData={formData} />
     </div>

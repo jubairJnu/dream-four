@@ -3,40 +3,45 @@ import { DownloadTableExcel } from "react-export-table-to-excel";
 import { useLoaderData } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import Loading from "../component/Loading";
-
+import { key } from "localforage";
 
 const IncomeLedger = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [Incomes, setIncomes] = useState([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [selectedUser, setSelectedUser] = useState('All');
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [selectedUser, setSelectedUser] = useState("All");
   const [users, setUsers] = useState([]);
   const [isloading, setIsloading] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user, userInfo } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch('https://dream-four-server.vercel.app/users')
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
+    fetch("https://dream-four-server.vercel.app/users")
+      .then((res) => res.json())
+      .then((data) => {
         setUsers(data);
       });
   }, []);
 
-  const currentUserEmail = user?.email;
+  const currentUserEmail = userInfo?.email;
 
-  const currentUser = users.find(user => user.email === currentUserEmail);
+  const currentUser = users.find((user) => user.email === currentUserEmail);
 
   const tableRef = useRef(null);
 
-  const [totalPrice, setTotalPrice] = useState(0); // 
+  const [totalPrice, setTotalPrice] = useState(0); //
 
   const usersName = useLoaderData();
 
-
   const calculateTotalPrice = () => {
-    const total = Incomes.reduce((accumulator, income) => {
-      return accumulator + parseFloat(income.paid);
+    const total = Incomes?.reduce((accumulator, income) => {
+      const paymentTotal = income.paymentInfo.reduce(
+        (paymentAccumulator, paymentDetail) => {
+          return paymentAccumulator + parseFloat(paymentDetail.paid);
+        },
+        0
+      );
+      return accumulator + paymentTotal;
     }, 0);
     setTotalPrice(total);
   };
@@ -50,7 +55,7 @@ const IncomeLedger = () => {
 
   const handleSearch = (event) => {
     event.preventDefault();
-    setIsloading(true)
+    setIsloading(true);
     const form = event.target;
     const startedDate = form.startDate.value;
     const endedDate = form.endDate.value;
@@ -60,32 +65,30 @@ const IncomeLedger = () => {
 
     // Create a URLSearchParams object to pass query parameters
     const params = new URLSearchParams();
-    params.append('startDate', startedDate);
-    params.append('endDate', endedDate);
+    params.append("startDate", startedDate);
+    params.append("endDate", endedDate);
 
     // Include the selected user in the query only if it's not 'All'
-    if (selectedUser !== 'All') {
-      params.append('user', selectedUser);
+    if (selectedUser !== "All") {
+      params.append("user", selectedUser);
     }
-   params.append('email', currentUser?.email)
+    params.append("email", currentUser?.email);
 
     // ********************
     let endPointApi = " ";
 
     if (currentUser?.role == "admin" || currentUser?.role == "owner") {
-      endPointApi = `https://dream-four-server.vercel.app/all-incomeledger?${params.toString()}`
+      endPointApi = `${base_url}/all-incomeledger?${params.toString()}`;
+    } else if (currentUser?.role == "staff") {
+      endPointApi = `${base_url}income-ledger?${params.toString()}`;
     }
-
-    else if ( currentUser?.role == 'staff'){
-      endPointApi = `https://dream-four-server.vercel.app/income-ledger?${params.toString()}`
-    }
-
+    console.log("income", Incomes);
     // Use the URLSearchParams object in the fetch request
-    fetch(endPointApi)
+    fetch(endPointApi, {})
       .then((res) => res.json())
       .then((data) => {
         setIncomes(data);
-        setIsloading(false)
+        setIsloading(false);
         console.log(data);
       })
       .catch((error) => console.error(error));
@@ -93,27 +96,36 @@ const IncomeLedger = () => {
     console.log(startDate);
   };
 
-
-
   return (
     <div className="w-full ">
-      <h1 className="text-center text-purple-500 text-2xl mb-8">Income Ledger</h1>
-      <div >
-        <form onSubmit={handleSearch} className="md:flex justify-center items-center mb-10 gap-3 ">
-
+      <h1 className="text-center text-purple-500 text-2xl mb-8">
+        Income Ledger
+      </h1>
+      <div>
+        <form
+          onSubmit={handleSearch}
+          className="md:flex justify-center items-center mb-10 gap-3 "
+        >
           <div className="form-control sm:my-2">
-
             <label className="input-group">
               <span className="bg-[#1653B2] text-white ">Start Date</span>
-              <input name="startDate" type="date" className="input input-bordered" />
+              <input
+                name="startDate"
+                type="date"
+                className="input input-bordered"
+              />
             </label>
           </div>
           {/*  */}
           <div className="form-control my-2">
-
             <label className="input-group">
               <span className="bg-[#1653B2] text-white ">End Date</span>
-              <input name="endDate" type="date" placeholder="info@site.com" className="input input-bordered" />
+              <input
+                name="endDate"
+                type="date"
+                placeholder="info@site.com"
+                className="input input-bordered"
+              />
             </label>
           </div>
           {/* 3 */}
@@ -126,26 +138,40 @@ const IncomeLedger = () => {
                 value={selectedUser}
                 onChange={(e) => setSelectedUser(e.target.value)}
               >
-             {
-              currentUser && (currentUser?.role == 'admin' || currentUser?.role == 'owner')  && <option value="All">All</option>
-             }
+                {currentUser &&
+                  (currentUser?.role == "admin" ||
+                    currentUser?.role == "owner") && (
+                    <option value="All">All</option>
+                  )}
                 {currentUser?.role == "staff" ? (
-                  <option value={currentUser?.name}> {currentUser?.name} </option>
-                ): usersName?.map(user => (
-                  <option key={user._id} value={user.name}> {user?.name} </option>
-                )) }
+                  <option value={currentUser?.name}>
+                    {" "}
+                    {currentUser?.name}{" "}
+                  </option>
+                ) : (
+                  usersName?.map((user) => (
+                    <option key={user._id} value={user.name}>
+                      {" "}
+                      {user?.name}{" "}
+                    </option>
+                  ))
+                )}
                 {/* {usersName.map((user) => (
                   <option key={user._id} value={user.name}>
                     {user.name}
                   </option>
                 ))} */}
               </select>
-
-
             </div>
           </div>
-          <button className="btn  btn-primary cursor-pointer ">  <input className="  text-white" type="submit" value="Search">
-          </input></button>
+          <button className="btn  btn-primary cursor-pointer ">
+            {" "}
+            <input
+              className="  text-white"
+              type="submit"
+              value="Search"
+            ></input>
+          </button>
         </form>
       </div>
       {/* excel download buttton */}
@@ -157,71 +183,48 @@ const IncomeLedger = () => {
         <button className="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-2 mb-2 rounded-md hover:bg-gradient-to-r hover:from-violet-500 hover:to-fuchsia-500">
           Download
         </button>
-
       </DownloadTableExcel>
-
-
 
       <div className="overflow-x-auto">
         <table ref={tableRef} className="table ">
           {/* head */}
           <thead>
             <tr className="md:text-[20px] bg-[#1653B2] text-white ">
-              <th>
-                #
-              </th>
+              <th>#</th>
               <th>Order Id</th>
               <th>Amount</th>
-              <th>Service</th>
+              <th className="hidden sm:table-cell">Service</th>
               <th>Date</th>
               <th>User Name</th>
-             
             </tr>
           </thead>
-         {
-          isloading? <Loading  /> :
-          <tbody >
-
-          {
-            Incomes?.map((income, index) => <tr key={income._id}>
-              <th>
-                {index + 1}
-              </th>
-              <td>
-                {income?.OrderId}
-              </td>
-              <td>
-                <p>{income?.paid}tk  </p>
-              </td>
-              <td>{income?.service} </td>
-              <th>
-                {income?.date}
-              </th>
-              <th>
-                {income?.user}
-              </th>
-              
-            </tr>)
-          }
-          <tr className="border-2 font-bold text-[16px]">
-            <td>
-
-            </td>
-            <td>
-              Total
-            </td>
-            <td >
-              {totalPrice} tk
-            </td>
-          </tr>
-
-        </tbody>
-         }
-
-
+          {isloading ? (
+            <Loading />
+          ) : (
+            <tbody>
+              {Incomes?.map((income, index) =>
+                income.paymentInfo.map((paydetais, paydetaisIndex) => (
+                  <tr key={income._id}>
+                    <th>{index + 1}</th>
+                    <td>{income?.OrderId}</td>
+                    <td>
+                      <p>{paydetais?.paid}tk </p>
+                    </td>
+                    <td className="hidden sm:table-cell">{income?.service} </td>
+                    <th>{paydetais?.date}</th>
+                    <th>{income?.user}</th>
+                  </tr>
+                ))
+              )}
+              <tr className="border-2 font-bold text-[16px]">
+                <td></td>
+                <td>Total</td>
+                <td>{totalPrice} tk</td>
+              </tr>
+            </tbody>
+          )}
         </table>
       </div>
-
     </div>
   );
 };

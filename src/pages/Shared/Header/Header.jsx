@@ -7,12 +7,8 @@ const Header = () => {
   const { user, logOut } = useContext(AuthContext);
 
   const handleLogOut = () => {
-    logOut()
-      .then({})
-      .catch(error => {
-        console.log(error);
-      })
-  }
+    logOut();
+  };
 
   return (
     <div className="navbar  bg-[#1653B2] fixed top-0 z-20 text-[20px] text-white ">

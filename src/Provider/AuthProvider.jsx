@@ -1,64 +1,82 @@
 import { createContext, useEffect, useState } from "react";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, onAuthStateChanged } from "firebase/auth";
-import app from "../firebase/firebase.config";
 
 export const AuthContext = createContext();
-const auth = getAuth(app);
-
 
 // *** atuh provider routes
 const AuthProvider = ({ children }) => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [user, setUser] = useState(null);
+  const [userInfo, setUserInfo] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // authentication system
+  useEffect(() => {
+    const isAuthenticated = localStorage.getItem("isAuthenticated");
+    const storedUserInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-  const createUser = (email, password) => {
-    setLoading(true);
-    return createUserWithEmailAndPassword(auth, email, password);
-  }
-
-  const login = (email, password) =>{
-    setLoading(true);
-    return signInWithEmailAndPassword(auth, email, password);
-  }
-
-  const logOut = () =>{
-   return signOut(auth);
-  }
-
-  const updateUserProfile =(name,photo)=>{
-    return updateProfile(auth.currentUser, {
-       displayName: name, photoURL: photo
-     })
-     
-   }
-
-   useEffect(() => {
-    const unsubscribed = onAuthStateChanged(auth, currentUser =>{
-      setUser(currentUser);
-      setLoading(false)
-    });
-    return () => {
-      unsubscribed();
+    if (isAuthenticated === "true" && storedUserInfo) {
+      setUser({ isAuthenticated: true });
+      setUserInfo(storedUserInfo);
     }
-   },[])
+    setLoading(false);
+  }, []);
 
-  // pass function
+  // console.log("from provide",user)
+
+  // login system
+  const login = (email, password) => {
+    setLoading(true);
+    fetch("${base_url}/logged", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "invalid User") {
+          setLoading(false);
+          setError("Invalid credentials");
+          setUser({ isAuthenticated: false });
+        } else if (data.status === "valid User") {
+          // Store user information in local storage
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("userInfo", JSON.stringify(data.user));
+
+          // Update state or perform other actions based on successful login
+          setUser({ isAuthenticated: true });
+          setUserInfo(data.user);
+          console.log("user", data.user);
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        setError("Something went wrong");
+        console.error("Error:", error);
+      });
+  };
+
+  // logout
+
+  const logOut = () => {
+    loading;
+    setUser({ isAuthenticated: false });
+    localStorage.removeItem("isAuthenticated");
+    localStorage.removeItem("userInfo");
+  };
+
   const authInfo = {
     user,
-    loading,
-    setLoading,
-    createUser,
+    userInfo,
+    error,
     login,
     logOut,
-    updateUserProfile
-  }
-
+    loading,
+  };
   return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
   );
 };
 
