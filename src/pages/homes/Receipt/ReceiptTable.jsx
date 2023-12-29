@@ -63,26 +63,30 @@ const ReceiptTable = ({ formData }) => {
         ) : (
           <>
             <tbody>
-              {lastReceipt?.map((receipts, index) => (
-                <tr key={receipts._id}>
-                  <th>{index + 1}</th>
-                  <td>{receipts?.OrderId}</td>
-                  <td>
-                    <p>{receipts?.paid}tk </p>
-                  </td>
-                  <td className="hidden sm:table-cell">{receipts?.service} </td>
-                  <th>{receipts?.date}</th>
-                  <th>{receipts?.user}</th>
-                  <th className="hidden sm:table-cell">
-                    <button onClick={() => handleView(receipts)}>View</button>
-                    <ReceiptModal
-                      isOpen={isModalOpen}
-                      onClose={closeModal}
-                      selectedReceipt={selectedReceipt}
-                    />
-                  </th>
-                </tr>
-              ))}
+              {lastReceipt?.map((receipts, index) =>
+                receipts?.paymentInfo?.map((paymentDetails) => (
+                  <tr key={receipts._id}>
+                    <th>{index + 1}</th>
+                    <td>{receipts?.OrderId}</td>
+                    <td>
+                      <p>{paymentDetails?.paid}tk </p>
+                    </td>
+                    <td className="hidden sm:table-cell">
+                      {receipts?.service}{" "}
+                    </td>
+                    <th>{paymentDetails?.date}</th>
+                    <th>{receipts?.user}</th>
+                    <th className="hidden sm:table-cell">
+                      <button onClick={() => handleView(receipts)}>View</button>
+                      <ReceiptModal
+                        isOpen={isModalOpen}
+                        onClose={closeModal}
+                        selectedReceipt={selectedReceipt}
+                      />
+                    </th>
+                  </tr>
+                ))
+              )}
             </tbody>
           </>
         )}

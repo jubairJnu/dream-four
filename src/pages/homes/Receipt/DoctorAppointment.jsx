@@ -1,10 +1,14 @@
 /* eslint-disable no-unused-vars */
-import {  useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import numberToWords from "number-to-words";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import Modal from "../../../component/Modal";
+import Loading from "../../../component/Loading";
 
 const DoctorAppointment = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const {
     register,
     handleSubmit,
@@ -12,9 +16,24 @@ const DoctorAppointment = () => {
     formState: { errors },
     watch,
   } = useForm();
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [error, setError] = useState(" ");
-  const [batchs, setBatch] = useState([]);
+  const { userInfo } = useContext(AuthContext);
+
+  useEffect(() => {
+    fetch("https://dream-four-server.vercel.app/users")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setUsers(data);
+      });
+  }, []);
+
+  const currentUserEmail = userInfo?.email;
+
+  const currentUser = users.find((user) => user.email === currentUserEmail);
+
   const [doctors, setDoctors] = useState([]);
   const [formData, setFormData] = useState([]);
   const [totalInprice, settotalInPrice] = useState(null); //total
@@ -61,8 +80,17 @@ const DoctorAppointment = () => {
   };
 
   const onSubmit = (data) => {
-    const { student_name, phone, course, batch, fee, total, discount, paid } =
-      data;
+    const {
+      patient,
+      phone,
+      appointedDoctor,
+      appointmentDate,
+      fee,
+      total,
+      discount,
+      paid,
+      refference,
+    } = data;
     const date = new Date();
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -73,33 +101,38 @@ const DoctorAppointment = () => {
     // const UserName = user.displayName;
     // const userEmail = user.email;
 
-    const newAdmisson = {
-      student_name,
-      // user: UserName,
-      // email: userEmail,
-      date: formattedDate,
+    const newAppointment = {
+      patient,
+      user: currentUser.name,
       phone,
-      course,
-      batch,
-      discount: parseFloat(discount),
-      fee: parseFloat(fee),
-      total: totalInprice,
-      paid: parseFloat(paid),
-      due: totalInprice - paid,
-      inWord: coverted,
-      access: "allow",
-      status: "accepted",
+      appointedDoctor,
+      appointmentDate,
+      service: "Doctor Appointment",
+      fee,
+      total,
+      paymentInfo: [
+        {
+          date: formattedDate,
+          discount: parseFloat(discount),
+          paid: parseFloat(paid),
+          inWord: coverted,
+        },
+      ],
+
+      refference,
     };
-    fetch("http://localhost:3000/create_admission", {
+    setIsLoading(true);
+    fetch(`${base_url}/doctor_appointment`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(newAdmisson),
+      body: JSON.stringify(newAppointment),
     })
       .then((res) => res.json())
       .then((admission) => {
         if (admission.insertedId) {
+          setIsLoading(false);
           const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -116,13 +149,11 @@ const DoctorAppointment = () => {
             title: "Data Added successfully",
           });
           reset();
-        } else if (admission.message == "already exisit") {
-          setError("This student already exists");
-          reset();
+        } else {
+          setIsLoading(false);
         }
       });
   };
-
   //
   useEffect(() => {
     fetch("https://dream-four-server.vercel.app/doctors")
@@ -149,9 +180,9 @@ const DoctorAppointment = () => {
                 </span>
               </label>
               <input
-                {...register("student_name", { required: true })}
+                {...register("patient", { required: true })}
                 type="text"
-                placeholder="Your Name"
+                placeholder="Patient Name"
                 className="input input-bordered w-full input-primary"
               />
               {errors.student_name && (
@@ -189,7 +220,7 @@ const DoctorAppointment = () => {
                 </span>
               </label>
               <select
-                {...register("batch", { required: true })}
+                {...register("appointedDoctor", { required: true })}
                 className="select select-bordered select-primary  text-black"
               >
                 {doctors?.map((doctor) => (
@@ -211,7 +242,7 @@ const DoctorAppointment = () => {
                 </span>
               </label>
               <input
-                {...register("phone", { required: true })}
+                {...register("appointmentDate", { required: true })}
                 type="date"
                 placeholder="phone number"
                 className="input input-bordered input-primary text-black"
@@ -334,11 +365,16 @@ const DoctorAppointment = () => {
           </div>
 
           <div className="flex justify-center">
-            <input
-              className="btn btn-primary btn-sm mt-3 "
-              type="submit"
-              value="Submit"
-            />
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <input
+                className="btn btn-primary btn-sm mt-3 "
+                type="submit"
+                value="Submit"
+                disabled={isLoading}
+              />
+            )}
             {/* <Modal isOpen={isModalOpen} onClose={closeModal} formData={formData} Order={Order} /> */}
           </div>
         </form>

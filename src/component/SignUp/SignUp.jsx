@@ -1,74 +1,58 @@
 import { useForm } from "react-hook-form";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../Provider/AuthProvider";
+import { useState } from "react";
+
 import Swal from "sweetalert2";
 const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const SignUp = () => {
-  const [erro, setErro] = useState('');
-  const { createUser, user, updateUserProfile, setLoading } = useContext(AuthContext);
+  const [erro, setErro] = useState("");
+
   const { register, handleSubmit, reset } = useForm();
-  const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`
+  const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`;
 
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append('image', (data.image[0]));
+    formData.append("image", data.image[0]);
     fetch(img_hosting_url, {
-      method: 'POST',
-      body: formData
+      method: "POST",
+      body: formData,
     })
-      .then(res => res.json())
-      .then(responseImage => {
-
+      .then((res) => res.json())
+      .then((responseImage) => {
         const imageUrl = responseImage.data.display_url;
-        const { name, email } = data;
-        const UserInfo = { name, email, image: imageUrl, role: 'staff' }
-        console.log(UserInfo);
-        createUser(email, data.password)
-          .then(result => {
-            const signedUser = result.user;
-            console.log(signedUser);
-            updateUserProfile(name, imageUrl)
-              .then(() => {
-                fetch('https://dream-four-server.vercel.app/users', {
-                  method: "POST",
-                  headers: {
-                    'content-type': 'application/json',
-                  },
-                  body: JSON.stringify(UserInfo)
-                })
-                  .then(res => res.json())
-                  .then(data => {
-                    console.log('data from host', data);
-                    if (data.message == "already exisit") {
-                      alert('User Already Exists')
-                    }
-                    else if (data.insertedId) {
-                      Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Registered Successfully',
-                        showConfirmButton: false,
-                        timer: 1500
-                      })
-                      reset();
-                    }
-                  })
+        const { name, email, password } = data;
+        const UserInfo = {
+          name,
+          email,
+          password,
+          image: imageUrl,
+          role: "staff",
+          status: "active",
+        };
 
-              })
-          })
-
-      })
-      .catch(err => {
-        setLoading(false)
-        console.log(err.message)
-
-      })
-
-
-
-
-
+        fetch("https://dream-four-server.vercel.app/create_user", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(UserInfo),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.message == "already exisit") {
+              setErro("User Already Exist");
+            } else if (data.insertedId) {
+              Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "Registered Successfully",
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              reset();
+            }
+          });
+      });
   };
 
   return (
@@ -79,6 +63,7 @@ const SignUp = () => {
           Create A New User
         </h1>
         <div className="md:p-10">
+          {erro && <p className="text-center text-red-500">{erro}</p>}
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-control">
               <label className="label">
@@ -120,14 +105,17 @@ const SignUp = () => {
                 <span className="label-text font-semibold">Photo * </span>
               </label>
               <input
-                {...register("image",)}
+                {...register("image")}
                 type="file"
                 className="file-input w-full"
               />
             </div>
             <div className="flex justify-center">
-
-              <input className="btn btn-primary mt-9 " type="submit" value="Add User" />
+              <input
+                className="btn btn-primary mt-9 "
+                type="submit"
+                value="Add User"
+              />
             </div>
           </form>
         </div>

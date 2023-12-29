@@ -24,12 +24,7 @@ const Login = () => {
       {/* ---- */}
 
       <div className="hero min-h-screen ">
-        <div className="hero-content flex-col lg:flex-row ">
-          <div className="text-center lg:text-left">
-            <div className="w-1/2 mx-auto">
-              <Lottie animationData={typing}></Lottie>
-            </div>
-          </div>
+        <div className="hero-content flex-col lg:flex-row-reverse ">
           <div className="card md:shrink-0 md:w-96 max-w-sm shadow-2xl bg-base-100">
             <h1 className="md:text-5xl text-center md:p-4 font-bold">
               Login now!
@@ -57,17 +52,20 @@ const Login = () => {
                     name="password"
                     placeholder="password"
                     className="input input-bordered"
+                    required
                   />
-                  <label className="label">
-                    <a href="#" className="label-text-alt link link-hover ">
-                      Forgot password?
-                    </a>
-                  </label>
                 </div>
                 <div className="form-control mt-6">
                   <button className="btn btn-primary">Login</button>
                 </div>
               </form>
+            </div>
+          </div>
+
+          <div className="text-center lg:text-left">
+            {/* animation */}
+            <div className="w-1/2 mx-auto invisible md:visible">
+              <Lottie animationData={typing}></Lottie>
             </div>
           </div>
         </div>

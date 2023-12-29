@@ -53,7 +53,7 @@ const Dashboard = () => {
               <h1 className="text-xl font-semibold py-4">Dashboard</h1>
               <img
                 className="mask mask-circle w-24 h-24 border-4 border-purple-500 rounded-full "
-                src={user?.photoURL}
+                src={currentUser?.image}
                 alt="Image"
               />
 
@@ -69,57 +69,45 @@ const Dashboard = () => {
             {currentUser && currentUser.role == "admin" && (
               <div>
                 <li>
-                  <NavLink to="/dashboard/manageuser">Manage User</NavLink>{" "}
+                  <NavLink to="/dashboard/manageuser">Manage User</NavLink>
                 </li>
                 <li>
-                  {" "}
-                  <NavLink to="/dashboard/managedoctor">
-                    {" "}
-                    Manage Doctor{" "}
-                  </NavLink>{" "}
+                  <NavLink to="/dashboard/managedoctor">Manage Doctor</NavLink>
                 </li>
                 <li>
-                  {" "}
                   <NavLink to="/dashboard/manageservice">
-                    {" "}
-                    Manage Service{" "}
-                  </NavLink>{" "}
+                    Manage Service
+                  </NavLink>
                 </li>
                 <li>
-                  {" "}
-                  <NavLink to="/dashboard/incomeledger">
-                    {" "}
-                    Income Ledger
-                  </NavLink>{" "}
+                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
                 </li>
+                <NavLink to="/dashboard/appointment">Appointment List</NavLink>
               </div>
             )}
+
+            {/* for owner */}
+
             {currentUser && currentUser.role === "owner" && (
               <div>
                 <li>
-                  {" "}
-                  <NavLink to="/dashboard/managedoctor">
-                    {" "}
-                    Manage Doctor{" "}
-                  </NavLink>{" "}
+                  <NavLink to="/dashboard/managedoctor">Manage Doctor</NavLink>
                 </li>
                 <li>
-                  {" "}
-                  <NavLink to="/dashboard/incomeledger">
-                    {" "}
-                    Income Ledger
-                  </NavLink>{" "}
+                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
                 </li>
+                <NavLink to="/dashboard/appointment">Appointment List</NavLink>
               </div>
             )}
             {currentUser && currentUser.role === "staff" && (
               <div>
                 <li>
-                  {" "}
-                  <NavLink to="/dashboard/incomeledger">
-                    {" "}
-                    Income Ledger
-                  </NavLink>{" "}
+                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/appointment">
+                    Appointment List
+                  </NavLink>
                 </li>
               </div>
             )}
@@ -137,7 +125,7 @@ const Dashboard = () => {
               <li>
                 <Link className="flex">
                   <FaUserCog /> Profile
-                </Link>{" "}
+                </Link>
               </li>
               <ul
                 tabIndex={0}

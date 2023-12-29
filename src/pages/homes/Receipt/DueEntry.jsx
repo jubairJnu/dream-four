@@ -123,6 +123,7 @@ const DueEntry = () => {
                 onChange={handleOrderSearch}
                 className="input input-bordered input-info w-full "
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -179,34 +180,42 @@ const DueEntry = () => {
         
         </div> */}
 
-        <div>
-          {searchDatas &&
-          searchDatas.data &&
-          searchDatas.data.orderDetails &&
-          searchDatas.data.orderDetails.length > 0 ? (
-            <div>
-              <p>Patient Name: {searchDatas?.data?.orderDetails[0]?.patient}</p>
-              <p>Order ID: {searchDatas?.data?.orderDetails[0]?.OrderId}</p>
-              <p>Service Name: {searchDatas?.data?.orderDetails[0]?.service}</p>
-              <p>Total Fee: {searchDatas?.data?.orderDetails[0]?.total}</p>
-              <p>
-                Paid Amount:
-                {searchDatas?.data?.orderDetails[0]?.paymentInfo[0]?.paid}
-              </p>
-              <p>
-                Discount:
-                {searchDatas?.data?.orderDetails[0]?.paymentInfo[0]?.discount}
-              </p>
-              <p>
-                Due Amount:
-                {searchDatas?.data?.orderDetails[0]?.total -
-                  searchDatas?.data?.totalPaidAmount}
-              </p>
-            </div>
-          ) : (
-            <p>No order details found</p>
-          )}
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
+            {searchDatas &&
+            searchDatas.data &&
+            searchDatas.data.orderDetails &&
+            searchDatas.data.orderDetails.length > 0 ? (
+              <div>
+                <p>
+                  Patient Name: {searchDatas?.data?.orderDetails[0]?.patient}
+                </p>
+                <p>Order ID: {searchDatas?.data?.orderDetails[0]?.OrderId}</p>
+                <p>
+                  Service Name: {searchDatas?.data?.orderDetails[0]?.service}
+                </p>
+                <p>Total Fee: {searchDatas?.data?.orderDetails[0]?.total}</p>
+                <p>
+                  Paid Amount:
+                  {searchDatas?.data?.orderDetails[0]?.paymentInfo[0]?.paid}
+                </p>
+                <p>
+                  Discount:
+                  {searchDatas?.data?.orderDetails[0]?.paymentInfo[0]?.discount}
+                </p>
+                <p>
+                  Due Amount:
+                  {searchDatas?.data?.orderDetails[0]?.total -
+                    searchDatas?.data?.totalPaidAmount}
+                </p>
+              </div>
+            ) : (
+              <p>No order details found</p>
+            )}
+          </div>
+        )}
       </div>
 
       {/* payment details table */}

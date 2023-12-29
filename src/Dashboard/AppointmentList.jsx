@@ -1,55 +1,30 @@
 /* eslint-disable no-unused-vars */
-import { useContext, useEffect, useRef, useState } from "react";
 import { DownloadTableExcel } from "react-export-table-to-excel";
+import Loading from "../component/Loading";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
-import Loading from "../component/Loading";
 
-const IncomeLedger = () => {
+const AppointmentList = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
-  const [Incomes, setIncomes] = useState([]);
+  const [Appointment, setAppointment] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedUser, setSelectedUser] = useState("All");
+  const [selectDoctor, setSelectDoctor] = useState();
   const [users, setUsers] = useState([]);
   const [isloading, setIsloading] = useState(false);
-  const { user, userInfo } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/users")
+    fetch(`${base_url}/users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
       });
   }, []);
 
-  const currentUserEmail = userInfo?.email;
-
-  const currentUser = users.find((user) => user.email === currentUserEmail);
+  const doctors = useLoaderData();
 
   const tableRef = useRef(null);
-
-  const [totalPrice, setTotalPrice] = useState(0); //
-
-  const usersName = useLoaderData();
-
-  const calculateTotalPrice = () => {
-    const total = Incomes?.reduce((accumulator, income) => {
-      const paymentTotal = income.paymentInfo.reduce(
-        (paymentAccumulator, paymentDetail) => {
-          return paymentAccumulator + parseFloat(paymentDetail.paid);
-        },
-        0
-      );
-      return accumulator + paymentTotal;
-    }, 0);
-    setTotalPrice(total);
-  };
-
-  useEffect(() => {
-    // Step 2: Call the calculateTotalPrice function when Incomes data changes
-    calculateTotalPrice();
-  }, [Incomes]);
 
   // handlechange
 
@@ -67,39 +42,38 @@ const IncomeLedger = () => {
     const params = new URLSearchParams();
     params.append("startDate", startedDate);
     params.append("endDate", endedDate);
+    params.append("appointedDoctor", selectDoctor);
 
     // Include the selected user in the query only if it's not 'All'
-    if (selectedUser !== "All") {
-      params.append("user", selectedUser);
-    }
-    params.append("email", currentUser?.email);
+    // if (selectedUser !== "All") {
+
+    // }
+
+    // params.append("email", currentUser?.email);
 
     // ********************
-    let endPointApi = " ";
+    // let endPointApi = " ";
 
-    if (currentUser?.role == "admin" || currentUser?.role == "owner") {
-      endPointApi = `${base_url}/all-incomeledger?${params.toString()}`;
-    } else if (currentUser?.role == "staff") {
-      endPointApi = `${base_url}income-ledger?${params.toString()}`;
-    }
-    
+    // if (currentUser?.role == "admin" || currentUser?.role == "owner") {
+    //   endPointApi = `${base_url}/all-infoledger?${params.toString()}`;
+    // } else if (currentUser?.role == "staff") {
+    //   endPointApi = `${base_url}info-ledger?${params.toString()}`;
+    // }
+
     // Use the URLSearchParams object in the fetch request
-    fetch(endPointApi, {})
+    fetch(`${base_url}/doctor_appointment?${params.toString()}`, {})
       .then((res) => res.json())
       .then((data) => {
-        setIncomes(data);
+        setAppointment(data);
         setIsloading(false);
         console.log(data);
       })
       .catch((error) => console.error(error));
-
-   
   };
-
   return (
-    <div className="w-full ">
+    <div>
       <h1 className="text-center text-purple-500 text-2xl mb-8">
-        Income Ledger
+        Doctor Appointment List
       </h1>
       <div>
         <form
@@ -113,6 +87,7 @@ const IncomeLedger = () => {
                 name="startDate"
                 type="date"
                 className="input input-bordered"
+                required
               />
             </label>
           </div>
@@ -125,47 +100,33 @@ const IncomeLedger = () => {
                 type="date"
                 placeholder="info@site.com"
                 className="input input-bordered"
+                required
               />
             </label>
           </div>
           {/* 3 */}
           <div className="form-control">
             <div className="input-group">
-              <span className="bg-[#1653B2] text-white ">Users</span>
+              <span className="bg-[#1653B2] text-white ">Doctor</span>
               <select
                 name="users"
                 className="select select-bordered"
-                value={selectedUser}
-                onChange={(e) => setSelectedUser(e.target.value)}
+                value={selectDoctor}
+                onChange={(e) => setSelectDoctor(e.target.value)}
+                required
               >
-                {currentUser &&
-                  (currentUser?.role == "admin" ||
-                    currentUser?.role == "owner") && (
-                    <option value="All">All</option>
-                  )}
-                {currentUser?.role == "staff" ? (
-                  <option value={currentUser?.name}>
-                    {" "}
-                    {currentUser?.name}{" "}
+                <option disabled value="" selected>
+                  Select Doctor
+                </option>
+                {doctors?.map((doctor) => (
+                  <option key={doctor._id} value={doctor.name}>
+                    {doctor?.name}
                   </option>
-                ) : (
-                  usersName?.map((user) => (
-                    <option key={user._id} value={user.name}>
-                      {" "}
-                      {user?.name}{" "}
-                    </option>
-                  ))
-                )}
-                {/* {usersName.map((user) => (
-                  <option key={user._id} value={user.name}>
-                    {user.name}
-                  </option>
-                ))} */}
+                ))}
               </select>
             </div>
           </div>
           <button className="btn  btn-primary cursor-pointer ">
-            {" "}
             <input
               className="  text-white"
               type="submit"
@@ -176,8 +137,8 @@ const IncomeLedger = () => {
       </div>
       {/* excel download buttton */}
       <DownloadTableExcel
-        filename="income ledger"
-        sheet="income"
+        filename="info ledger"
+        sheet="info"
         currentTableRef={tableRef.current}
       >
         <button className="bg-gradient-to-r from-sky-500 to-indigo-500 text-white p-2 mb-2 rounded-md hover:bg-gradient-to-r hover:from-violet-500 hover:to-fuchsia-500">
@@ -189,38 +150,40 @@ const IncomeLedger = () => {
         <table ref={tableRef} className="table ">
           {/* head */}
           <thead>
-            <tr className="md:text-[20px] bg-[#1653B2] text-white ">
+            <tr className="md:text-[15px] bg-[#1653B2] text-white ">
               <th>#</th>
+              <th>Serial</th>
               <th>Order Id</th>
-              <th>Amount</th>
-              <th className="hidden sm:table-cell">Service</th>
-              <th>Date</th>
-              <th>User Name</th>
+              <th>Patient</th>
+              <th>Phone</th>
+              <th className="hidden sm:table-cell">Appointment To</th>
+              <th className="hidden sm:table-cell">Appointment Date</th>
             </tr>
           </thead>
           {isloading ? (
             <Loading />
           ) : (
-            <tbody>
-              {Incomes?.map((income, index) =>
-                income.paymentInfo.map((paydetais) => (
-                  <tr key={income._id}>
+            <tbody className="text-center">
+              {Appointment?.data?.map((info, index) =>
+                info.paymentInfo.map((paydetais) => (
+                  <tr key={info._id}>
                     <th>{index + 1}</th>
-                    <td>{income?.OrderId}</td>
+                    <td>{info?.serial}</td>
                     <td>
-                      <p>{paydetais?.paid}tk </p>
+                      <p>{info?.OrderId}</p>
                     </td>
-                    <td className="hidden sm:table-cell">{income?.service} </td>
-                    <th>{paydetais?.date}</th>
-                    <th>{income?.user}</th>
+                    <td>
+                      <p>{info?.patient} </p>
+                    </td>
+                    <td>
+                      <p>{info?.phone} </p>
+                    </td>
+
+                    <th>{info?.appointedDoctor}</th>
+                    <th>{info?.appointmentDate}</th>
                   </tr>
                 ))
               )}
-              <tr className="border-2 font-bold text-[16px]">
-                <td></td>
-                <td>Total</td>
-                <td>{totalPrice} tk</td>
-              </tr>
             </tbody>
           )}
         </table>
@@ -229,4 +192,4 @@ const IncomeLedger = () => {
   );
 };
 
-export default IncomeLedger;
+export default AppointmentList;

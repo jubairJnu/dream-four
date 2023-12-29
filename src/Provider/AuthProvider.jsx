@@ -26,8 +26,9 @@ const AuthProvider = ({ children }) => {
   // login system
   const login = (email, password) => {
     setLoading(true);
-    fetch("${base_url}/logged", {
+    fetch(`${base_url}/logged`, {
       method: "POST",
+
       headers: {
         "content-type": "application/json",
       },

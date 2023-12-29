@@ -13,6 +13,7 @@ import IncomeLedger from "../Dashboard/IncomeLedger";
 import Services from "../pages/homes/services/Services";
 import Doctors from "../pages/homes/DoctorCorner/Doctors";
 import ReceiptTabs from "../pages/homes/Receipt/ReceiptTabs";
+import AppointmentList from "../Dashboard/AppointmentList";
 
 const routes = createBrowserRouter([
   {
@@ -87,11 +88,19 @@ const routes = createBrowserRouter([
         ),
       },
       {
+        path: "appointment",
+        element: (
+          <PrivateRoutes>
+            <AppointmentList />
+          </PrivateRoutes>
+        ),
+        loader: () => fetch("https://dream-four-server.vercel.app/doctors"),
+      },
+      {
         path: "incomeledger",
         element: (
           <PrivateRoutes>
-            {" "}
-            <IncomeLedger />{" "}
+            <IncomeLedger />
           </PrivateRoutes>
         ),
         loader: () => fetch("https://dream-four-server.vercel.app/users"),
