@@ -3,7 +3,8 @@ import { useForm } from "react-hook-form";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
 
-const AddServiceModal = ({ isOpen, onClose }) => {
+const ExpenditureEntryModal = ({ isOpen, onClose }) => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -14,14 +15,15 @@ const AddServiceModal = ({ isOpen, onClose }) => {
 
   const onSubmit = (data) => {
     setIsLoading(true);
-    const { name, price, description } = data;
-    const serviceInfo = { name, price, description, status: "active" };
-    fetch("https://dream-four-server.vercel.app/services-entry", {
+    const { purpose, amount, date } = data;
+    const expenditureInfo = { purpose, amount, date, type: "expenditure" };
+    // fetch(`${base_url}/expenditure`,
+    fetch("http://localhost:5000/expenditure", {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(serviceInfo),
+      body: JSON.stringify(expenditureInfo),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -41,7 +43,6 @@ const AddServiceModal = ({ isOpen, onClose }) => {
         onClose();
       });
   };
-
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 ${
@@ -61,16 +62,16 @@ const AddServiceModal = ({ isOpen, onClose }) => {
               <div className="form-control w-full ">
                 <label className="label">
                   <span className="label-text font-semibold text-yellow-400">
-                    name *
+                    Purpose *
                   </span>
                 </label>
                 <input
-                  {...register("name", { required: true })}
+                  {...register("purpose", { required: true })}
                   type="text"
                   placeholder="Name"
                   className="input input-bordered w-full "
                 />
-                {errors?.name && (
+                {errors?.purpose && (
                   <span className="text-red-500">this field is required</span>
                 )}
               </div>
@@ -80,11 +81,11 @@ const AddServiceModal = ({ isOpen, onClose }) => {
               <div className="form-control w-full ">
                 <label className="label">
                   <span className="label-text font-semibold text-yellow-400">
-                    Price *
+                    Amount *
                   </span>
                 </label>
                 <input
-                  {...register("price", {
+                  {...register("amount", {
                     required: true,
                     valueAsNumber: true,
                   })}
@@ -92,23 +93,26 @@ const AddServiceModal = ({ isOpen, onClose }) => {
                   placeholder="Price"
                   className="input input-bordered w-full "
                 />
-                {errors?.fees && (
+                {errors?.amount && (
                   <span className="text-red-500">this field is required</span>
                 )}
               </div>
-            </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text text-yellow-400">
-                  Description (Optional)
-                </span>
-              </label>
-              <textarea
-                {...register("description", { required: false })}
-                className="textarea textarea-bordered h-24"
-                placeholder="Our Blood Test is good"
-              ></textarea>
+              {/* 2 */}
+
+              <div className="form-control w-full">
+                <label className="label">
+                  <span className="label-text text-yellow-400">Date</span>
+                </label>
+                <input
+                  {...register("date", { required: false })}
+                  className="input input-bordered w-full"
+                  type="date"
+                ></input>
+                {errors?.date && (
+                  <span className="text-red-500">this field is required</span>
+                )}
+              </div>
             </div>
 
             {isLoading ? (
@@ -148,4 +152,4 @@ const AddServiceModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddServiceModal;
+export default ExpenditureEntryModal;

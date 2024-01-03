@@ -124,7 +124,7 @@ const Receipt = () => {
       confirmButtonText: "Submit",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch("https://dream-four-server.vercel.app/receipt-entry", {
+        fetch("http://localhost:5000/receipt-entry", {
           method: "POST",
           headers: {
             "content-type": "application/json",

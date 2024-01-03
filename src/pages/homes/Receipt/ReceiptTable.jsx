@@ -18,15 +18,51 @@ const ReceiptTable = ({ formData }) => {
     setIsModalOpen(false);
   };
 
-  const handleView = (receipt) => {
+  // const handleView = (receipt, paymentDetails) => {
+  //   fetch(`https://dream-four-server.vercel.app/all-receipt/${receipt._id}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log("first", data);
+  //       const selectedDate = paymentDetails.date; // Use the date from the first paymentInfo object
+  //       console.log(selectedDate);
+
+  //       const selectedReceiptData = data?.data.orderDetails.filter(
+  //         (item) => item.paymentInfo.some(info=> info.date=== selectedDate)
+  //       );
+  //       setselectedReceipt(selectedReceiptData);
+  //       console.log("modal", selectedReceiptData);
+  //     });
+
+  //   // openModal();
+  // };
+  const handleView = (receipt, paymentDetails) => {
     fetch(`https://dream-four-server.vercel.app/all-receipt/${receipt._id}`)
       .then((res) => res.json())
       .then((data) => {
-        setselectedReceipt(data);
-        console.log("modal", data);
+        console.log("first", data);
+        const selectedDate = paymentDetails.date; // Use the date from the first paymentInfo object
+        console.log(selectedDate);
+
+        const selectedReceiptData = data?.data.orderDetails
+          .map((item) => {
+            const matchingPaymentInfo = item.paymentInfo.filter(
+              (info) => info.date === selectedDate
+            );
+
+            // Include the item only if there's a matching paymentInfo for the selected date
+            if (matchingPaymentInfo.length > 0) {
+              return { ...item, paymentInfo: matchingPaymentInfo };
+            }
+
+            return null; // Exclude the item if there's no matching paymentInfo
+          })
+          .filter(Boolean); // Remove null entries from the result
+
+        setselectedReceipt(selectedReceiptData);
+        console.log("modal", selectedReceiptData);
       });
 
-    openModal();
+    openModal(selectedReceipt);
   };
 
   useEffect(() => {
@@ -77,7 +113,11 @@ const ReceiptTable = ({ formData }) => {
                     <th>{paymentDetails?.date}</th>
                     <th>{receipts?.user}</th>
                     <th className="hidden sm:table-cell">
-                      <button onClick={() => handleView(receipts)}>View</button>
+                      <button
+                        onClick={() => handleView(receipts, paymentDetails)}
+                      >
+                        View
+                      </button>
                       <ReceiptModal
                         isOpen={isModalOpen}
                         onClose={closeModal}

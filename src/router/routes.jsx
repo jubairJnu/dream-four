@@ -14,6 +14,9 @@ import Services from "../pages/homes/services/Services";
 import Doctors from "../pages/homes/DoctorCorner/Doctors";
 import ReceiptTabs from "../pages/homes/Receipt/ReceiptTabs";
 import AppointmentList from "../Dashboard/AppointmentList";
+import ExpenditureList from "../Dashboard/Expenditure/ExpenditureList";
+import EditDoctors from "../Dashboard/ManageDoctors/EditDoctors";
+import EditService from "../Dashboard/Manageservice/EditService";
 
 const routes = createBrowserRouter([
   {
@@ -54,6 +57,7 @@ const routes = createBrowserRouter([
         <Dashboard />
       </PrivateRoutes>
     ),
+
     children: [
       {
         path: "manageuser",
@@ -72,6 +76,16 @@ const routes = createBrowserRouter([
         ),
       },
       {
+        path: "managedoctor/:id",
+        element: (
+          <PrivateRoutes>
+            <EditDoctors />
+          </PrivateRoutes>
+        ),
+        loader: ({ params }) =>
+          fetch(`https://dream-four-server.vercel.app/doctor/${params.id}`),
+      },
+      {
         path: "manageservice",
         element: (
           <PrivateRoutes>
@@ -80,10 +94,28 @@ const routes = createBrowserRouter([
         ),
       },
       {
+        path: "manageservice/:id",
+        element: (
+          <PrivateRoutes>
+            <EditService />
+          </PrivateRoutes>
+        ),
+        loader: ({ params }) =>
+          fetch(`https://dream-four-server.vercel.app/service/${params.id}`),
+      },
+      {
         path: "signup",
         element: (
           <PrivateRoutes>
             <SignUp></SignUp>
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "expenditure",
+        element: (
+          <PrivateRoutes>
+            <ExpenditureList />
           </PrivateRoutes>
         ),
       },
