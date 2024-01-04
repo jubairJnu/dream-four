@@ -18,6 +18,7 @@ const EditService = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    setIsLoading(true)
     const { name, price, description, status } = data;
     const updatedService = { name, price, description, status };
     console.log(updatedService);
@@ -30,6 +31,7 @@ const EditService = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        setIsLoading(false)
         console.log(data);
         if (data.data.matchedCount > 0) {
           const Toast = Swal.mixin({
@@ -48,6 +50,7 @@ const EditService = () => {
             title: "Updated successfully",
           });
           reset();
+          setIsLoading(false)
         }
       });
   };

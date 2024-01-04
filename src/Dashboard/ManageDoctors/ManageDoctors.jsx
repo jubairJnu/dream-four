@@ -27,7 +27,7 @@ const ManageDoctors = () => {
   };
 
   useEffect(() => {
-    fetch(`${base_url}/doctors`)
+    fetch(`${base_url}/all_doctors`)
       .then((res) => res.json())
       .then((data) => setTotalDoctors(data));
   }, []);

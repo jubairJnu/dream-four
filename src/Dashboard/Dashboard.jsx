@@ -97,6 +97,11 @@ const Dashboard = () => {
                       Income Ledger
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink to="/dashboard/expenditure">
+                      Expenditure Entry
+                    </NavLink>
+                  </li>
                   <NavLink to="/dashboard/appointment">
                     Appointment List
                   </NavLink>

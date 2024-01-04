@@ -2,7 +2,6 @@ import { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
 const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
-  console.log("print", selectedReceipt);
   const receiptRef = useRef();
   const calculateTotal = () => {
     if (!selectedReceipt || !selectedReceipt[0]?.service) {
@@ -43,7 +42,7 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
       {selectedReceipt && selectedReceipt.length > 0 && (
         <div className="fixed inset-0 flex items-center justify-end z-10 right-0 top-0 left-80 overflow-y-auto">
           <div
-            className="modal-top max-h-32 "
+            className="modal-top  "
             onClick={onClose}
             style={{
               background: "rgba(0, 0, 0, 0.5)",
@@ -160,12 +159,7 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                               (receipt, index) => (
                                 <tr key={receipt._id}>
                                   <th>{index + 1}</th>
-                                  <span className="px-2">
-                                    {" "}
-                                    {selectedReceipt &&
-                                      selectedReceipt[0]?.paymentInfo[0]
-                                        ?.inWord}
-                                  </span>
+                                  <th> {receipt?.name}</th>
                                   <th className="ps-64">{receipt.price}</th>
                                 </tr>
                               )
@@ -322,12 +316,7 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                               (receipt, index) => (
                                 <tr key={receipt._id}>
                                   <th>{index + 1}</th>
-                                  <span className="px-2">
-                                    {" "}
-                                    {selectedReceipt &&
-                                      selectedReceipt[0]?.paymentInfo[0]
-                                        ?.inWord}
-                                  </span>
+                                  <th>{receipt?.name}</th>
                                   <th className="ps-64">{receipt.price}</th>
                                 </tr>
                               )

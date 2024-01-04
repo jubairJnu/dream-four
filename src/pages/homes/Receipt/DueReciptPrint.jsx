@@ -1,15 +1,15 @@
 import { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
-const Modal = ({ isOpen, onClose, formData, Order }) => {
-  console.log("modal", formData);
+const DueReciptPrint = ({ isOpen, onClose, selectedReceipt }) => {
+  // console.log("due", selectedReceipt);
 
   const calculateTotal = () => {
-    if (!formData || !formData?.service) {
+    if (!selectedReceipt || !selectedReceipt?.service) {
       return 0;
     }
 
-    return formData?.service.reduce(
+    return selectedReceipt?.service.reduce(
       (total, receipt) => total + receipt.price,
       0
     );
@@ -35,7 +35,6 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
       printRef.current.handlePrint();
     }
   };
-
   return (
     <div className="fixed inset-0 flex items-center justify-end z-10 right-0 top-0 left-80 overflow-y-auto">
       <div
@@ -76,149 +75,6 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
               {/* content one for office */}
               <div>
                 <p className="mb-1">
-                  <small>Office Copy</small>
-                </p>
-                <div className="text-center mb-2  border-2 p-3">
-                  {/* style */}
-                  <h2>Dream Four Hospital And Diagonstic Center</h2>
-                  <p>
-                    Omor New Market, Bridge Road, Zero Point, Paikgasa, Khulna
-                  </p>
-                </div>
-                <div className="flex justify-between">
-                  <small>
-                    <p>print Date: {isOpen ? formatDate(new Date()) : ""} </p>
-                  </small>
-                  <p>
-                    <small> {formData?.paymentInfo[0]?.date} </small>
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <div className="form-control">
-                    <label className="label">
-                      <span className=" text-black">Patient Name</span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={formData.patient}
-                      readOnly
-                    />
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="text-black">Age </span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={formData?.age}
-                      readOnly
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-2 mb-2 ">
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="text-black">Doctor</span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={formData?.doctor}
-                      readOnly
-                    />
-                  </div>
-
-                  {/* order */}
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="text-black">Order Id </span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={Order}
-                      readOnly
-                    />
-                  </div>
-                </div>
-
-                {/* services */}
-                <div className="bg-white text-black">
-                  <table className="table">
-                    <thead className="flex-col justify-between items-center "></thead>
-                    {formData &&
-                      formData?.service?.map((srvc, index) => (
-                        <tr key={srvc._id}>
-                          <th> {index + 1} </th>
-                          <th>{srvc?.name}</th>
-                          <th className="ps-64">{srvc?.price}</th>
-                        </tr>
-                      ))}
-                  </table>
-                </div>
-                {/* total */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center px-5 border-t-2">
-                      <th>Total</th>
-                      <th></th> {calculateTotal()}
-                    </thead>
-                  </table>
-                </div>
-                {/* discount */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center p">
-                      <th className="ps-6">Discount</th>
-                      <th>- {formData?.discount} % / -</th>
-                    </thead>
-                  </table>
-                </div>
-                {/* grand total */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center px-5 border-t-2">
-                      <th>Grand Total </th>
-
-                      {formData?.total}
-                    </thead>
-                  </table>
-                </div>
-                {/* paid */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center px-5 border-t-2">
-                      <th>Paid</th>
-                      <th></th>
-                      {formData?.paymentInfo[0]?.paid}
-                    </thead>
-                  </table>
-                </div>
-                {/* in word */}
-                <p className="capitalize">
-                  In Word:{" "}
-                  <span className="px-2">
-                    {formData?.paymentInfo[0]?.inWord}
-                  </span>{" "}
-                  tk only{" "}
-                </p>
-                {/*  */}
-
-                <p> prepared by</p>
-                <p> {formData.user} </p>
-                {/* footer */}
-                <div className="mt-1 border p-3 text-center">
-                  <p>Mobile: 01329-633401, 01329-633402, 01329-633403</p>
-                  <p>Web: www.dreamfourhospital.com</p>
-                </div>
-              </div>
-              {/* line */}
-              <div className="border-dotted border-s"></div>
-              {/* content 2 for customer */}
-              <div>
-                <p className="mb-1">
                   <small>Customer Copy</small>
                 </p>
                 <div className="text-center mb-2  border-2 p-3">
@@ -233,7 +89,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <p>print Date: {isOpen ? formatDate(new Date()) : ""} </p>
                   </small>
                   <p>
-                    <small> {formData?.paymentInfo[0]?.date} </small>
+                    <small> {selectedReceipt?.paymentInfo[0]?.date} </small>
                   </p>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mb-2">
@@ -244,7 +100,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <input
                       className="input input-bordered input-sm text-black text-center p-1"
                       type="text"
-                      value={formData.patient}
+                      value={selectedReceipt?.patient}
                       readOnly
                     />
                   </div>
@@ -255,7 +111,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <input
                       className="input input-bordered input-sm text-black text-center p-1"
                       type="text"
-                      value={formData?.age}
+                      value={selectedReceipt?.age}
                       readOnly
                     />
                   </div>
@@ -268,11 +124,10 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <input
                       className="input input-bordered input-sm text-black text-center p-1"
                       type="text"
-                      value={formData?.doctor}
+                      value={selectedReceipt?.doctor}
                       readOnly
                     />
                   </div>
-
                   {/* order */}
                   <div className="form-control">
                     <label className="label">
@@ -281,18 +136,18 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <input
                       className="input input-bordered input-sm text-black text-center p-1"
                       type="text"
-                      value={Order}
+                      value={selectedReceipt?.OrderId}
                       readOnly
                     />
                   </div>
                 </div>
 
                 {/* services */}
-                <div className="bg-white ">
+                <div className="bg-white text-black">
                   <table className="table">
                     <thead className="flex-col justify-between items-center "></thead>
-                    {formData &&
-                      formData?.service?.map((srvc, index) => (
+                    {selectedReceipt &&
+                      selectedReceipt?.service?.map((srvc, index) => (
                         <tr key={srvc._id}>
                           <th> {index + 1} </th>
                           <th>{srvc?.name}</th>
@@ -315,7 +170,9 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                   <table className="table">
                     <thead className="flex justify-between items-center p">
                       <th className="ps-6">Discount</th>
-                      <th>- {formData?.discount} % / -</th>
+                      <th>
+                        - {selectedReceipt?.paymentInfo[0]?.discount} % / -
+                      </th>
                     </thead>
                   </table>
                 </div>
@@ -325,7 +182,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <thead className="flex justify-between items-center px-5 border-t-2">
                       <th>Grand Total </th>
 
-                      {formData?.total}
+                      {selectedReceipt?.total}
                     </thead>
                   </table>
                 </div>
@@ -335,7 +192,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <thead className="flex justify-between items-center px-5 border-t-2">
                       <th>Paid</th>
                       <th></th>
-                      {formData?.paymentInfo[0]?.paid}
+                      {selectedReceipt?.paymentInfo[0]?.paid}
                     </thead>
                   </table>
                 </div>
@@ -343,14 +200,14 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 <p className="capitalize">
                   In Word:{" "}
                   <span className="px-2">
-                    {formData?.paymentInfo[0]?.inWord}
+                    {selectedReceipt?.paymentInfo[0]?.inWord}
                   </span>{" "}
                   tk only{" "}
                 </p>
                 {/*  */}
 
                 <p> prepared by</p>
-                <p> {formData.user} </p>
+                <p> {selectedReceipt.user} </p>
                 {/* footer */}
                 <div className="mt-1 border p-3 text-center">
                   <p>Mobile: 01329-633401, 01329-633402, 01329-633403</p>
@@ -358,10 +215,10 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 </div>
               </div>
             </div>
+            {/* line */}
+            <div className="border-dotted border-s"></div>
+            {/* content 2 for customer */}
           </div>
-          {/* <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Press ESC key or click the button below to close</p> */}
-
           <div className="modal-action flex justify-between">
             <form method="dialog">
               <button className="btn " onClick={onClose}>
@@ -385,4 +242,4 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
   );
 };
 
-export default Modal;
+export default DueReciptPrint;

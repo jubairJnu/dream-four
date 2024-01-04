@@ -26,7 +26,7 @@ const ManageServices = () => {
     setIsModalOpen(false);
   };
   useEffect(() => {
-    fetch(`${base_url}/services`)
+    fetch(`${base_url}/all_services`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

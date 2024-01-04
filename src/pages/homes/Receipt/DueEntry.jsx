@@ -1,11 +1,17 @@
-/* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import numberToWords from "number-to-words";
 import Loading from "../../../component/Loading";
-import ReceiptModal from "./ReceiptModal";
+
+import DueReciptPrint from "./DueReciptPrint";
+import Swal from "sweetalert2";
+
+import ModalDue from "./ModalDue";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 const DueEntry = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
+  const { userInfo } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
   const [selectedReceipt, setselectedReceipt] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -13,6 +19,14 @@ const DueEntry = () => {
   const [formData, setFormData] = useState([]);
   const [priceField, setpriceField] = useState([]);
   const [coverted, setcoverted] = useState([]);
+
+  useEffect(() => {
+    fetch(`${base_url}/users`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+      });
+  }, []);
 
   //hnadler
   const handlePriceWord = (event) => {
@@ -23,10 +37,10 @@ const DueEntry = () => {
     const convert = numberToWords.toWords(paidField);
     console.log(convert);
     setcoverted(convert);
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      inWord: convert,
-    }));
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   inWord: convert,
+    // }));
   };
 
   const openModal = () => {
@@ -69,6 +83,9 @@ const DueEntry = () => {
   };
 
   //handle submit
+  const currentUserEmail = userInfo?.email;
+
+  const currentUser = users.find((user) => user.email === currentUserEmail);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -80,16 +97,19 @@ const DueEntry = () => {
 
     // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
     const formattedDate = `${year}-${month}-${day}`;
-
+    const UserName = currentUser?.name;
+    const userEmail = currentUser?.email;
     const form = event.target;
     const OrderId = form.orderId.value;
     const paid = form.paid.value;
     const discount = form.discount.value;
     const paymentInfo = {
+      user: UserName,
+      email: userEmail,
       OrderId,
       paid: parseInt(paid),
       discount,
-      coverted,
+      inWord: coverted,
       date: formattedDate,
     };
     console.log("paymentinfo", paymentInfo);
@@ -103,6 +123,26 @@ const DueEntry = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log("data", data);
+        if (data.data.insertedId) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Updated successfully",
+          });
+        }
+        form.reset();
+        setFormData(paymentInfo);
+        openModal();
         setSearchDatas(data);
         setIsLoading(false);
       });
@@ -164,21 +204,13 @@ const DueEntry = () => {
               {" "}
               <input type="submit" />
             </button>
+            <ModalDue
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              formData={formData}
+            />
           </form>
         </div>
-
-        {/* show details */}
-        {/* <div>
-          
-          <p>Patient Name: {} </p>
-          <p>Order ID: </p>
-          <p>Sevice Name: </p>
-          <p>Service Fee: </p>
-          <p>Paid Amount: </p>
-          <p>Discount: </p>
-          <p>Due Amount: </p>
-        
-        </div> */}
 
         {isLoading ? (
           <Loading />
@@ -193,9 +225,9 @@ const DueEntry = () => {
                   Patient Name: {searchDatas?.data?.orderDetails[0]?.patient}
                 </p>
                 <p>Order ID: {searchDatas?.data?.orderDetails[0]?.OrderId}</p>
-                <p>
+                {/* <p>
                   Service Name: {searchDatas?.data?.orderDetails[0]?.service}
-                </p>
+                </p> */}
                 <p>Total Fee: {searchDatas?.data?.orderDetails[0]?.total}</p>
                 <p>
                   Paid Amount:
@@ -272,7 +304,7 @@ const DueEntry = () => {
                             <p>{payment?.paid}tk </p>
                           </td>
                           <td className="hidden sm:table-cell">
-                            {order?.service}
+                            {order?.service.map((item) => item.name).join(", ")}
                           </td>
                           <th>{payment?.date}</th>
                           <th>{order?.user}</th>
@@ -280,7 +312,7 @@ const DueEntry = () => {
                             <button onClick={() => handleView(order)}>
                               View
                             </button>
-                            <ReceiptModal
+                            <DueReciptPrint
                               isOpen={isModalOpen}
                               onClose={closeModal}
                               selectedReceipt={order}

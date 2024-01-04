@@ -286,9 +286,6 @@ const Receipt = () => {
                   placeholder="age"
                   className="input input-bordered input-primary "
                 />
-                {errors.phone && (
-                  <span className="text-red-500">this field is required</span>
-                )}
               </div>
             </div>
 
@@ -296,7 +293,7 @@ const Receipt = () => {
               <div className="form-control  w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px]  font-semibold">
-                    Doctor *
+                    Doctor
                   </span>
                 </label>
                 <select
@@ -321,6 +318,7 @@ const Receipt = () => {
                   onChange={handleServiceChange} // Move the onChange here
                   options={options}
                   isMulti
+                  required
                   className="w-full "
                 />
               </div>
@@ -351,14 +349,7 @@ const Receipt = () => {
                     Discount
                   </span>
                 </label>
-                {/* <input
-                  className="input input-bordered input-primary"
-                  type="number"
-                  name="discount"
-                  placeholder="Enter Discount"
-                  onChange={handleDiscountValueChange}
-                  step={discountType === "percentage" ? "0.01" : "1"}
-                /> */}
+
                 <input
                   {...register("discount", {})}
                   type="number"
