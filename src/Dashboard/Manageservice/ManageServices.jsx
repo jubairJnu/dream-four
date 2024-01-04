@@ -26,7 +26,7 @@ const ManageServices = () => {
     setIsModalOpen(false);
   };
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/services")
+    fetch(`${base_url}/services`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const AddDoctModal = ({ isOpen, onClose }) => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -45,9 +46,9 @@ const AddDoctModal = ({ isOpen, onClose }) => {
           fees,
           description,
           image: imageUrl,
-          status:"active"
+          status: "active",
         };
-        fetch("https://dream-four-server.vercel.app/doctor", {
+        fetch(`${base_url}/doctor`, {
           method: "POST",
           headers: {
             "content-type": "application/json",

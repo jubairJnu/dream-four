@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 
 const Doctors = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [doctrs, setDoctrs] = useState([]);
   const [showAllDoctors, setShowAllDoctors] = useState(false);
 
@@ -19,7 +20,7 @@ const Doctors = () => {
   };
 
   useEffect(() => {
-    fetch('https://dream-four-server.vercel.app/doctors')
+    fetch(`${base_url}/doctors`)
       .then(res => res.json())
       .then(data => setDoctrs(data))
   }, [])

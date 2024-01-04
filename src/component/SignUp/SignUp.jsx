@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const SignUp = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [erro, setErro] = useState("");
 
   const { register, handleSubmit, reset } = useForm();
@@ -30,7 +31,7 @@ const SignUp = () => {
           status: "active",
         };
 
-        fetch("https://dream-four-server.vercel.app/create_user", {
+        fetch(`${base_url}/create_user`, {
           method: "POST",
           headers: {
             "content-type": "application/json",

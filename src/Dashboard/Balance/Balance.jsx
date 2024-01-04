@@ -11,7 +11,7 @@ const Balance = () => {
   useEffect(() => {
     setIsloading(true);
     // fetch(`${base_url}/balance_list`)
-    fetch("http://localhost:5000/balance_list")
+    fetch(`${base_url}/balance_list`)
       .then((res) => res.json())
       .then((data) => {
         setIsloading(false);

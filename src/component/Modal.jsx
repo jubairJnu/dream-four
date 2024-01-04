@@ -1,12 +1,19 @@
 import { useRef } from "react";
 import ReactToPrint from "react-to-print";
 
-
 const Modal = ({ isOpen, onClose, formData, Order }) => {
+  console.log("modal", formData);
   const printRef = useRef();
   if (!isOpen) return null;
   const formatDate = (date) => {
-    const options = { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "numeric", second: "numeric" };
+    const options = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      second: "numeric",
+    };
     return new Date(date).toLocaleDateString(undefined, options);
   };
 
@@ -35,78 +42,111 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
         <div className="modal-body p-4">
           {/* Your modal content goes here */}
           <div className=" mt-20 mx-5" ref={printRef}>
-          <small><p>print Date: {isOpen ? formatDate(new Date()) : ''}  </p></small>
-            <p><small> {formData.date} </small></p>
-          <div className="grid grid-cols-2 gap-2 mb-2">
-            <div className="form-control">
-              <label className="label">
-                <span className=" text-black">Patient Name</span>
-              </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={formData.patient} readOnly />
+            <small>
+              <p>print Date: {isOpen ? formatDate(new Date()) : ""} </p>
+            </small>
+            <p>
+              <small> {formData?.paymentInfo[0]?.date} </small>
+            </p>
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              <div className="form-control">
+                <label className="label">
+                  <span className=" text-black">Patient Name</span>
+                </label>
+                <input
+                  className="input input-bordered input-sm text-black text-center p-1"
+                  type="text"
+                  value={formData.patient}
+                  readOnly
+                />
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="text-black">Order Id</span>
+                </label>
+                <input
+                  className="input input-bordered input-sm text-black text-center p-1"
+                  type="text"
+                  value={Order}
+                  readOnly
+                />
+              </div>
             </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="text-black">Order Id</span>
-              </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={Order} readOnly />
+            <div className="grid grid-cols-2 gap-2 ">
+              <div className="form-control">
+                <label className="label">
+                  <span className="text-black">Appointment To</span>
+                </label>
+                <input
+                  className="input input-bordered input-sm text-black text-center p-1"
+                  type="text"
+                  value={formData?.doctor}
+                  readOnly
+                />
+              </div>
+              <div className="form-control">
+                <label className="label">
+                  <span className="text-black">Service Name</span>
+                </label>
+                <input
+                  className="input input-bordered input-sm text-black text-center p-1"
+                  type="text"
+                  value={formData.service}
+                  readOnly
+                />
+              </div>
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2 ">
-            <div className="form-control">
-              <label className="label">
-                <span className="text-black">Appointment To</span>
-              </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={formData?.doctor} readOnly />
-            </div>
-            <div className="form-control">
-              <label className="label">
-                <span className="text-black">Service Name</span>
-              </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={formData.service} readOnly />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2 mb-2">
+            <div className="grid grid-cols-2 gap-2 mb-2">
+              <div className="form-control">
+                <label className="label">
+                  <span className="text-black">Total amount</span>
+                </label>
+                <input
+                  className="input input-bordered input-sm text-black text-center p-1"
+                  type="text"
+                  value={formData?.total}
+                  readOnly
+                />
+              </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="text-black">Total amount</span>
-              </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={formData?.total} readOnly />
+              <div className="form-control">
+                <label className="label">
+                  <span className="text-black">Paid amount</span>
+                </label>
+                <input
+                  className="input input-bordered input-sm text-black text-center p-1"
+                  type="text"
+                  value={formData?.paymentInfo[0]?.paid}
+                  readOnly
+                />
+              </div>
+              <p className="capitalize">
+                In Word: {formData?.paymentInfo[0]?.inWord} tk only{" "}
+              </p>
             </div>
-
-            <div className="form-control">
-              <label className="label">
-                <span className="text-black">Paid amount</span>
-              </label>
-              <input className="input input-bordered input-sm text-black text-center p-1" type="text" value={formData.paid} readOnly />
-            </div>
-            <p className="capitalize">In Word: {formData?.inWord} tk only </p>
-          </div>
-          <p> prepared by</p>
-          <p > {formData.user} </p>
+            <p> prepared by</p>
+            <p> {formData.user} </p>
           </div>
 
           {/* <h3 className="font-bold text-lg">Hello!</h3>
           <p className="py-4">Press ESC key or click the button below to close</p> */}
-          
+
           <div className="modal-action flex justify-between">
             <form method="dialog">
               <button className="btn " onClick={onClose}>
                 Close
               </button>
-
             </form>
             <ReactToPrint
-          trigger={() => (
-            <button onClick={handlePrint} className="btn btn-warning">
-              Print
-            </button>
-          )}
-          content={() => printRef.current}
-          onBeforePrint={onClose} // Close the modal before printing
-          onAfterPrint={onClose} // Close the modal after printing
-        />
-            
+              trigger={() => (
+                <button onClick={handlePrint} className="btn btn-warning">
+                  Print
+                </button>
+              )}
+              content={() => printRef.current}
+              onBeforePrint={onClose} // Close the modal before printing
+              onAfterPrint={onClose} // Close the modal after printing
+            />
           </div>
         </div>
       </div>

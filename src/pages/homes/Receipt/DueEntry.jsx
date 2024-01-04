@@ -38,7 +38,7 @@ const DueEntry = () => {
   };
 
   const handleView = (receipt) => {
-    fetch(`https://dream-four-server.vercel.app/all-receipt/${receipt._id}`)
+    fetch(`${base_url}/all-receipt/${receipt._id}`)
       .then((res) => res.json())
       .then((data) => {
         setselectedReceipt(data);

@@ -28,6 +28,7 @@ const EditDoctors = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    setIsLoading(true);
     const {
       name,
       mobile,
@@ -37,6 +38,7 @@ const EditDoctors = () => {
       education,
       description,
       specialist,
+      status,
     } = data;
 
     const UpdatedDoctor = {
@@ -48,6 +50,7 @@ const EditDoctors = () => {
       education,
       description,
       specialist,
+      status,
     };
     fetch(`${base_url}/doctor/${_id}`, {
       method: "PUT",
@@ -55,7 +58,29 @@ const EditDoctors = () => {
         "content-type": "application/json",
       },
       body: JSON.stringify(UpdatedDoctor),
-    });
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setIsLoading(false);
+        if (data.modifiedCount > 0) {
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Updated successfully",
+          });
+          reset();
+        }
+      });
   };
 
   return (
@@ -172,13 +197,10 @@ const EditDoctors = () => {
               <span className="label-text font-semibold  ">Status</span>
             </label>
             <select
-              defaultValue={status}
-              {...register("status", { required: false })}
+              {...register("status", { required: true })}
               className="select select-bordered"
             >
-              <option disabled value="">
-                Pick One
-              </option>
+              <option disabled>Pick One</option>
               <option> active </option>
               <option> inactive </option>
             </select>

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import ReceiptModal from "./ReceiptModal";
 import Loading from "../../../component/Loading";
-const ReceiptTable = ({ formData }) => {
+const ReceiptTable = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
   const [recentReceipt, setRecentReceipt] = useState([]);
   const [selectedReceipt, setselectedReceipt] = useState([]);
@@ -18,25 +18,18 @@ const ReceiptTable = ({ formData }) => {
     setIsModalOpen(false);
   };
 
-  // const handleView = (receipt, paymentDetails) => {
-  //   fetch(`https://dream-four-server.vercel.app/all-receipt/${receipt._id}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       console.log("first", data);
-  //       const selectedDate = paymentDetails.date; // Use the date from the first paymentInfo object
-  //       console.log(selectedDate);
-
-  //       const selectedReceiptData = data?.data.orderDetails.filter(
-  //         (item) => item.paymentInfo.some(info=> info.date=== selectedDate)
-  //       );
-  //       setselectedReceipt(selectedReceiptData);
-  //       console.log("modal", selectedReceiptData);
-  //     });
-
-  //   // openModal();
+  // const handlePrint = () => {
+  //   if (receiptRef.current) {
+  //     // Trigger the print action
+  //     receiptRef.current.handlePrint();
+  //     console.log("print");
+  //   }
   // };
+
+  //
+
   const handleView = (receipt, paymentDetails) => {
-    fetch(`https://dream-four-server.vercel.app/all-receipt/${receipt._id}`)
+    fetch(`${base_url}/all-receipt/${receipt._id}`)
       .then((res) => res.json())
       .then((data) => {
         console.log("first", data);
@@ -59,10 +52,9 @@ const ReceiptTable = ({ formData }) => {
           .filter(Boolean); // Remove null entries from the result
 
         setselectedReceipt(selectedReceiptData);
-        console.log("modal", selectedReceiptData);
       });
 
-    openModal(selectedReceipt);
+    openModal();
   };
 
   useEffect(() => {
@@ -108,8 +100,14 @@ const ReceiptTable = ({ formData }) => {
                       <p>{paymentDetails?.paid}tk </p>
                     </td>
                     <td className="hidden sm:table-cell">
-                      {receipts?.service}{" "}
+                      {Array.isArray(receipts?.service) &&
+                        receipts?.service?.map((item, index) => (
+                          <div key={index}>
+                            <p>{item.name}</p>
+                          </div>
+                        ))}
                     </td>
+
                     <th>{paymentDetails?.date}</th>
                     <th>{receipts?.user}</th>
                     <th className="hidden sm:table-cell">

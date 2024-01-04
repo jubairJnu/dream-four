@@ -16,7 +16,7 @@ const IncomeLedger = () => {
   const { user, userInfo } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/users")
+    fetch(`${base_url}/users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);
@@ -80,7 +80,7 @@ const IncomeLedger = () => {
     if (currentUser?.role == "admin" || currentUser?.role == "owner") {
       endPointApi = `${base_url}/all-incomeledger?${params.toString()}`;
     } else if (currentUser?.role == "staff") {
-      endPointApi = `${base_url}income-ledger?${params.toString()}`;
+      endPointApi = `${base_url}/income-ledger?${params.toString()}`;
     }
     
     // Use the URLSearchParams object in the fetch request

@@ -4,10 +4,11 @@ import { HiPencilSquare, HiTrash , HiChevronDown } from "react-icons/hi2";
 import { AiOutlineStop } from "react-icons/ai";
 
 const ManageUsers = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [allusers, setAllUsers] = useState([]);
 
   useEffect(() => {
-    fetch('https://dream-four-server.vercel.app/users')
+    fetch(`${base_url}/users`)
       .then(res => res.json())
       .then(data => setAllUsers(data))
   }, [])

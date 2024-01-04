@@ -1,4 +1,5 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+
 import { useContext, useEffect, useState } from "react";
 import numberToWords from "number-to-words";
 import { useForm } from "react-hook-form";
@@ -6,10 +7,16 @@ import Swal from "sweetalert2";
 import Modal from "../../../component/Modal";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import ReceiptTable from "./ReceiptTable";
+import Select from "react-select";
 
 const Receipt = () => {
-  const { user } = useContext(AuthContext);
+  const base_url = import.meta.env.VITE_BASE_URL;
+  const { userInfo } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
   const [services, setServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]); //add new start
+
+  const [discountType, setDiscountType] = useState("flat"); // add new end
   const [doctors, setDoctors] = useState([]);
   const [formData, setFormData] = useState([]);
   const [totalInprice, settotalInPrice] = useState([]);
@@ -25,8 +32,9 @@ const Receipt = () => {
     formState: { errors },
     watch,
   } = useForm();
+
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/services")
+    fetch(`${base_url}/services`)
       .then((res) => res.json())
       .then((data) => setServices(data));
   }, []);
@@ -46,27 +54,73 @@ const Receipt = () => {
     //   inWord: convert,
     // }));
   };
+  //
+  const options = services?.map((serviceOption) => ({
+    value: serviceOption.name,
+    label: serviceOption.name,
+  }));
 
-  // change handle
-  const handleDiscountChange = (e) => {
-    const discountField = e.target.value;
-    const grandTotal = inamount - (0 || discountField);
-    console.log("total", grandTotal);
-    settotalInPrice(grandTotal);
+  const handleServiceChange = (selectedOptions) => {
+    setSelectedServices(selectedOptions);
+
+    // Calculate total fee based on the selected services
+    const total = selectedOptions.reduce((acc, selectedService) => {
+      const selectedServiceObj = services.find(
+        (service) => service.name === selectedService.value
+      );
+
+      if (selectedServiceObj) {
+        acc += parseFloat(selectedServiceObj.price);
+      }
+      return acc;
+    }, 0);
+    settotalInPrice(total);
+    setinamount(total);
+    recalculateTotal(total, newAmount);
   };
 
-  const handleTotalChange = (e) => {
-    const amountField = e.target.value;
-    setinamount(amountField);
-    console.log(amountField);
+  const handleDiscountValueChange = (event) => {
+    const discountField = parseFloat(event.target.value) || 0;
+
+    recalculateTotal(inamount, discountField);
   };
+
+  const handleDiscountTypeChange = (event) => {
+    const type = event.target.value;
+    setDiscountType(type);
+  };
+
+  const recalculateTotal = (acc, discountField) => {
+    if (discountType === "flat") {
+      const discount = acc - parseFloat(discountField);
+      settotalInPrice(discount);
+    } else if (discountType === "percentage") {
+      const discountPercentage = parseFloat(discountField);
+      const discountAmount = (acc * discountPercentage) / 100;
+      const finalTotal = acc - discountAmount;
+      settotalInPrice(finalTotal);
+    }
+  };
+  useEffect(() => {
+    fetch(`${base_url}/users`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+      });
+  }, []);
+
+  const currentUserEmail = userInfo?.email;
+
+  const currentUser = users.find((user) => user.email === currentUserEmail);
 
   // doctor fetch;
 
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/doctors")
+    fetch(`${base_url}/doctors`)
       .then((res) => res.json())
-      .then((data) => setDoctors(data));
+      .then((data) => {
+        setDoctors(data);
+      });
   }, []);
 
   // modal-----
@@ -80,8 +134,16 @@ const Receipt = () => {
   };
 
   const onSubmit = (data) => {
-    const { patient, phone, amount, doctor, service, total, paid, discount } =
-      data;
+    const {
+      patient,
+      phone,
+      age,
+      doctor,
+
+      paid,
+      discount,
+      refference,
+    } = data;
 
     const date = new Date();
     const year = date.getFullYear();
@@ -91,16 +153,28 @@ const Receipt = () => {
     // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
     const formattedDate = `${year}-${month}-${day}`;
 
-    const UserName = user.displayName;
-    const userEmail = user.email;
+    const UserName = currentUser.name;
+    const userEmail = currentUser.email;
+
+    const selectedServiceDetails = selectedServices.map((selectedService) => {
+      const serviceObj = services.find(
+        (service) => service.name === selectedService.value
+      );
+      return {
+        name: selectedService.value,
+        price: serviceObj ? parseFloat(serviceObj.price) : 0,
+      };
+    });
+
     const newReceipt = {
       patient,
       user: UserName,
       email: userEmail,
       phone,
+      age,
       doctor,
-      service,
-      amount: parseFloat(amount),
+      service: selectedServiceDetails,
+
       total: totalInprice,
       paymentInfo: [
         {
@@ -111,6 +185,7 @@ const Receipt = () => {
           inWord: coverted,
         },
       ],
+      refference,
     };
 
     console.log(newReceipt);
@@ -124,7 +199,7 @@ const Receipt = () => {
       confirmButtonText: "Submit",
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch("http://localhost:5000/receipt-entry", {
+        fetch(`${base_url}/receipt-entry`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -147,15 +222,18 @@ const Receipt = () => {
             }
           });
         reset();
-
         setFormData(newReceipt);
         openModal();
       }
     });
   };
 
+  // discount
+  const discountFieldValue = watch("discount");
+  console.log("disfield", discountFieldValue);
+
   return (
-    <div className="container mx-auto mt-24  ">
+    <div className="container mx-auto mt-16  ">
       <h1 className="text-center font-bold text-2xl">Receipt Entry</h1>
       <div className=" px-10 ">
         <div className=" bg-white  shadow-2xl p-4 ">
@@ -177,7 +255,7 @@ const Receipt = () => {
                   <span className="text-red-500">this field is required</span>
                 )}
               </div>
-
+              {/* phone */}
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px] font-semibold">
@@ -186,8 +264,26 @@ const Receipt = () => {
                 </label>
                 <input
                   {...register("phone", { required: true })}
-                  type="number"
+                  type="text"
                   placeholder="phone number"
+                  className="input input-bordered input-primary "
+                />
+                {errors.phone && (
+                  <span className="text-red-500">this field is required</span>
+                )}
+              </div>
+              {/* age */}
+
+              <div className="form-control md:ms-6 w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Age
+                  </span>
+                </label>
+                <input
+                  {...register("age", { required: false })}
+                  type="number"
+                  placeholder="age"
                   className="input input-bordered input-primary "
                 />
                 {errors.phone && (
@@ -220,16 +316,13 @@ const Receipt = () => {
                     Service *
                   </span>
                 </label>
-                <select
-                  defaultValue="pick One"
-                  {...register("service", { required: false })}
-                  className="select select-bordered select-primary"
-                >
-                  <option disabled>Pick One</option>
-                  {services?.map((service) => (
-                    <option key={service._id}> {service.name} </option>
-                  ))}
-                </select>
+                <Select
+                  value={selectedServices}
+                  onChange={handleServiceChange} // Move the onChange here
+                  options={options}
+                  isMulti
+                  className="w-full "
+                />
               </div>
             </div>
 
@@ -237,25 +330,50 @@ const Receipt = () => {
               <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px] font-semibold">
-                    Amount *{" "}
+                    Discount Type:
                   </span>
                 </label>
-                <input
-                  {...register("amount", {
-                    required: true,
-                    valueAsNumber: true,
-                  })}
+                <select
+                  className="select select-bordered select-primary"
+                  value={discountType}
+                  onChange={handleDiscountTypeChange}
+                >
+                  <option disabled selected value=" ">
+                    Select
+                  </option>
+                  <option value="flat">Flat</option>
+                  <option value="percentage">Percentage</option>
+                </select>
+              </div>
+              <div className="form-control w-full md:ms-6">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Discount
+                  </span>
+                </label>
+                {/* <input
+                  className="input input-bordered input-primary"
                   type="number"
-                  placeholder="Amount"
-                  onChange={handleTotalChange}
-                  // ref={control.register}
+                  name="discount"
+                  placeholder="Enter Discount"
+                  onChange={handleDiscountValueChange}
+                  step={discountType === "percentage" ? "0.01" : "1"}
+                /> */}
+                <input
+                  {...register("discount", {})}
+                  type="number"
+                  placeholder="Enter Amount"
+                  onChange={handleDiscountValueChange}
                   className="input input-bordered input-primary"
                 />
               </div>
-              <div className="form-control md:ms-6 w-full">
+            </div>
+
+            <div className="md:flex justify-between">
+              <div className="form-control w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px] font-semibold">
-                    Total Amount *{" "}
+                    Total Amount *
                   </span>
                 </label>
                 <input
@@ -270,23 +388,8 @@ const Receipt = () => {
                   className="input input-bordered input-primary bg-slate-200"
                 />
               </div>
-            </div>
+              {/*  */}
 
-            <div className="md:flex justify-between">
-              <div className="form-control w-full">
-                <label className="label">
-                  <span className="label-text md:text-[18px] font-semibold">
-                    Discount{" "}
-                  </span>
-                </label>
-                <input
-                  {...register("discount", {})}
-                  type="number"
-                  placeholder="Enter Amount"
-                  onChange={handleDiscountChange}
-                  className="input input-bordered input-primary"
-                />
-              </div>
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px] font-semibold">
@@ -311,11 +414,35 @@ const Receipt = () => {
                   className="input input-bordered input-primary "
                 />
                 <p className="text-red-500"> {errors.paid?.message} </p>
+              </div>
+            </div>
+            <div className="flex justify-between">
+              {/* conditionally required value */}
+              {discountFieldValue && (
+                <div className="form-control mt-2 w-1/2">
+                  <label className="label">
+                    <span className="label-text md:text-[18px] font-semibold">
+                      Refference
+                    </span>
+                  </label>
+                  <input
+                    {...register("refference", { required: true })}
+                    type="text"
+                    placeholder="Refference"
+                    className="input input-bordered input-primary"
+                  />
+                  {errors.refference && (
+                    <span className="text-red-500 text-sm">
+                      Enter Refference For discount.
+                    </span>
+                  )}
+                </div>
+              )}
+
+              <div className="w-1/2 md:ms-6">
                 <p className="my-4 capitalize">
                   {" "}
-                  <span className="font-bold text-blue-700 ">
-                    In Word:
-                  </span>{" "}
+                  <span className="font-bold text-blue-700 ">In Word:</span>
                   {coverted} Tk Only{" "}
                 </p>
               </div>
@@ -337,7 +464,7 @@ const Receipt = () => {
           </form>
         </div>
       </div>
-      <ReceiptTable formData={formData} />
+      <ReceiptTable />
     </div>
   );
 };

@@ -22,7 +22,7 @@ const DoctorAppointment = () => {
   const { userInfo } = useContext(AuthContext);
 
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/users")
+    fetch(`${base_url}/users`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -85,10 +85,7 @@ const DoctorAppointment = () => {
       phone,
       appointedDoctor,
       appointmentDate,
-      fee,
-      total,
-      discount,
-      paid,
+
       refference,
     } = data;
     const date = new Date();
@@ -98,28 +95,19 @@ const DoctorAppointment = () => {
     // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
     const formattedDate = `${year}-${month}-${day}`;
 
-    // const UserName = user.displayName;
-    // const userEmail = user.email;
+    const UserName = currentUser.name;
+    const userEmail = currentUser.email;
 
     const newAppointment = {
       patient,
-      user: currentUser.name,
+      user: UserName,
+      email: userEmail,
       phone,
       appointedDoctor,
       appointmentDate,
       service: "Doctor Appointment",
-      fee,
-      total,
-      paymentInfo: [
-        {
-          date: formattedDate,
-          discount: parseFloat(discount),
-          paid: parseFloat(paid),
-          inWord: coverted,
-        },
-      ],
-
       refference,
+      data: formattedDate,
     };
     setIsLoading(true);
     fetch(`${base_url}/doctor_appointment`, {
@@ -156,7 +144,7 @@ const DoctorAppointment = () => {
   };
   //
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/doctors")
+    fetch(`${base_url}/doctors`)
       .then((res) => res.json())
       .then((data) => setDoctors(data));
   }, []);
@@ -255,7 +243,7 @@ const DoctorAppointment = () => {
             </div>
           </div>
 
-          <div className="md:flex justify-between">
+          {/* <div className="md:flex justify-between">
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text md:text-[18px] font-semibold">
@@ -286,9 +274,9 @@ const DoctorAppointment = () => {
                 className="input input-bordered input-primary  text-blackbg-slate-200"
               />
             </div>
-          </div>
+          </div> */}
 
-          <div className="md:flex justify-between">
+          {/* <div className="md:flex justify-between">
             <div className="form-control w-full">
               <label className="label">
                 <span className="label-text md:text-[18px] font-semibold">
@@ -304,8 +292,8 @@ const DoctorAppointment = () => {
               />
 
               {/* Conditional extra field based on the value of discount */}
-              {discountValue && (
-                <div className="form-control mt-2 w-full">
+          {/* {discountValue && ( */}
+          {/* <div className="form-control mt-2 w-full">
                   <label className="label">
                     <span className="label-text md:text-[18px] font-semibold">
                       Refference
@@ -322,12 +310,10 @@ const DoctorAppointment = () => {
                       Enter Refference For discount.
                     </span>
                   )}
-                </div>
-              )}
-            </div>
+                </div> */}
 
-            {/*  */}
-            <div className="form-control md:ms-6 w-full">
+          {/*  */}
+          {/* <div className="form-control md:ms-6 w-full">
               <label className="label">
                 <span className="label-text md:text-[18px] font-semibold">
                   Pay Now *
@@ -361,8 +347,7 @@ const DoctorAppointment = () => {
                 </span>{" "}
                 {coverted} Tk Only{" "}
               </p>
-            </div>
-          </div>
+            </div> */}
 
           <div className="flex justify-center">
             {isLoading ? (

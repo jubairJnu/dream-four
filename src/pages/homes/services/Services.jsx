@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import Loading from "../../../component/Loading";
 
 const Services = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [Ourservices, setOurservices] = useState([]);
   const [showAllServices, setShowAllServices] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,7 +29,7 @@ const Services = () => {
   };
 
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/services")
+    fetch(`${base_url}/services`)
       .then((res) => res.json())
       .then((data) => setOurservices(data));
   }, []);

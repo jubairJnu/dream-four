@@ -5,6 +5,7 @@ import { AuthContext } from "../Provider/AuthProvider";
 import Balance from "./Balance/Balance";
 
 const Dashboard = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [users, setUsers] = useState([]);
   const { userInfo, logOut } = useContext(AuthContext);
   const location = useLocation();
@@ -18,7 +19,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/users")
+    fetch(`${base_url}/users`)
       .then((res) => res.json())
       .then((data) => {
         setUsers(data);

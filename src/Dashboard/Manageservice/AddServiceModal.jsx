@@ -4,6 +4,7 @@ import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
 
 const AddServiceModal = ({ isOpen, onClose }) => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -16,7 +17,7 @@ const AddServiceModal = ({ isOpen, onClose }) => {
     setIsLoading(true);
     const { name, price, description } = data;
     const serviceInfo = { name, price, description, status: "active" };
-    fetch("https://dream-four-server.vercel.app/services-entry", {
+    fetch(`${base_url}/services-entry`, {
       method: "POST",
       headers: {
         "content-type": "application/json",

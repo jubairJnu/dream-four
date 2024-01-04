@@ -27,7 +27,7 @@ const ManageDoctors = () => {
   };
 
   useEffect(() => {
-    fetch("https://dream-four-server.vercel.app/doctors")
+    fetch(`${base_url}/doctors`)
       .then((res) => res.json())
       .then((data) => setTotalDoctors(data));
   }, []);
