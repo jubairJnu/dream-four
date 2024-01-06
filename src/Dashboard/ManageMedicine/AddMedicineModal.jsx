@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { ScaleLoader } from "react-spinners";
 import Swal from "sweetalert2";
 
-const ExpenditureEntryModal = ({ isOpen, onClose }) => {
+const AddMedicineModal = ({ isOpen, onClose }) => {
   const base_url = import.meta.env.VITE_BASE_URL;
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -15,19 +15,18 @@ const ExpenditureEntryModal = ({ isOpen, onClose }) => {
 
   const onSubmit = (data) => {
     setIsLoading(true);
-    const { purpose, amount, date } = data;
-    const expenditureInfo = { purpose, amount, date, type: "expenditure" };
-    // fetch(`${base_url}/expenditure`,
-    fetch(`${base_url}/expenditure`, {
+    const { name, buy, sell } = data;
+    const medicineInfo = { name, buy, sell };
+    fetch(`${base_url}/medicine`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(expenditureInfo),
+      body: JSON.stringify(medicineInfo),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("doctor", data);
+        setIsLoading(false);
         if (data.insertedId) {
           setIsLoading(false);
           Swal.fire({
@@ -62,16 +61,16 @@ const ExpenditureEntryModal = ({ isOpen, onClose }) => {
               <div className="form-control w-full ">
                 <label className="label">
                   <span className="label-text font-semibold text-yellow-400">
-                    Purpose *
+                    Name *
                   </span>
                 </label>
                 <input
-                  {...register("purpose", { required: true })}
+                  {...register("name", { required: true })}
                   type="text"
-                  placeholder="Name"
+                  placeholder="Napa"
                   className="input input-bordered w-full "
                 />
-                {errors?.purpose && (
+                {errors?.name && (
                   <span className="text-red-500">this field is required</span>
                 )}
               </div>
@@ -81,35 +80,39 @@ const ExpenditureEntryModal = ({ isOpen, onClose }) => {
               <div className="form-control w-full ">
                 <label className="label">
                   <span className="label-text font-semibold text-yellow-400">
-                    Amount *
+                    Buy Price *
                   </span>
                 </label>
                 <input
-                  {...register("amount", {
+                  {...register("buy", {
                     required: true,
                     valueAsNumber: true,
                   })}
                   type="number"
-                  placeholder="Price"
+                  placeholder="80"
                   className="input input-bordered w-full "
                 />
-                {errors?.amount && (
+                {errors?.buy && (
                   <span className="text-red-500">this field is required</span>
                 )}
               </div>
-
-              {/* 2 */}
-
-              <div className="form-control w-full">
+              {/* sell price */}
+              <div className="form-control w-full ">
                 <label className="label">
-                  <span className="label-text text-yellow-400">Date</span>
+                  <span className="label-text font-semibold text-yellow-400">
+                    Sell Price *
+                  </span>
                 </label>
                 <input
-                  {...register("date", { required: false })}
-                  className="input input-bordered w-full"
-                  type="date"
-                ></input>
-                {errors?.date && (
+                  {...register("sell", {
+                    required: true,
+                    valueAsNumber: true,
+                  })}
+                  type="number"
+                  placeholder="100"
+                  className="input input-bordered w-full "
+                />
+                {errors?.sell && (
                   <span className="text-red-500">this field is required</span>
                 )}
               </div>
@@ -152,4 +155,4 @@ const ExpenditureEntryModal = ({ isOpen, onClose }) => {
   );
 };
 
-export default ExpenditureEntryModal;
+export default AddMedicineModal;

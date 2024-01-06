@@ -177,7 +177,6 @@ const DueEntry = () => {
                 className="input input-bordered input-info w-full"
                 placeholder="Pay Now"
                 onChange={handlePriceWord}
-                required
               />
             </div>
             {/* discount */}

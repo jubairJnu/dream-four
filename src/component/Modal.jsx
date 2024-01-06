@@ -172,7 +172,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                   <table className="table">
                     <thead className="flex justify-between items-center p">
                       <th className="ps-6">Discount</th>
-                      <th>- {formData?.discount} % / -</th>
+                      <th>- {formData?.paymentInfo[0]?.discount} % / -</th>
                     </thead>
                   </table>
                 </div>
@@ -315,7 +315,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                   <table className="table">
                     <thead className="flex justify-between items-center p">
                       <th className="ps-6">Discount</th>
-                      <th>- {formData?.discount} % / -</th>
+                      <th>- {formData?.paymentInfo[0]?.discount} % / -</th>
                     </thead>
                   </table>
                 </div>

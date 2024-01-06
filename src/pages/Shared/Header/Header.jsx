@@ -1,9 +1,22 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
 
 const Header = () => {
+  const base_url = import.meta.env.VITE_BASE_URL;
   const { user, logOut, userInfo } = useContext(AuthContext);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch(`${base_url}/users`)
+      .then((res) => res.json())
+      .then((data) => {
+        setUsers(data);
+      });
+  }, []);
+  const currentUserEmail = userInfo?.email;
+
+  const currentUser = users.find((user) => user.email === currentUserEmail);
 
   const handleLogOut = () => {
     logOut();
@@ -80,9 +93,22 @@ const Header = () => {
               <li className=" hover:bg-white rounded-md hover:font-semibold ">
                 <Link to="/dashboard"> Dashboard </Link>{" "}
               </li>
-              <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                <Link to="/receipt"> Receipt Entry </Link>{" "}
-              </li>
+              {/* receipt entry can see only staff */}
+              {currentUser && currentUser.role === "staff" && (
+                <div>
+                  <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
+                    <Link to="/receipt"> Receipt Entry </Link>{" "}
+                  </li>
+                </div>
+              )}
+              {/* only shopkeeper */}
+              {currentUser && currentUser.role === "shopkeeper" && (
+                <div>
+                  <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
+                    <Link to="/medicine_receipt"> Receipt Entry </Link>{" "}
+                  </li>
+                </div>
+              )}
             </>
           )}
         </ul>

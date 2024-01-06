@@ -102,14 +102,25 @@ const Dashboard = () => {
                       Expenditure Entry
                     </NavLink>
                   </li>
-                  <NavLink to="/dashboard/appointment">
-                    Appointment List
-                  </NavLink>
+                  <li>
+                    <NavLink to="/dashboard/appointment">
+                      Appointment List
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/reportlist">
+                      Customer Report Entry
+                    </NavLink>
+                  </li>
+                  <li>
+                    {" "}
+                    <NavLink to="/dashboard/medicinelist">
+                      Medicine Entry
+                    </NavLink>
+                  </li>
                 </div>
               )}
-
               {/* for owner */}
-
               {currentUser && currentUser.role === "owner" && (
                 <div>
                   <li>
@@ -122,9 +133,12 @@ const Dashboard = () => {
                       Income Ledger
                     </NavLink>
                   </li>
-                  <NavLink to="/dashboard/appointment">
-                    Appointment List
-                  </NavLink>
+
+                  <li>
+                    <NavLink to="/dashboard/appointment">
+                      Appointment List
+                    </NavLink>
+                  </li>
                 </div>
               )}
               {currentUser && currentUser.role === "staff" && (
@@ -141,9 +155,23 @@ const Dashboard = () => {
                   </li>
                 </div>
               )}
+              {/* shopkeeper */}
+              {currentUser && currentUser.role === "shopkeeper" && (
+                <div>
+                  <li>
+                    <NavLink to="/dashboard/incomeledger">
+                      Income Ledger
+                    </NavLink>
+                  </li>
 
+                  <li>
+                    <NavLink to="/dashboard/reportlist">
+                      Customer Report Entry
+                    </NavLink>
+                  </li>
+                </div>
+              )}
               {/* divider */}
-
               <div className="divider"></div>
               <li>
                 <Link to="/dashboard">Dashboard</Link>
@@ -165,7 +193,7 @@ const Dashboard = () => {
                     className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52"
                   >
                     <li className="bg-[#2048ca] rounded-md text-white">
-                      <a>Change Password</a>
+                      <Link to="/dashboard/change_password">Change Password</Link>
                     </li>
                   </ul>
                 </details>
@@ -224,7 +252,19 @@ const Dashboard = () => {
                 <li>
                   <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
                 </li>
-                <NavLink to="/dashboard/appointment">Appointment List</NavLink>
+                <li>
+                  <NavLink to="/dashboard/appointment">
+                    Appointment List
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/reportlist">
+                    Customer Report Entry
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/medicinelist">Medicine Entry</NavLink>
+                </li>
               </div>
             )}
 
@@ -249,6 +289,26 @@ const Dashboard = () => {
                 <li>
                   <NavLink to="/dashboard/appointment">
                     Appointment List
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/reportlist">
+                    Customer Report Entry
+                  </NavLink>
+                </li>
+              </div>
+            )}
+
+            {/* shopkeeper */}
+            {currentUser && currentUser.role === "shopkeeper" && (
+              <div>
+                <li>
+                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
+                </li>
+
+                <li>
+                  <NavLink to="/dashboard/reportlist">
+                    Customer Report Entry
                   </NavLink>
                 </li>
               </div>
@@ -277,7 +337,7 @@ const Dashboard = () => {
                   className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52"
                 >
                   <li className="bg-[#2048ca] rounded-md text-white">
-                    <a>Change Password</a>
+                  <Link to="/dashboard/change_password">Change Password</Link>
                   </li>
                 </ul>
               </details>

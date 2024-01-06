@@ -1,12 +1,14 @@
 import { useState } from "react";
 
 import ExpenditureEntryModal from "./ExpenditureEntryModal";
+import Loading from "../../component/Loading";
 
 const ExpenditureList = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
 
   const [expenditures, setExpenditures] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // handle
   const handleAddExpenditure = () => {
@@ -27,6 +29,7 @@ const ExpenditureList = () => {
   // handle search
 
   const handleSearch = (event) => {
+    setIsLoading(true);
     event.preventDefault();
     const form = event.target;
     const startedDate = form.startDate.value;
@@ -40,11 +43,12 @@ const ExpenditureList = () => {
     //fetch
 
     // fetch(`${base_url}/all-incomeledger?${params.toString()}`)
-    fetch(`http://localhost:5000/expenditure_list?${params.toString()}`)
+    fetch(`${base_url}/expenditure_list/?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
         setExpenditures(data);
         console.log(data);
+        setIsLoading(false);
       });
   };
   return (
@@ -118,19 +122,25 @@ const ExpenditureList = () => {
             </tr>
           </thead>
           <tbody className="text-center">
-            {expenditures && expenditures.length > 0
-              ? expenditures?.map((expenditure, index) => (
-                  <tr key={expenditure._id}>
-                    <th>{index + 1}</th>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <>
+                {expenditures && expenditures.length > 0
+                  ? expenditures?.map((expenditure, index) => (
+                      <tr key={expenditure._id}>
+                        <th>{index + 1}</th>
 
-                    <td>
-                      <p>{expenditure?.purpose}</p>
-                    </td>
-                    <td>{expenditure?.date}</td>
-                    <td>{expenditure?.amount}</td>
-                  </tr>
-                ))
-              : "no expenditure found"}
+                        <td>
+                          <p>{expenditure?.purpose}</p>
+                        </td>
+                        <td>{expenditure?.date}</td>
+                        <td>{expenditure?.amount}</td>
+                      </tr>
+                    ))
+                  : "no expenditure found"}
+              </>
+            )}
           </tbody>
         </table>
       </div>

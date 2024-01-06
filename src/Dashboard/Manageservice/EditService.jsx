@@ -18,10 +18,10 @@ const EditService = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    setIsLoading(true)
+    setIsLoading(true);
     const { name, price, description, status } = data;
     const updatedService = { name, price, description, status };
-    console.log(updatedService);
+    // console.log(updatedService);
     fetch(`${base_url}/service/${_id}`, {
       method: "PUT",
       headers: {
@@ -31,9 +31,9 @@ const EditService = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setIsLoading(false)
+        setIsLoading(false);
         console.log(data);
-        if (data.data.matchedCount > 0) {
+        if (data.data.modifiedCount > 0) {
           const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -50,7 +50,7 @@ const EditService = () => {
             title: "Updated successfully",
           });
           reset();
-          setIsLoading(false)
+          setIsLoading(false);
         }
       });
   };

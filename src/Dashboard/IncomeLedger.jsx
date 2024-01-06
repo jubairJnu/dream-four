@@ -82,7 +82,7 @@ const IncomeLedger = () => {
     } else if (currentUser?.role == "staff") {
       endPointApi = `${base_url}/income-ledger?${params.toString()}`;
     }
-    
+
     // Use the URLSearchParams object in the fetch request
     fetch(endPointApi, {})
       .then((res) => res.json())
@@ -92,8 +92,6 @@ const IncomeLedger = () => {
         console.log(data);
       })
       .catch((error) => console.error(error));
-
-   
   };
 
   return (
@@ -195,6 +193,7 @@ const IncomeLedger = () => {
               <th>Amount</th>
               <th className="hidden sm:table-cell">Service</th>
               <th>Date</th>
+              <th>Refference</th>
               <th>User Name</th>
             </tr>
           </thead>
@@ -210,8 +209,11 @@ const IncomeLedger = () => {
                     <td>
                       <p>{paydetais?.paid}tk </p>
                     </td>
-                    <td className="hidden sm:table-cell">{income?.service} </td>
+                    <td className="hidden sm:table-cell">
+                      {income?.service?.map((item) => item.name).join(", ")}{" "}
+                    </td>
                     <th>{paydetais?.date}</th>
+                    <th>{income?.refference}</th>
                     <th>{income?.user}</th>
                   </tr>
                 ))

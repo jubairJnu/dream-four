@@ -17,6 +17,12 @@ import AppointmentList from "../Dashboard/AppointmentList";
 import ExpenditureList from "../Dashboard/Expenditure/ExpenditureList";
 import EditDoctors from "../Dashboard/ManageDoctors/EditDoctors";
 import EditService from "../Dashboard/Manageservice/EditService";
+import MedicineReceipt from "../pages/homes/Receipt/MedicineReceipt";
+import EditUser from "../Dashboard/ManageUser/EditUser";
+import ChangePassword from "../component/ChangePassword";
+import MedicineList from "../Dashboard/ManageMedicine/MedicineList";
+import UpdateReport from "../component/UpdateReport";
+import EditMedicine from "../Dashboard/ManageMedicine/EditMedicine";
 
 const routes = createBrowserRouter([
   {
@@ -36,6 +42,14 @@ const routes = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <ReceiptTabs />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "medicine_receipt",
+        element: (
+          <PrivateRoutes>
+            <MedicineReceipt />
           </PrivateRoutes>
         ),
       },
@@ -68,6 +82,26 @@ const routes = createBrowserRouter([
         ),
       },
       {
+        path: "change_password",
+        element: (
+          <PrivateRoutes>
+            <ChangePassword />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "manageuser/:id",
+        element: (
+          <PrivateRoutes>
+            <EditUser />
+          </PrivateRoutes>
+        ),
+        loader: ({ params }) =>
+          fetch(
+            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/user/${params.id}`
+          ),
+      },
+      {
         path: "managedoctor",
         element: (
           <PrivateRoutes>
@@ -83,7 +117,9 @@ const routes = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(`https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctor/${params.id}`),
+          fetch(
+            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctor/${params.id}`
+          ),
       },
       {
         path: "manageservice",
@@ -101,7 +137,9 @@ const routes = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(`https://dream-four-hospital-4c43bb12e925.herokuapp.com/service/${params.id}`),
+          fetch(
+            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/service/${params.id}`
+          ),
       },
       {
         path: "signup",
@@ -120,13 +158,44 @@ const routes = createBrowserRouter([
         ),
       },
       {
+        path: "reportlist",
+        element: (
+          <PrivateRoutes>
+            <UpdateReport />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "medicinelist",
+        element: (
+          <PrivateRoutes>
+            <MedicineList />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "medicinelist/:id",
+        element: (
+          <PrivateRoutes>
+            <EditMedicine />
+          </PrivateRoutes>
+        ),
+        loader: ({ params }) =>
+          fetch(
+            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/medicine/${params.id}`
+          ),
+      },
+      {
         path: "appointment",
         element: (
           <PrivateRoutes>
             <AppointmentList />
           </PrivateRoutes>
         ),
-        loader: () => fetch("https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctors"),
+        loader: () =>
+          fetch(
+            "https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctors"
+          ),
       },
       {
         path: "incomeledger",
@@ -135,7 +204,8 @@ const routes = createBrowserRouter([
             <IncomeLedger />
           </PrivateRoutes>
         ),
-        loader: () => fetch("https://dream-four-hospital-4c43bb12e925.herokuapp.com/users"),
+        loader: () =>
+          fetch("https://dream-four-hospital-4c43bb12e925.herokuapp.com/users"),
       },
     ],
   },
