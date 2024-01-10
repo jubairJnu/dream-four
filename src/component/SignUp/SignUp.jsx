@@ -13,46 +13,38 @@ const SignUp = () => {
 
   const onSubmit = (data) => {
     const formData = new FormData();
-    formData.append("image", data.image[0]);
-    fetch(img_hosting_url, {
+
+    const { name, email, password } = data;
+    const UserInfo = {
+      name,
+      email,
+      password,
+
+      role: "staff",
+      status: "active",
+    };
+
+    fetch(`${base_url}/create_user`, {
       method: "POST",
-      body: formData,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(UserInfo),
     })
       .then((res) => res.json())
-      .then((responseImage) => {
-        const imageUrl = responseImage.data.display_url;
-        const { name, email, password } = data;
-        const UserInfo = {
-          name,
-          email,
-          password,
-          image: imageUrl,
-          role: "staff",
-          status: "active",
-        };
-
-        fetch(`${base_url}/create_user`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(UserInfo),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.message == "already exisit") {
-              setErro("User Already Exist");
-            } else if (data.insertedId) {
-              Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Registered Successfully",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              reset();
-            }
+      .then((data) => {
+        if (data.message == "already exisit") {
+          setErro("User Already Exist");
+        } else if (data.insertedId) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Registered Successfully",
+            showConfirmButton: false,
+            timer: 1500,
           });
+          reset();
+        }
       });
   };
 
@@ -103,10 +95,12 @@ const SignUp = () => {
             </div>
             <div className="mt-4">
               <label className="label">
-                <span className="label-text font-semibold">Photo * </span>
+                <span className="label-text font-semibold">
+                  Photo (optional){" "}
+                </span>
               </label>
               <input
-                {...register("image")}
+                {...register("image", { required: false })}
                 type="file"
                 className="file-input w-full"
               />
