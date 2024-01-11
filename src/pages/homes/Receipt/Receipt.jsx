@@ -134,16 +134,8 @@ const Receipt = () => {
   };
 
   const onSubmit = (data) => {
-    const {
-      patient,
-      phone,
-      age,
-      doctor,
-
-      paid,
-      discount,
-      refference,
-    } = data;
+    const { patient, phone, age, doctor, gender, paid, discount, refference } =
+      data;
 
     const date = new Date();
     const year = date.getFullYear();
@@ -171,6 +163,7 @@ const Receipt = () => {
       user: UserName,
       email: userEmail,
       phone,
+      gender,
       age,
       doctor,
       service: selectedServiceDetails,
@@ -248,11 +241,11 @@ const Receipt = () => {
                 <input
                   {...register("patient", { required: true })}
                   type="text"
-                  placeholder="Your Name"
+                  placeholder="Patient Name"
                   className="input input-bordered w-full input-primary"
                 />
                 {errors.patient && (
-                  <span className="text-red-500">this field is required</span>
+                  <span className="text-red-500">Name is required</span>
                 )}
               </div>
               {/* phone */}
@@ -269,7 +262,7 @@ const Receipt = () => {
                   className="input input-bordered input-primary "
                 />
                 {errors.phone && (
-                  <span className="text-red-500">this field is required</span>
+                  <span className="text-red-500">Phone Number is required</span>
                 )}
               </div>
               {/* age */}
@@ -277,15 +270,40 @@ const Receipt = () => {
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px] font-semibold">
-                    Age
+                    Age *
                   </span>
                 </label>
                 <input
-                  {...register("age", { required: false })}
+                  {...register("age", { required: true })}
                   type="number"
                   placeholder="age"
                   className="input input-bordered input-primary "
                 />
+                {errors.age && (
+                  <span className="text-red-500">Age is required</span>
+                )}
+              </div>
+              {/* Gender */}
+              <div className="form-control md:ms-6 w-full">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Gender *
+                  </span>
+                </label>
+                <select
+                  defaultValue="pick One"
+                  {...register("gender", { required: true })}
+                  className="select select-bordered select-primary"
+                >
+                  <option selected disabled value="">
+                    Pick One
+                  </option>
+                  <option>Male</option>
+                  <option>Femaale</option>
+                </select>
+                {errors.gender && (
+                  <span className="text-red-500">Gender is required</span>
+                )}
               </div>
             </div>
 
@@ -303,7 +321,10 @@ const Receipt = () => {
                 >
                   <option disabled>Pick One</option>
                   {doctors?.map((doctor) => (
-                    <option key={doctor._id}> {doctor.name} </option>
+                    <option key={doctor._id}>
+                      {" "}
+                      {doctor.name} ({doctor?.specialist}){" "}
+                    </option>
                   ))}
                 </select>
               </div>
