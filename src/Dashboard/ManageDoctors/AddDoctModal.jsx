@@ -7,6 +7,7 @@ const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 const AddDoctModal = ({ isOpen, onClose }) => {
   const base_url = import.meta.env.VITE_BASE_URL;
   const [isLoading, setIsLoading] = useState(false);
+  const [isOtherOpen, setIsOtherOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -14,6 +15,11 @@ const AddDoctModal = ({ isOpen, onClose }) => {
     formState: { errors },
   } = useForm();
   const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`;
+
+  // handle other change
+  const handleOtherChange = () => {
+    setIsOtherOpen(!isOtherOpen);
+  };
 
   const onSubmit = (data) => {
     setIsLoading(true);
@@ -82,11 +88,11 @@ const AddDoctModal = ({ isOpen, onClose }) => {
   return (
     <div
       className={`fixed inset-0 flex items-center justify-center z-50 ${
-        isOpen ? "" : "hidden"
+        isOpen ? "" : "hidden overflow-y-auto"
       }`}
     >
       <div className="modal-overlay" onClick={onClose}></div>
-      <div className="modal-container  bg-[#2f6bcc] w-1/2 mx-auto rounded-md shadow-lg z-50">
+      <div className="modal- max-h-screen  bg-[#2f6bcc]  mx-auto rounded-md shadow-lg z-50 overflow-y-auto">
         <div className="modal-header">
           <span className="modal-close" onClick={onClose}>
             &times;
@@ -115,7 +121,7 @@ const AddDoctModal = ({ isOpen, onClose }) => {
               <div className="form-control w-full ">
                 <label className="label">
                   <span className="label-text font-semibold text-yellow-400">
-                    Mobile*
+                    Mobile* <span className="text-[11px]">(Must be Unique)</span>
                   </span>
                 </label>
                 <input
@@ -153,6 +159,27 @@ const AddDoctModal = ({ isOpen, onClose }) => {
                   <option> শুক্র </option>
                   <option> প্রতিদিন </option>
                 </select>
+                <label className="label bg-white mt-2 ">
+                  Other
+                  <input
+                    {...register("ff", { required: false })}
+                    type="checkbox"
+                    className="checkbox checkbox-sm checkbox-primary "
+                    onChange={handleOtherChange}
+                  />
+                </label>
+                {/* if other is true then open it */}
+                {isOtherOpen && (
+                  <label className="text-white text-[15px]">
+                    Write Doctor Schedule
+                    <input
+                      {...register("schedule", { required: true })}
+                      type="text"
+                      placeholder="schedule"
+                      className="input input-bordered input-primary ms-2 text-black "
+                    />
+                  </label>
+                )}
                 {errors?.schedule && (
                   <span className="text-red-500">this field is required</span>
                 )}

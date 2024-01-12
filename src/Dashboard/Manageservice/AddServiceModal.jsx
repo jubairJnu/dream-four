@@ -26,7 +26,7 @@ const AddServiceModal = ({ isOpen, onClose }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("doctor", data);
+        
         if (data.insertedId) {
           setIsLoading(false);
           Swal.fire({

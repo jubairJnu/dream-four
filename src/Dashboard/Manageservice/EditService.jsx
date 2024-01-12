@@ -32,7 +32,7 @@ const EditService = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        console.log(data);
+      
         if (data.data.modifiedCount > 0) {
           const Toast = Swal.mixin({
             toast: true,

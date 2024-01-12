@@ -14,12 +14,14 @@ const Receipt = () => {
   const { userInfo } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const [services, setServices] = useState([]);
+  const [isOtherOpen, setIsOtherOpen] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]); //add new start
 
   const [discountType, setDiscountType] = useState("flat"); // add new end
   const [doctors, setDoctors] = useState([]);
   const [formData, setFormData] = useState([]);
   const [totalInprice, settotalInPrice] = useState([]);
+  const [discountValues, setDiscountValues] = useState(0);
   const [inamount, setinamount] = useState([]);
   const [priceField, setpriceField] = useState([]);
   const [coverted, setcoverted] = useState([]);
@@ -39,20 +41,21 @@ const Receipt = () => {
       .then((data) => setServices(data));
   }, []);
 
+  // handle other
+  const handleOtherChange = () => {
+    setIsOtherOpen(!isOtherOpen);
+  };
+
   // handle price in word
 
   const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-    console.log(paidField);
+   
 
     const convert = numberToWords.toWords(paidField);
-    console.log(convert);
+  
     setcoverted(convert);
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   inWord: convert,
-    // }));
   };
   //
   const options = services?.map((serviceOption) => ({
@@ -81,6 +84,7 @@ const Receipt = () => {
 
   const handleDiscountValueChange = (event) => {
     const discountField = parseFloat(event.target.value) || 0;
+    setDiscountValues(discountField);
 
     recalculateTotal(inamount, discountField);
   };
@@ -91,16 +95,20 @@ const Receipt = () => {
   };
 
   const recalculateTotal = (acc, discountField) => {
+    const discountValue = discountField ? discountField : 0;
+
     if (discountType === "flat") {
-      const discount = acc - parseFloat(discountField);
+      const discount = acc - parseFloat(discountValue);
       settotalInPrice(discount);
     } else if (discountType === "percentage") {
-      const discountPercentage = parseFloat(discountField);
+      const discountPercentage = parseFloat(discountValue);
       const discountAmount = (acc * discountPercentage) / 100;
-      const finalTotal = acc - discountAmount;
+      const roundedDiscount = Math.round(discountAmount);
+      const finalTotal = acc - roundedDiscount;
       settotalInPrice(finalTotal);
     }
   };
+
   useEffect(() => {
     fetch(`${base_url}/users`)
       .then((res) => res.json())
@@ -134,8 +142,7 @@ const Receipt = () => {
   };
 
   const onSubmit = (data) => {
-    const { patient, phone, age, doctor, gender, paid, discount, refference } =
-      data;
+    const { patient, phone, age, doctor, gender, paid, refference } = data;
 
     const date = new Date();
     const year = date.getFullYear();
@@ -160,8 +167,7 @@ const Receipt = () => {
 
     const newReceipt = {
       patient,
-      user: UserName,
-      email: userEmail,
+
       phone,
       gender,
       age,
@@ -171,8 +177,12 @@ const Receipt = () => {
       total: totalInprice,
       paymentInfo: [
         {
+          user: UserName,
+          email: userEmail,
+          paymentId: parseInt(1),
           date: formattedDate,
-          discount: parseFloat(discount),
+          discount: parseFloat(discountValues),
+          discountType: discountType,
 
           paid: parseFloat(paid),
           inWord: coverted,
@@ -181,7 +191,7 @@ const Receipt = () => {
       refference,
     };
 
-    console.log(newReceipt);
+    
     Swal.fire({
       title: "Are you sure?",
       text: "You cannot edit it!",
@@ -203,7 +213,7 @@ const Receipt = () => {
           .then((data) => {
             if (data.insertedId) {
               const orderId = data.OrderId; // Assuming your response contains the OrderId
-              console.log("OrderId:", orderId);
+              
               setOrder(orderId);
               Swal.fire({
                 position: "top-end",
@@ -223,7 +233,7 @@ const Receipt = () => {
 
   // discount
   const discountFieldValue = watch("discount");
-  console.log("disfield", discountFieldValue);
+
 
   return (
     <div className="container mx-auto mt-16  ">
@@ -299,7 +309,7 @@ const Receipt = () => {
                     Pick One
                   </option>
                   <option>Male</option>
-                  <option>Femaale</option>
+                  <option>Female</option>
                 </select>
                 {errors.gender && (
                   <span className="text-red-500">Gender is required</span>
@@ -319,7 +329,9 @@ const Receipt = () => {
                   {...register("doctor", { required: false })}
                   className="select select-bordered select-primary"
                 >
-                  <option disabled>Pick One</option>
+                  <option selected value=" " disabled>
+                    Pick One
+                  </option>
                   {doctors?.map((doctor) => (
                     <option key={doctor._id}>
                       {" "}
@@ -327,6 +339,29 @@ const Receipt = () => {
                     </option>
                   ))}
                 </select>
+                <label className="label text-[14px]">
+                  Other
+                  <input
+                    {...register("age", { required: false })}
+                    type="checkbox"
+                    className="checkbox checkbox-sm  checkbox-primary "
+                    onChange={handleOtherChange}
+                  />
+                </label>
+
+                {/* if other field has value only open the input field */}
+
+                {isOtherOpen && (
+                  <label>
+                    Write Doctor Name
+                    <input
+                      {...register("doctor", { required: true })}
+                      type="text"
+                      placeholder="Doctor"
+                      className="input input-bordered input-primary ms-2 "
+                    />
+                  </label>
+                )}
               </div>
               <div className="form-control md:ms-6 w-full">
                 <label className="label">

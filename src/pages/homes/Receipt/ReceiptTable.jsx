@@ -18,13 +18,7 @@ const ReceiptTable = () => {
     setIsModalOpen(false);
   };
 
-  // const handlePrint = () => {
-  //   if (receiptRef.current) {
-  //     // Trigger the print action
-  //     receiptRef.current.handlePrint();
-  //     console.log("print");
-  //   }
-  // };
+ 
 
   //
 
@@ -32,9 +26,9 @@ const ReceiptTable = () => {
     fetch(`${base_url}/all-receipt/${receipt._id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("first", data);
+        
         const selectedDate = paymentDetails.date; // Use the date from the first paymentInfo object
-        console.log(selectedDate);
+        
 
         const selectedReceiptData = data?.data.orderDetails
           .map((item) => {
@@ -62,7 +56,7 @@ const ReceiptTable = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        console.log(data);
+     
         setRecentReceipt(data);
       });
   }, []);
@@ -109,9 +103,10 @@ const ReceiptTable = () => {
                     </td>
 
                     <th>{paymentDetails?.date}</th>
-                    <th>{receipts?.user}</th>
+                    <th>{paymentDetails?.user}</th>
                     <th className="hidden sm:table-cell">
                       <button
+                        className="cursor-pointer"
                         onClick={() => handleView(receipts, paymentDetails)}
                       >
                         View

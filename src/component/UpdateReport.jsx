@@ -53,7 +53,7 @@ const UpdateReport = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data", data);
+          
           setSearchDatas(data);
           setIsLoading(false);
         });

@@ -14,6 +14,7 @@ const DueEntry = () => {
   const { userInfo } = useContext(AuthContext);
   const [users, setUsers] = useState([]);
   const [selectedReceipt, setselectedReceipt] = useState([]);
+  const [isDueModalOpen, setIsDueModalOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [searchDatas, setSearchDatas] = useState([]);
@@ -33,10 +34,10 @@ const DueEntry = () => {
   const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-    console.log(paidField);
+    
 
     const convert = numberToWords.toWords(paidField);
-    console.log(convert);
+    
     setcoverted(convert);
     // setFormData((prevFormData) => ({
     //   ...prevFormData,
@@ -47,17 +48,21 @@ const DueEntry = () => {
   const openModal = () => {
     setIsModalOpen(true);
   };
+  const openDueModal = () => {
+    setIsDueModalOpen(true);
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setIsDueModalOpen(false);
   };
 
-  const handleView = (receipt) => {
-    fetch(`${base_url}/all-receipt/${receipt._id}`)
+  const handleView = (orderId, paymentId) => {
+    
+    fetch(`${base_url}/all-receipt/${orderId}?paymentId=${paymentId}`)
       .then((res) => res.json())
       .then((data) => {
         setselectedReceipt(data);
-        console.log("modal", data);
       });
 
     openModal();
@@ -76,7 +81,7 @@ const DueEntry = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data", data);
+          
           setSearchDatas(data);
           setIsLoading(false);
         });
@@ -89,6 +94,7 @@ const DueEntry = () => {
   const currentUser = users.find((user) => user.email === currentUserEmail);
 
   const handleSubmit = (event) => {
+    isLoading(true);
     event.preventDefault();
 
     const date = new Date();
@@ -103,17 +109,17 @@ const DueEntry = () => {
     const form = event.target;
     const OrderId = form.orderId.value;
     const paid = form.paid.value;
-    const discount = form.discount.value;
+
     const paymentInfo = {
       user: UserName,
       email: userEmail,
       OrderId,
       paid: parseInt(paid),
-      discount,
+
       inWord: coverted,
       date: formattedDate,
     };
-    console.log("paymentinfo", paymentInfo);
+
     fetch(`${base_url}/due-amount`, {
       method: "PATCH",
       headers: {
@@ -123,7 +129,7 @@ const DueEntry = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data);
+        isLoading(false);
         if (data.data.insertedId) {
           const Toast = Swal.mixin({
             toast: true,
@@ -143,8 +149,9 @@ const DueEntry = () => {
         }
         form.reset();
         setFormData(paymentInfo);
-        openModal();
-        setSearchDatas(data);
+
+        openDueModal();
+        // setSearchDatas(data);
         setIsLoading(false);
       });
   };
@@ -179,24 +186,14 @@ const DueEntry = () => {
                 onChange={handlePriceWord}
               />
             </div>
+            <p className="my-4 capitalize text-sm text-start">
+              {" "}
+              <span className="font-bold text-blue-700 text-sm text-start ">
+                In Word:
+              </span>{" "}
+              {coverted} Tk Only{" "}
+            </p>
             {/* discount */}
-            <div className="form-control w-full">
-              <label className="label">
-                <span className="label-text">Discount Amount </span>
-              </label>
-              <input
-                name="discount"
-                className="input input-bordered input-info w-full"
-                placeholder="Discount"
-              />
-              <p className="my-4 capitalize text-sm text-start">
-                {" "}
-                <span className="font-bold text-blue-700 text-sm text-start ">
-                  In Word:
-                </span>{" "}
-                {coverted} Tk Only{" "}
-              </p>
-            </div>
 
             {/* submit */}
 
@@ -205,9 +202,10 @@ const DueEntry = () => {
               <input type="submit" />
             </button>
             <ModalDue
-              isOpen={isModalOpen}
+              isOpen={isDueModalOpen}
               onClose={closeModal}
               formData={formData}
+              searchDatas={searchDatas}
             />
           </form>
         </div>
@@ -307,15 +305,21 @@ const DueEntry = () => {
                             {order?.service.map((item) => item.name).join(", ")}
                           </td>
                           <th>{payment?.date}</th>
-                          <th>{order?.user}</th>
+                          <th>{payment?.user}</th>
+
                           <th className="hidden sm:table-cell">
-                            <button onClick={() => handleView(order)}>
+                            <button
+                              onClick={() =>
+                                handleView(order._id, payment.paymentId)
+                              }
+                            >
                               View
                             </button>
+
                             <DueReciptPrint
                               isOpen={isModalOpen}
                               onClose={closeModal}
-                              selectedReceipt={order}
+                              selectedReceipt={selectedReceipt}
                             />
                           </th>
                         </tr>

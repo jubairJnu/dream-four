@@ -43,12 +43,9 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
   };
 
   const handlePrint = () => {
-    // Simulate a delay before starting the print
-    setTimeout(() => {
-      if (receiptRef.current) {
-        window.print();
-      }
-    }, 800); // Adjust the delay as needed
+    if (receiptRef.current) {
+      window.print();
+    }
   };
 
   return (
@@ -84,12 +81,14 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
       @media print {
         @page {
           size: A4 landscape;
-          margin: 0;
+          margin: 0 !important;
+          padding: 0 !important;
         }
        
 
         body {
-          margin: 0;
+          margin: 0 !important;
+          -webkit-print-color-adjust: exact; 
         }
         .print-text {
           font-size: 12pt; /* Adjust the font size as needed */
@@ -97,9 +96,8 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
         div#footer {
           position: fixed;
           bottom: 0;
-          left: 0;
           
-          width: 50%;
+         width: 50%
           
           padding: 5px;
           
@@ -119,10 +117,12 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       {/* style */}
                       <div className="flex justify-center gap-4 items-center">
                         <div>
-                          <img className="w-8" src={logo} alt="logo" />
+                          <img className="w-10" src={logo} alt="logo" />
                         </div>
                         <div>
-                          <h2>Dream Four Hospital And Diagonstic Center</h2>
+                          <h2 className="font-bold">
+                            Dream Four Hospital And Diagonstic Center
+                          </h2>
                           <p className="text-[11px]">
                             Amar New Market, Bridge Road, Zero Point, Paikgacha,
                             Khulna
@@ -143,36 +143,36 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       </p>
                     </div>
                     {/* name and order id */}
-                    <div className="flex justify-between text-[12px]">
+                    <div className="flex justify-between text-[12px] ">
                       <div className="flex text-[12px]">
-                        <p className="me-1">Name</p>
+                        <p className="me-1 font-semibold">Name</p>
                         <p>
                           : {selectedReceipt && selectedReceipt[0]?.patient}
                         </p>
                       </div>
                       {/* order id */}
                       <div className="flex text-[12px]">
-                        <p className="me-1">Order Id</p>
+                        <p className="me-1 font-semibold">Order Id</p>
                         <p>
                           : {selectedReceipt && selectedReceipt[0]?.OrderId}
                         </p>
                       </div>
                     </div>
                     {/* for age gender contact */}
-                    <div className="text-[12px] flex items-center justify-between">
+                    <div className="text-[12px] flex items-center justify-between ">
                       <div className="flex gap-[2px]">
-                        <p className="me-[15px]">Age </p>
+                        <p className="me-[15px] font-semibold">Age </p>
                         <p>: {selectedReceipt && selectedReceipt[0]?.age} y</p>
                       </div>
                       {/* gender */}
-                      <div className="flex gap-[2px]">
-                        <p>Gender </p>
+                      <div className="flex gap-[2px] ">
+                        <p className="font-semibold"> Gender </p>
                         <p>: {selectedReceipt && selectedReceipt[0]?.gender}</p>
                       </div>
                       {/* contact */}
 
                       <div className="flex gap-[2px]">
-                        <p>Mobile </p>
+                        <p className="font-semibold">Mobile </p>
                         <p>: {selectedReceipt && selectedReceipt[0]?.phone}</p>
                       </div>
                     </div>
@@ -180,14 +180,16 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                     {/* doctor */}
 
                     <div className="text-[12px] flex">
-                      <p className="me-[3px]">Ref by</p>
+                      <p className="me-[3px] font-semibold">Ref by</p>
                       <p>: {selectedReceipt && selectedReceipt[0]?.doctor} </p>
                     </div>
 
                     {/* service */}
 
                     <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
-                      <p>Test Name</p>
+                      <p>
+                        <span className="me-5">SL.</span> Test Name
+                      </p>
                       <p>Price</p>
                     </div>
                     {/* data */}
@@ -196,13 +198,15 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       {selectedReceipt &&
                         selectedReceipt[0]?.service &&
                         selectedReceipt[0]?.service?.map((receipt, index) => (
-                          <div
-                            key={receipt._id}
-                            className="flex justify-between items-center text-[12px]"
-                          >
-                            <p className="">{receipt?.name}</p>
-                            <p className=" ">{receipt.price} </p>
-                          </div>
+                          <>
+                            <div className="flex justify-between grid-cols-2 items-center text-[12px]">
+                              <div>
+                                <span className="me-5">{index + 1}</span>
+                                {receipt?.name}
+                              </div>
+                              <p className=" ">{receipt.price} </p>
+                            </div>
+                          </>
                         ))}
                     </div>
 
@@ -277,26 +281,45 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
 
                     <div className="flex items-center text-[12px] gap-2 mt-2">
                       <p> prepared by :</p>
-                      <p> {selectedReceipt && selectedReceipt[0]?.user}</p>
+                      <p>
+                        {" "}
+                        {selectedReceipt &&
+                          selectedReceipt[0]?.paymentInfo[0]?.user}
+                      </p>
                     </div>
 
                     {/* footer */}
-                    <div id="footer">
-                      <p className="text-[11px] text-center">
-                        বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের নাম,
-                        পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
-                      </p>
-                      <p className="text-[11px] text-center border-t-[1px]">
-                        Mobile: 01329-633401, 01329-633402, 01329-633403
-                      </p>
-                      <p className="text-[11px] text-center">
-                        Web: www.dreamfourhospital.com
-                      </p>
-                      <p className="text-[9px]">Software by : Novus IT</p>
+                    <div className="flex justify-between gap-5" id="footer">
+                      <div>
+                        <p className="text-[11px] text-center">
+                          বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের
+                          নাম, পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
+                        </p>
+                        <p className="text-[11px] text-center border-t-[1px]">
+                          Mobile: 01329-633401, 01329-633402, 01329-633403
+                        </p>
+                        <p className="text-[11px] text-center">
+                          Web: www.dreamfourhospital.com
+                        </p>
+                        <p className="text-[9px]">Software by : Novus IT</p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] text-center">
+                          বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের
+                          নাম, পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
+                        </p>
+                        <p className="text-[11px] text-center border-t-[1px]">
+                          Mobile: 01329-633401, 01329-633402, 01329-633403
+                        </p>
+                        <p className="text-[11px] text-center">
+                          Web: www.dreamfourhospital.com
+                        </p>
+                        <p className="text-[9px]">Software by : Novus IT</p>
+                      </div>
                     </div>
                   </div>
                   {/* line */}
-                  <div className="border-dotted border-s"></div>
+                  <div className="border-dotted border-s "></div>
                   {/* content2 */}
 
                   <div className="w-full">
@@ -306,10 +329,12 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       {/* style */}
                       <div className="flex justify-center gap-4 items-center">
                         <div>
-                          <img className="w-8" src={logo} alt="logo" />
+                          <img className="w-10" src={logo} alt="logo" />
                         </div>
                         <div>
-                          <h2>Dream Four Hospital And Diagonstic Center</h2>
+                          <h2 className="font-bold">
+                            Dream Four Hospital And Diagonstic Center
+                          </h2>
                           <p className="text-[11px]">
                             Amar New Market, Bridge Road, Zero Point, Paikgacha,
                             Khulna
@@ -330,25 +355,36 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       </p>
                     </div>
 
-                    <div className="flex text-[12px]">
-                      <p className="me-1">Name</p>
-                      <p>: {selectedReceipt && selectedReceipt[0]?.patient}</p>
+                    <div className="flex justify-between text-[12px] ">
+                      <div className="flex text-[12px]">
+                        <p className="me-1 font-semibold">Name</p>
+                        <p>
+                          : {selectedReceipt && selectedReceipt[0]?.patient}
+                        </p>
+                      </div>
+                      {/* order id */}
+                      <div className="flex text-[12px]">
+                        <p className="me-1 font-semibold">Order Id</p>
+                        <p>
+                          : {selectedReceipt && selectedReceipt[0]?.OrderId}
+                        </p>
+                      </div>
                     </div>
                     {/* for age gender contact */}
                     <div className="text-[12px] flex items-center justify-between">
                       <div className="flex gap-[2px]">
-                        <p className="me-[15px]">Age </p>
+                        <p className="me-[15px] font-semibold">Age </p>
                         <p>: {selectedReceipt && selectedReceipt[0]?.age} y</p>
                       </div>
                       {/* gender */}
                       <div className="flex gap-[2px]">
-                        <p>Gender </p>
+                        <p className="font-semibold">Gender </p>
                         <p>: {selectedReceipt && selectedReceipt[0]?.gender}</p>
                       </div>
                       {/* contact */}
 
                       <div className="flex gap-[2px]">
-                        <p>Mobile </p>
+                        <p className="font-semibold">Mobile </p>
                         <p>: {selectedReceipt && selectedReceipt[0]?.phone}</p>
                       </div>
                     </div>
@@ -356,14 +392,16 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                     {/* doctor */}
 
                     <div className="text-[12px] flex">
-                      <p className="me-[3px]">Ref by</p>
+                      <p className="me-[3px] font-semibold">Ref by</p>
                       <p>: {selectedReceipt && selectedReceipt[0]?.doctor} </p>
                     </div>
 
                     {/* service */}
 
                     <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
-                      <p>Test Name</p>
+                      <p>
+                        <span className="me-5">SL.</span> Test Name
+                      </p>
                       <p>Price</p>
                     </div>
                     {/* data */}
@@ -372,13 +410,15 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       {selectedReceipt &&
                         selectedReceipt[0]?.service &&
                         selectedReceipt[0]?.service?.map((receipt, index) => (
-                          <div
-                            key={receipt._id}
-                            className="flex justify-between items-center text-[12px]"
-                          >
-                            <p className="">{receipt?.name}</p>
-                            <p className=" ">{receipt.price} </p>
-                          </div>
+                          <>
+                            <div className="flex justify-between grid-cols-2 items-center text-[12px]">
+                              <div>
+                                <span className="me-5">{index + 1}</span>
+                                {receipt?.name}
+                              </div>
+                              <p className=" ">{receipt.price} </p>
+                            </div>
+                          </>
                         ))}
                     </div>
 
@@ -453,7 +493,11 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
 
                     <div className="flex items-center text-[12px] gap-2 mt-2">
                       <p> prepared by :</p>
-                      <p> {selectedReceipt && selectedReceipt[0]?.user}</p>
+                      <p>
+                        {" "}
+                        {selectedReceipt &&
+                          selectedReceipt[0]?.paymentInfo[0]?.user}
+                      </p>
                     </div>
                   </div>
 

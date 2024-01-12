@@ -89,7 +89,7 @@ const IncomeLedger = () => {
       .then((data) => {
         setIncomes(data);
         setIsloading(false);
-        console.log(data);
+        
       })
       .catch((error) => console.error(error));
   };

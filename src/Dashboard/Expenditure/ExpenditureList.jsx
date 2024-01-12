@@ -47,7 +47,7 @@ const ExpenditureList = () => {
       .then((res) => res.json())
       .then((data) => {
         setExpenditures(data);
-        console.log(data);
+        
         setIsLoading(false);
       });
   };

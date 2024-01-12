@@ -15,7 +15,7 @@ const Balance = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsloading(false);
-        console.log(data);
+        
         setTransactions(data);
       });
   }, []);

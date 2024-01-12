@@ -66,7 +66,7 @@ const AppointmentList = () => {
       .then((data) => {
         setAppointment(data);
         setIsloading(false);
-        console.log(data);
+        
       })
       .catch((error) => console.error(error));
   };

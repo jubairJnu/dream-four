@@ -3,7 +3,7 @@ import ReactToPrint from "react-to-print";
 import logo from "../../public/logo.jpg";
 
 const Modal = ({ isOpen, onClose, formData, Order }) => {
-  console.log("modal", formData);
+ 
 
   const calculateTotal = () => {
     if (!formData || !formData?.service) {
@@ -78,12 +78,14 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
       @media print {
         @page {
           size: A4 landscape;
-          margin: 0;
+          margin: 0 !important;
+          padding: 0 !important;
         }
        
 
         body {
-          margin: 0;
+          margin: 0 !important;
+          -webkit-print-color-adjust: exact; 
         }
         .print-text {
           font-size: 12pt; /* Adjust the font size as needed */
@@ -91,9 +93,8 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
         div#footer {
           position: fixed;
           bottom: 0;
-          left: 0;
           
-          width: 50%;
+         width: 50%
           
           padding: 5px;
           
@@ -109,10 +110,12 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
               <div className="w-full">
                 <div className="flex justify-center gap-4 items-center">
                   <div>
-                    <img className="w-8" src={logo} alt="logo" />
+                    <img className="w-10" src={logo} alt="logo" />
                   </div>
                   <div>
-                    <h2>Dream Four Hospital And Diagonstic Center</h2>
+                    <h2 className="font-bold">
+                      Dream Four Hospital And Diagonstic Center
+                    </h2>
                     <p className="text-[11px]">
                       Amar New Market, Bridge Road, Zero Point, Paikgacha,
                       Khulna
@@ -136,11 +139,11 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 {/* name */}
                 <div className="flex justify-between">
                   <div className="flex text-[12px]">
-                    <p className="me-1">Name</p>
+                    <p className="me-1 font-semibold">Name</p>
                     <p>: {formData.patient}</p>
                   </div>
                   <div className="flex text-[12px]">
-                    <p className="me-1">Order Id</p>
+                    <p className="me-1 font-semibold">Order Id</p>
                     <p>: {Order}</p>
                   </div>
                 </div>
@@ -148,43 +151,47 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
 
                 <div className="text-[12px] flex items-center justify-between">
                   <div className="flex gap-[2px]">
-                    <p className="me-[15px]">Age </p>
+                    <p className="me-[15px] font-semibold">Age </p>
                     <p>: {formData?.age} y</p>
                   </div>
                   {/* gender */}
                   <div className="flex gap-[2px]">
-                    <p>Gender </p>
+                    <p className="font-semibold">Gender </p>
                     <p>: {formData?.gender}</p>
                   </div>
                   {/* contact */}
 
                   <div className="flex gap-[2px]">
-                    <p>Mobile </p>
+                    <p className="font-semibold">Mobile </p>
                     <p>: {formData?.phone}</p>
                   </div>
                 </div>
                 {/* doctor */}
                 <div className="text-[12px] flex">
-                  <p className="me-[3px]">Ref by</p>
+                  <p className="me-[3px] font-semibold">Ref by</p>
                   <p>: {formData?.doctor}</p>
                 </div>
 
                 {/* services */}
-                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
-                  <p>Test Name</p>
+                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 font-semibold ">
+                  <p>
+                    <span className="me-5">SL.</span> Test Name
+                  </p>
                   <p>Price</p>
                 </div>
                 <div>
                   {formData &&
                     formData?.service &&
                     formData?.service?.map((receipt, index) => (
-                      <div
-                        key={receipt._id}
-                        className="flex justify-between items-center text-[12px]"
-                      >
-                        <p className="">{receipt?.name}</p>
-                        <p className=" ">{receipt.price} </p>
-                      </div>
+                      <>
+                        <div className="flex justify-between grid-cols-2 items-center text-[12px]">
+                          <div>
+                            <span className="me-5">{index + 1}</span>
+                            {receipt?.name}
+                          </div>
+                          <p className=" ">{receipt.price} </p>
+                        </div>
+                      </>
                     ))}
                 </div>
 
@@ -204,7 +211,16 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                   <div className="flex border-t-[1px]">
                     <p className="me-5"> (-) Discount</p>
 
-                    <p className="">{formData?.paymentInfo[0]?.discount}</p>
+                    <p className="">
+                      {formData?.paymentInfo[0]?.discount}
+                      {formData?.paymentInfo[0]?.discountType &&
+                        (formData?.paymentInfo[0]?.discountType ===
+                        "percentage" ? (
+                          <span className="ms-2"> % </span>
+                        ) : (
+                          <span className="ms-2"> /- </span>
+                        ))}
+                    </p>
                   </div>
                 </div>
 
@@ -251,22 +267,37 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 {/*  */}
                 <div className="flex items-center text-[12px] gap-2 mt-2">
                   <p> prepared by :</p>
-                  <p> {formData.user} </p>
+                  <p> {formData?.paymentInfo[0]?.user} </p>
                 </div>
 
                 {/* footer */}
-                <div id="footer">
-                  <p className="text-[11px] text-center">
-                    বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের নাম,
-                    পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
-                  </p>
-                  <p className="text-[11px] text-center border-t-[1px]">
-                    Mobile: 01329-633401, 01329-633402, 01329-633403
-                  </p>
-                  <p className="text-[11px] text-center">
-                    Web: www.dreamfourhospital.com
-                  </p>
-                  <p className="text-[9px]">Software by : Novus IT</p>
+                <div className="flex justify-between gap-5" id="footer">
+                  <div>
+                    <p className="text-[11px] text-center">
+                      বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের নাম,
+                      পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
+                    </p>
+                    <p className="text-[11px] text-center border-t-[1px]">
+                      Mobile: 01329-633401, 01329-633402, 01329-633403
+                    </p>
+                    <p className="text-[11px] text-center">
+                      Web: www.dreamfourhospital.com
+                    </p>
+                    <p className="text-[9px]">Software by : Novus IT</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] text-center">
+                      বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের নাম,
+                      পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
+                    </p>
+                    <p className="text-[11px] text-center border-t-[1px]">
+                      Mobile: 01329-633401, 01329-633402, 01329-633403
+                    </p>
+                    <p className="text-[11px] text-center">
+                      Web: www.dreamfourhospital.com
+                    </p>
+                    <p className="text-[9px]">Software by : Novus IT</p>
+                  </div>
                 </div>
               </div>
               {/* line */}
@@ -275,10 +306,12 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
               <div className="w-full">
                 <div className="flex justify-center gap-4 items-center">
                   <div>
-                    <img className="w-8" src={logo} alt="logo" />
+                    <img className="w-10" src={logo} alt="logo" />
                   </div>
                   <div>
-                    <h2>Dream Four Hospital And Diagonstic Center</h2>
+                    <h2 className="font-bold">
+                      Dream Four Hospital And Diagonstic Center
+                    </h2>
                     <p className="text-[11px]">
                       Amar New Market, Bridge Road, Zero Point, Paikgacha,
                       Khulna
@@ -302,11 +335,11 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 {/* name */}
                 <div className="flex justify-between">
                   <div className="flex text-[12px]">
-                    <p className="me-1">Name</p>
+                    <p className="me-1 font-semibold">Name</p>
                     <p>: {formData.patient}</p>
                   </div>
                   <div className="flex text-[12px]">
-                    <p className="me-1">Order Id</p>
+                    <p className="me-1 font-semibold">Order Id</p>
                     <p>: {Order}</p>
                   </div>
                 </div>
@@ -314,43 +347,47 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
 
                 <div className="text-[12px] flex items-center justify-between">
                   <div className="flex gap-[2px]">
-                    <p className="me-[15px]">Age </p>
+                    <p className="me-[15px] font-semibold">Age </p>
                     <p>: {formData?.age} y</p>
                   </div>
                   {/* gender */}
                   <div className="flex gap-[2px]">
-                    <p>Gender </p>
+                    <p className="font-semibold">Gender </p>
                     <p>: {formData?.gender}</p>
                   </div>
                   {/* contact */}
 
                   <div className="flex gap-[2px]">
-                    <p>Mobile </p>
+                    <p className="font-semibold">Mobile </p>
                     <p>: {formData?.phone}</p>
                   </div>
                 </div>
                 {/* doctor */}
                 <div className="text-[12px] flex">
-                  <p className="me-[3px]">Ref by</p>
+                  <p className="me-[3px] font-semibold">Ref by</p>
                   <p>: {formData?.doctor}</p>
                 </div>
 
                 {/* services */}
-                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
-                  <p>Test Name</p>
+                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 font-semibold ">
+                  <p>
+                    <span className="me-5">SL.</span> Test Name
+                  </p>
                   <p>Price</p>
                 </div>
                 <div>
                   {formData &&
                     formData?.service &&
                     formData?.service?.map((receipt, index) => (
-                      <div
-                        key={receipt._id}
-                        className="flex justify-between items-center text-[12px]"
-                      >
-                        <p className="">{receipt?.name}</p>
-                        <p className=" ">{receipt.price} </p>
-                      </div>
+                      <>
+                        <div className="flex justify-between grid-cols-2 items-center text-[12px]">
+                          <div>
+                            <span className="me-5">{index + 1}</span>
+                            {receipt?.name}
+                          </div>
+                          <p className=" ">{receipt.price} </p>
+                        </div>
+                      </>
                     ))}
                 </div>
 
@@ -368,9 +405,19 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 <div className=" text-black flex justify-between text-[12px] ">
                   <div></div>
                   <div className="flex border-t-[1px]">
-                    <p className="me-5"> (-) Discount</p>
+                    <p className="me-5">(-) Discount</p>
 
-                    <p className="">{formData?.paymentInfo[0]?.discount}</p>
+                    <p className="">
+                      {formData?.paymentInfo[0]?.discount}
+                      {/* conditionally sign */}
+                      {formData?.paymentInfo[0]?.discountType &&
+                        (formData?.paymentInfo[0]?.discountType ===
+                        "percentage" ? (
+                          <span className="ms-2"> % </span>
+                        ) : (
+                          <span className="ms-2"> /- </span>
+                        ))}
+                    </p>
                   </div>
                 </div>
 
@@ -417,7 +464,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 {/*  */}
                 <div className="flex items-center text-[12px] gap-2 mt-2">
                   <p> prepared by :</p>
-                  <p> {formData.user} </p>
+                  <p> {formData?.paymentInfo[0]?.user} </p>
                 </div>
 
                 {/* footer */}

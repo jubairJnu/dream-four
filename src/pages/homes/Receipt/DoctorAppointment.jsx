@@ -25,7 +25,7 @@ const DoctorAppointment = () => {
     fetch(`${base_url}/users`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        
         setUsers(data);
       });
   }, []);
@@ -45,10 +45,10 @@ const DoctorAppointment = () => {
   const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-    console.log(paidField);
+    
 
     const convert = numberToWords.toWords(paidField);
-    console.log(convert);
+    
     setcoverted(convert);
     setFormData((prevFormData) => ({
       ...prevFormData,

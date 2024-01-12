@@ -13,7 +13,7 @@ const MedicineList = () => {
     fetch(`${base_url}/all_medicines`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        
         setTotalMedicine(data);
       });
   }, []);

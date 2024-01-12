@@ -29,7 +29,7 @@ const ManageServices = () => {
     fetch(`${base_url}/all_services`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        
         setTotalServices(data);
       });
   }, []);
@@ -37,7 +37,7 @@ const ManageServices = () => {
   // handle delete
 
   const handleServiceDelte = (id) => {
-    console.log(id);
+    
     Swal.fire({
       title: "Are you sure?",
       text: "You cannot edit it!",
@@ -54,7 +54,7 @@ const ManageServices = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.data.deletedCount > 0) {
-              console.log("data", data);
+              
               Swal.fire({
                 position: "top-end",
                 icon: "success",

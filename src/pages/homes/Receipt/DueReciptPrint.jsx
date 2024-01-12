@@ -1,18 +1,28 @@
 import { useRef } from "react";
 import ReactToPrint from "react-to-print";
+import logo from "../../../../public/logo.jpg";
 
 const DueReciptPrint = ({ isOpen, onClose, selectedReceipt }) => {
-  // console.log("due", selectedReceipt);
+  // console.log("due", selectedReceipt?.data?.orderDetails[0]?.patient);
+  // console.log("formate", selectedReceipt?.data);
 
   const calculateTotal = () => {
-    if (!selectedReceipt || !selectedReceipt?.service) {
+    if (!selectedReceipt || !selectedReceipt?.data?.orderDetails[0]?.service) {
       return 0;
     }
 
-    return selectedReceipt?.service.reduce(
+    return selectedReceipt?.data?.orderDetails[0]?.service.reduce(
       (total, receipt) => total + receipt.price,
       0
     );
+  };
+
+  const calculateDueAmount = () => {
+    const inTotalAmount =
+      parseFloat(selectedReceipt?.data?.orderDetails[0]?.total) || 0;
+    const totalPaid = selectedReceipt?.data?.totalPaidAmount;
+
+    return inTotalAmount - totalPaid;
   };
 
   const printRef = useRef();
@@ -36,15 +46,20 @@ const DueReciptPrint = ({ isOpen, onClose, selectedReceipt }) => {
     }
   };
   return (
-    <div className="fixed inset-0 flex items-center justify-end z-10 right-0 top-0 left-80 overflow-y-auto">
+    <div className="fixed inset-4 flex items-center justify-start z-10 left-0 top-0   overflow-y-auto">
       <div
-        className="modal-top  "
+        className="modal modal-bottom"
         onClick={onClose}
         style={{
           background: "rgba(0, 0, 0, 0.5)",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
         }}
       ></div>
-      <div className="modal-container bg-[#92afe9]  mx-auto rounded-md text-white shadow-2xl z-50 ">
+      <div className="modal- w-[1200px] max-h-full bg-[#92afe9] rounded-md text-white shadow-2xl overflow-y-auto">
         <div className="modal-header">
           <span className="modal-close" onClick={onClose}>
             &times;
@@ -59,12 +74,27 @@ const DueReciptPrint = ({ isOpen, onClose, selectedReceipt }) => {
       @media print {
         @page {
           size: A4 landscape;
-          margin: 0;
+          margin: 0 !important;
+          padding: 0 !important;
         }
        
 
         body {
-          margin: 1cm;
+          margin: 0 !important;
+          -webkit-print-color-adjust: exact; 
+        }
+        .print-text {
+          font-size: 12pt; /* Adjust the font size as needed */
+        }
+        div#footer {
+          position: fixed;
+          bottom: 0;
+          
+         width: 50%
+          
+          padding: 5px;
+          
+         
         }
       }
     `}
@@ -73,151 +103,477 @@ const DueReciptPrint = ({ isOpen, onClose, selectedReceipt }) => {
             {/* two content flex */}
             <div className="flex justify-between gap-5 text-black">
               {/* content one for office */}
-              <div>
-                <p className="mb-1">
-                  <small>Customer Copy</small>
-                </p>
-                <div className="text-center mb-2  border-2 p-3">
+              <div className="w-full">
+                {/* content */}
+
+                <div className="text-center mb-2  border-2 py-2">
                   {/* style */}
-                  <h2>Dream Four Hospital And Diagonstic Center</h2>
-                  <p>
-                    Omor New Market, Bridge Road, Zero Point, Paikgasa, Khulna
-                  </p>
-                </div>
-                <div className="flex justify-between">
-                  <small>
-                    <p>print Date: {isOpen ? formatDate(new Date()) : ""} </p>
-                  </small>
-                  <p>
-                    <small> {selectedReceipt?.paymentInfo[0]?.date} </small>
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <div className="form-control">
-                    <label className="label">
-                      <span className=" text-black">Patient Name</span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={selectedReceipt?.patient}
-                      readOnly
-                    />
-                  </div>
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="text-black">Age </span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={selectedReceipt?.age}
-                      readOnly
-                    />
+                  <div className="flex justify-center gap-4 items-center">
+                    <div>
+                      <img className="w-10" src={logo} alt="logo" />
+                    </div>
+                    <div>
+                      <h2 className="font-bold">
+                        Dream Four Hospital And Diagonstic Center
+                      </h2>
+                      <p className="text-[11px]">
+                        Amar New Market, Bridge Road, Zero Point, Paikgacha,
+                        Khulna
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-2 mb-2 ">
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="text-black">Doctor</span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={selectedReceipt?.doctor}
-                      readOnly
-                    />
-                  </div>
-                  {/* order */}
-                  <div className="form-control">
-                    <label className="label">
-                      <span className="text-black">Order Id </span>
-                    </label>
-                    <input
-                      className="input input-bordered input-sm text-black text-center p-1"
-                      type="text"
-                      value={selectedReceipt?.OrderId}
-                      readOnly
-                    />
-                  </div>
-                </div>
-
-                {/* services */}
-                <div className="bg-white text-black">
-                  <table className="table">
-                    <thead className="flex-col justify-between items-center "></thead>
-                    {selectedReceipt &&
-                      selectedReceipt?.service?.map((srvc, index) => (
-                        <tr key={srvc._id}>
-                          <th> {index + 1} </th>
-                          <th>{srvc?.name}</th>
-                          <th className="ps-64">{srvc?.price}</th>
-                        </tr>
-                      ))}
-                  </table>
-                </div>
-                {/* total */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center px-5 border-t-2">
-                      <th>Total</th>
-                      <th></th> {calculateTotal()}
-                    </thead>
-                  </table>
-                </div>
-                {/* discount */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center p">
-                      <th className="ps-6">Discount</th>
-                      <th>
-                        - {selectedReceipt?.paymentInfo[0]?.discount} % / -
-                      </th>
-                    </thead>
-                  </table>
-                </div>
-                {/* grand total */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center px-5 border-t-2">
-                      <th>Grand Total </th>
-
-                      {selectedReceipt?.total}
-                    </thead>
-                  </table>
-                </div>
-                {/* paid */}
-                <div className="bg-white mt-2 text-black">
-                  <table className="table">
-                    <thead className="flex justify-between items-center px-5 border-t-2">
-                      <th>Paid</th>
-                      <th></th>
-                      {selectedReceipt?.paymentInfo[0]?.paid}
-                    </thead>
-                  </table>
-                </div>
-                {/* in word */}
-                <p className="capitalize">
-                  In Word:{" "}
-                  <span className="px-2">
-                    {selectedReceipt?.paymentInfo[0]?.inWord}
-                  </span>{" "}
-                  tk only{" "}
+                <p className="w-24 mx-auto text-center text-[11px] border rounded-md ">
+                  Customer Copy
                 </p>
-                {/*  */}
+                <div className="flex justify-between text-[10px]">
+                  <p>print Date: {isOpen ? formatDate(new Date()) : ""} </p>
 
-                <p> prepared by</p>
-                <p> {selectedReceipt.user} </p>
+                  <p>
+                    Issue Date:
+                    {selectedReceipt &&
+                      selectedReceipt?.data?.paymentInfo[0]?.date}
+                  </p>
+                </div>
+                {/* name and order id */}
+                <div className="flex justify-between text-[12px] ">
+                  <div className="flex text-[12px]">
+                    <p className="me-1 font-semibold">Name</p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.patient}
+                    </p>
+                  </div>
+                  {/* order id */}
+                  <div className="flex text-[12px]">
+                    <p className="me-1 font-semibold">Order Id</p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.OrderId}
+                    </p>
+                  </div>
+                </div>
+                {/* for age gender contact */}
+                <div className="text-[12px] flex items-center justify-between ">
+                  <div className="flex gap-[2px]">
+                    <p className="me-[15px] font-semibold">Age </p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.age}{" "}
+                      y
+                    </p>
+                  </div>
+                  {/* gender */}
+                  <div className="flex gap-[2px] ">
+                    <p className="font-semibold"> Gender </p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.gender}
+                    </p>
+                  </div>
+                  {/* contact */}
+
+                  <div className="flex gap-[2px]">
+                    <p className="font-semibold">Mobile </p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.phone}
+                    </p>
+                  </div>
+                </div>
+
+                {/* doctor */}
+
+                <div className="text-[12px] flex">
+                  <p className="me-[3px] font-semibold">Ref by</p>
+                  <p>
+                    :{" "}
+                    {selectedReceipt &&
+                      selectedReceipt?.data?.orderDetails[0]?.doctor}{" "}
+                  </p>
+                </div>
+
+                {/* service */}
+
+                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
+                  <p>
+                    <span className="me-5">SL.</span> Test Name
+                  </p>
+                  <p>Price</p>
+                </div>
+                {/* data */}
+
+                <div>
+                  {selectedReceipt &&
+                    selectedReceipt?.data?.orderDetails[0]?.service &&
+                    selectedReceipt?.data?.orderDetails[0]?.service?.map(
+                      (receipt, index) => (
+                        <>
+                          <div className="flex justify-between grid-cols-2 items-center text-[12px]">
+                            <div>
+                              <span className="me-5">{index + 1}</span>
+                              {receipt?.name}
+                            </div>
+                            <p className=" ">{receipt.price} </p>
+                          </div>
+                        </>
+                      )
+                    )}
+                </div>
+
+                {/* total */}
+
+                <div className=" mt-1 text-[12px] flex justify-between items-center text-black border-t-2">
+                  <div></div>
+                  <div className="flex ">
+                    <p>Total</p>
+                    <p className="ms-4">{calculateTotal()} /-</p>
+                  </div>
+                </div>
+
+                {/* discount */}
+                <div className=" text-black flex justify-between text-[12px] ">
+                  <div></div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5"> (-) Discount</p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.paymentInfo[0]?.discount}
+                    </p>
+                  </div>
+                </div>
+
+                {/* grand total */}
+                <div className=" text-black flex justify-between text-[12px] ">
+                  <div></div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5">Grand Total</p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.total}
+                    </p>
+                  </div>
+                </div>
+
+                {/* paid */}
+                <div className=" text-black flex justify-between items-center text-[12px]  ">
+                  <div>
+                    <p className="capitalize">
+                      In word:
+                      <span className="px-2">
+                        {selectedReceipt &&
+                          selectedReceipt?.data?.paymentInfo[0]?.inWord}
+                      </span>
+                      Tk only
+                    </p>
+                  </div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5">Paid </p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.paymentInfo[0]?.paid}
+                    </p>
+                  </div>
+                </div>
+
+                <hr />
+
+                <div className="flex justify-between mt-7">
+                  <div></div>
+                  <div className="flex ">
+                    <p className="me-5">Total Paid </p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.totalPaidAmount}
+                    </p>
+                  </div>
+                </div>
+                {/* due */}
+
+                <div className="flex justify-between text-[12px] text-black">
+                  <div></div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5">Due </p>
+
+                    <p className="">{calculateDueAmount()}</p>
+                  </div>
+                </div>
+
+                {/* prepared */}
+
+                <div className="flex items-center text-[12px] gap-2 mt-2">
+                  <p> prepared by :</p>
+                  <p>
+                    {" "}
+                    {selectedReceipt &&
+                      selectedReceipt?.data?.paymentInfo[0]?.user}
+                  </p>
+                </div>
+
                 {/* footer */}
-                <div className="mt-1 border p-3 text-center">
-                  <p>Mobile: 01329-633401, 01329-633402, 01329-633403</p>
-                  <p>Web: www.dreamfourhospital.com</p>
+                <div className="flex justify-between gap-5" id="footer">
+                  <div>
+                    <p className="text-[11px] text-center">
+                      বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের নাম,
+                      পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
+                    </p>
+                    <p className="text-[11px] text-center border-t-[1px]">
+                      Mobile: 01329-633401, 01329-633402, 01329-633403
+                    </p>
+                    <p className="text-[11px] text-center">
+                      Web: www.dreamfourhospital.com
+                    </p>
+                    <p className="text-[9px]">Software by : Novus IT</p>
+                  </div>
+                  <div>
+                    <p className="text-[11px] text-center">
+                      বিঃদ্রঃ পরীক্ষা করার আগে রোগীর নাম, বয়স, ডাক্তারের নাম,
+                      পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
+                    </p>
+                    <p className="text-[11px] text-center border-t-[1px]">
+                      Mobile: 01329-633401, 01329-633402, 01329-633403
+                    </p>
+                    <p className="text-[11px] text-center">
+                      Web: www.dreamfourhospital.com
+                    </p>
+                    <p className="text-[9px]">Software by : Novus IT</p>
+                  </div>
                 </div>
               </div>
+
+              {/* line */}
+              <div className="border-dotted border-s"></div>
+              {/* content 2 for customer */}
+              <div className="w-full">
+                {/* content */}
+
+                <div className="text-center mb-2  border-2 py-2">
+                  {/* style */}
+                  <div className="flex justify-center gap-4 items-center">
+                    <div>
+                      <img className="w-10" src={logo} alt="logo" />
+                    </div>
+                    <div>
+                      <h2 className="font-bold">
+                        Dream Four Hospital And Diagonstic Center
+                      </h2>
+                      <p className="text-[11px]">
+                        Amar New Market, Bridge Road, Zero Point, Paikgacha,
+                        Khulna
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <p className="w-24 mx-auto text-center text-[11px] border rounded-md ">
+                  Customer Copy
+                </p>
+                <div className="flex justify-between text-[10px]">
+                  <p>print Date: {isOpen ? formatDate(new Date()) : ""} </p>
+
+                  <p>
+                    Issue Date:
+                    {selectedReceipt &&
+                      selectedReceipt?.data?.paymentInfo[0]?.date}
+                  </p>
+                </div>
+                {/* name and order id */}
+                <div className="flex justify-between text-[12px] ">
+                  <div className="flex text-[12px]">
+                    <p className="me-1 font-semibold">Name</p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.patient}
+                    </p>
+                  </div>
+                  {/* order id */}
+                  <div className="flex text-[12px]">
+                    <p className="me-1 font-semibold">Order Id</p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.OrderId}
+                    </p>
+                  </div>
+                </div>
+                {/* for age gender contact */}
+                <div className="text-[12px] flex items-center justify-between ">
+                  <div className="flex gap-[2px]">
+                    <p className="me-[15px] font-semibold">Age </p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.age}{" "}
+                      y
+                    </p>
+                  </div>
+                  {/* gender */}
+                  <div className="flex gap-[2px] ">
+                    <p className="font-semibold"> Gender </p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.gender}
+                    </p>
+                  </div>
+                  {/* contact */}
+
+                  <div className="flex gap-[2px]">
+                    <p className="font-semibold">Mobile </p>
+                    <p>
+                      :{" "}
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.phone}
+                    </p>
+                  </div>
+                </div>
+
+                {/* doctor */}
+
+                <div className="text-[12px] flex">
+                  <p className="me-[3px] font-semibold">Ref by</p>
+                  <p>
+                    :{" "}
+                    {selectedReceipt &&
+                      selectedReceipt?.data?.orderDetails[0]?.doctor}{" "}
+                  </p>
+                </div>
+
+                {/* service */}
+
+                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
+                  <p>
+                    <span className="me-5">SL.</span> Test Name
+                  </p>
+                  <p>Price</p>
+                </div>
+                {/* data */}
+
+                <div>
+                  {selectedReceipt &&
+                    selectedReceipt?.data?.orderDetails[0]?.service &&
+                    selectedReceipt?.data?.orderDetails[0]?.service?.map(
+                      (receipt, index) => (
+                        <>
+                          <div className="flex justify-between grid-cols-2 items-center text-[12px]">
+                            <div>
+                              <span className="me-5">{index + 1}</span>
+                              {receipt?.name}
+                            </div>
+                            <p className=" ">{receipt.price} </p>
+                          </div>
+                        </>
+                      )
+                    )}
+                </div>
+
+                {/* total */}
+
+                <div className=" mt-1 text-[12px] flex justify-between items-center text-black border-t-2">
+                  <div></div>
+                  <div className="flex ">
+                    <p>Total</p>
+                    <p className="ms-4">{calculateTotal()} /-</p>
+                  </div>
+                </div>
+
+                {/* discount */}
+                <div className=" text-black flex justify-between text-[12px] ">
+                  <div></div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5"> (-) Discount</p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.paymentInfo[0]?.discount}
+                    </p>
+                  </div>
+                </div>
+
+                {/* grand total */}
+                <div className=" text-black flex justify-between text-[12px] ">
+                  <div></div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5">Grand Total</p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.orderDetails[0]?.total}
+                    </p>
+                  </div>
+                </div>
+
+                {/* paid */}
+                <div className=" text-black flex justify-between items-center text-[12px]  ">
+                  <div>
+                    <p className="capitalize">
+                      In word:
+                      <span className="px-2">
+                        {selectedReceipt &&
+                          selectedReceipt?.data?.paymentInfo[0]?.inWord}
+                      </span>
+                      Tk only
+                    </p>
+                  </div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5">Paid </p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.paymentInfo[0]?.paid}
+                    </p>
+                  </div>
+                </div>
+
+                {/* total paid */}
+                <hr />
+
+                <div className="flex justify-between mt-7">
+                  <div></div>
+                  <div className="flex ">
+                    <p className="me-5">Total Paid </p>
+
+                    <p className="">
+                      {selectedReceipt &&
+                        selectedReceipt?.data?.totalPaidAmount}
+                    </p>
+                  </div>
+                </div>
+
+                {/* due */}
+
+                <div className="flex justify-between text-[12px] text-black">
+                  <div></div>
+                  <div className="flex border-t-[1px]">
+                    <p className="me-5">Due </p>
+
+                    <p className="">{calculateDueAmount()}</p>
+                  </div>
+                </div>
+
+                {/* prepared */}
+
+                <div className="flex items-center text-[12px] gap-2 mt-2">
+                  <p> prepared by :</p>
+                  <p>
+                    {" "}
+                    {selectedReceipt &&
+                      selectedReceipt?.data?.paymentInfo[0]?.user}
+                  </p>
+                </div>
+
+                {/* footer */}
+              </div>
             </div>
-            {/* line */}
-            <div className="border-dotted border-s"></div>
-            {/* content 2 for customer */}
           </div>
           <div className="modal-action flex justify-between">
             <form method="dialog">

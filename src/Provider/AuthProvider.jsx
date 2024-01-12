@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  // console.log("from provide",user)
+  
 
   // login system
   const login = (email, password) => {
@@ -48,7 +48,7 @@ const AuthProvider = ({ children }) => {
           // Update state or perform other actions based on successful login
           setUser({ isAuthenticated: true });
           setUserInfo(data.user);
-          console.log("user", data.user);
+          
           setLoading(false);
         }
       })

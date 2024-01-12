@@ -44,10 +44,10 @@ const MedicineReceipt = () => {
   const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-    console.log(paidField);
+   
 
     const convert = numberToWords.toWords(paidField);
-    console.log(convert);
+    
     setcoverted(convert);
   };
   //
@@ -176,7 +176,7 @@ const MedicineReceipt = () => {
       refference,
     };
 
-    console.log(newReceipt);
+  
     Swal.fire({
       title: "Are you sure?",
       text: "You cannot edit it!",
@@ -198,7 +198,7 @@ const MedicineReceipt = () => {
           .then((data) => {
             if (data.insertedId) {
               const orderId = data.OrderId; // Assuming your response contains the OrderId
-              console.log("OrderId:", orderId);
+             
               setOrder(orderId);
               Swal.fire({
                 position: "top-end",
@@ -218,7 +218,7 @@ const MedicineReceipt = () => {
 
   // discount
   const discountFieldValue = watch("discount");
-  console.log("disfield", discountFieldValue);
+
 
   return (
     <div className="container mx-auto mt-16  ">

@@ -29,7 +29,7 @@ const DoctorCards = ({ doctr }) => {
         <h2 className="card-title text-xl">{name}</h2>
         <p>{education}</p>
         <p>Specialist: {specialist}</p>
-        <p>{description}</p>
+        <p>{schedule}বার । {time}</p>
         <p className="text-lg flex items-center ">
           ফি মাত্র ‍
           <span className="text-green-600 text-lg flex items-center">

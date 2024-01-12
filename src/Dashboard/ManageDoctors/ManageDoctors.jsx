@@ -35,7 +35,7 @@ const ManageDoctors = () => {
   // handle delete
 
   const handleDoctorDelete = (id) => {
-    console.log(id);
+    
     Swal.fire({
       title: "Are you sure?",
       text: "You cannot edit it!",
@@ -52,7 +52,7 @@ const ManageDoctors = () => {
           .then((res) => res.json())
           .then((data) => {
             if (data.data.deletedCount > 0) {
-              console.log("data", data);
+              
               Swal.fire({
                 position: "top-end",
                 icon: "success",
