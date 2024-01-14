@@ -36,7 +36,7 @@ const Receipt = () => {
   } = useForm();
 
   useEffect(() => {
-    fetch(`${base_url}/services`)
+    fetch(`${base_url}/all_services`)
       .then((res) => res.json())
       .then((data) => setServices(data));
   }, []);

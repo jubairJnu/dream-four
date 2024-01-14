@@ -15,8 +15,8 @@ const AddServiceModal = ({ isOpen, onClose }) => {
 
   const onSubmit = (data) => {
     setIsLoading(true);
-    const { name, price, description } = data;
-    const serviceInfo = { name, price, description, status: "active" };
+    const { name, price, description, status } = data;
+    const serviceInfo = { name, price, description, status };
     fetch(`${base_url}/services-entry`, {
       method: "POST",
       headers: {
@@ -26,7 +26,6 @@ const AddServiceModal = ({ isOpen, onClose }) => {
     })
       .then((res) => res.json())
       .then((data) => {
-        
         if (data.insertedId) {
           setIsLoading(false);
           Swal.fire({
@@ -94,6 +93,27 @@ const AddServiceModal = ({ isOpen, onClose }) => {
                   className="input input-bordered w-full "
                 />
                 {errors?.fees && (
+                  <span className="text-red-500">this field is required</span>
+                )}
+              </div>
+              <div className="form-control w-full ">
+                <label className="label">
+                  <span className="label-text font-semibold text-yellow-400">
+                    status *
+                  </span>
+                </label>
+                <select
+                  {...register("status", {
+                    required: true,
+                  })}
+                  type="number"
+                  placeholder="status"
+                  className="input input-bordered w-full "
+                >
+                  <option>active</option>
+                  <option>inactive</option>
+                </select>
+                {errors?.status && (
                   <span className="text-red-500">this field is required</span>
                 )}
               </div>

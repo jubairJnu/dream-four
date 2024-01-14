@@ -23,6 +23,7 @@ import ChangePassword from "../component/ChangePassword";
 import MedicineList from "../Dashboard/ManageMedicine/MedicineList";
 import UpdateReport from "../component/UpdateReport";
 import EditMedicine from "../Dashboard/ManageMedicine/EditMedicine";
+import BookDoctor from "../pages/homes/DoctorCorner/BookDoctor";
 
 const routes = createBrowserRouter([
   {
@@ -32,6 +33,14 @@ const routes = createBrowserRouter([
       {
         path: "/",
         element: <Home></Home>,
+      },
+      {
+        path: "doctor_appointment/:id",
+        element: <BookDoctor />,
+        loader: ({ params }) =>
+          fetch(
+            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctor/${params.id}`
+          ),
       },
       {
         path: "login",

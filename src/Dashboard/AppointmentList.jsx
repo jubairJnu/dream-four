@@ -44,29 +44,11 @@ const AppointmentList = () => {
     params.append("endDate", endedDate);
     params.append("appointedDoctor", selectDoctor);
 
-    // Include the selected user in the query only if it's not 'All'
-    // if (selectedUser !== "All") {
-
-    // }
-
-    // params.append("email", currentUser?.email);
-
-    // ********************
-    // let endPointApi = " ";
-
-    // if (currentUser?.role == "admin" || currentUser?.role == "owner") {
-    //   endPointApi = `${base_url}/all-infoledger?${params.toString()}`;
-    // } else if (currentUser?.role == "staff") {
-    //   endPointApi = `${base_url}info-ledger?${params.toString()}`;
-    // }
-
-    // Use the URLSearchParams object in the fetch request
     fetch(`${base_url}/doctor_appointment?${params.toString()}`, {})
       .then((res) => res.json())
       .then((data) => {
         setAppointment(data);
         setIsloading(false);
-        
       })
       .catch((error) => console.error(error));
   };
@@ -153,37 +135,28 @@ const AppointmentList = () => {
             <tr className="md:text-[15px] bg-[#1653B2] text-white ">
               <th>#</th>
               <th>Serial</th>
-              <th>Order Id</th>
+              <th className="hidden sm:table-cell">Appointment Date</th>
               <th>Patient</th>
               <th>Phone</th>
               <th className="hidden sm:table-cell">Appointment To</th>
-              <th className="hidden sm:table-cell">Appointment Date</th>
+              <th>Refference</th>
             </tr>
           </thead>
           {isloading ? (
             <Loading />
           ) : (
             <tbody className="text-center">
-              {Appointment?.data?.map((info, index) =>
-                info.paymentInfo.map((paydetais) => (
-                  <tr key={info._id}>
-                    <th>{index + 1}</th>
-                    <td>{info?.serial}</td>
-                    <td>
-                      <p>{info?.OrderId}</p>
-                    </td>
-                    <td>
-                      <p>{info?.patient} </p>
-                    </td>
-                    <td>
-                      <p>{info?.phone} </p>
-                    </td>
-
-                    <th>{info?.appointedDoctor}</th>
-                    <th>{info?.appointmentDate}</th>
-                  </tr>
-                ))
-              )}
+              {Appointment?.data?.map((appt, index) => (
+                <tr key={appt._id}>
+                  <td>{index + 1}</td>
+                  <td>{appt?.serial}</td>
+                  <td>{appt?.appointmentDate}</td>
+                  <td>{appt?.patient}</td>
+                  <td>{appt?.phone}</td>
+                  <td>{appt?.appointedDoctor}</td>
+                  <td>{appt?.refference}</td>
+                </tr>
+              ))}
             </tbody>
           )}
         </table>

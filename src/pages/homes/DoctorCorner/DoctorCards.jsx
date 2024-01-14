@@ -7,6 +7,7 @@ const DoctorCards = ({ doctr }) => {
     education,
     time,
     fees,
+    _id,
     description,
     image,
     specialist,
@@ -29,7 +30,9 @@ const DoctorCards = ({ doctr }) => {
         <h2 className="card-title text-xl">{name}</h2>
         <p>{education}</p>
         <p>Specialist: {specialist}</p>
-        <p>{schedule}বার । {time}</p>
+        <p>
+          {schedule} । {time}
+        </p>
         <p className="text-lg flex items-center ">
           ফি মাত্র ‍
           <span className="text-green-600 text-lg flex items-center">
@@ -38,7 +41,7 @@ const DoctorCards = ({ doctr }) => {
         </p>
 
         <div className="flex item-center justify-between gap-5">
-          <Link>
+          <Link to={`/doctor_appointment/${_id}`}>
             <button className="btn btn-sm btn-warning mt-2">
               Appointment Now
             </button>

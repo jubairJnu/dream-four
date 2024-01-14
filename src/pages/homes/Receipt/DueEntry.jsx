@@ -34,15 +34,10 @@ const DueEntry = () => {
   const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-    
 
     const convert = numberToWords.toWords(paidField);
-    
+
     setcoverted(convert);
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   inWord: convert,
-    // }));
   };
 
   const openModal = () => {
@@ -58,7 +53,6 @@ const DueEntry = () => {
   };
 
   const handleView = (orderId, paymentId) => {
-    
     fetch(`${base_url}/all-receipt/${orderId}?paymentId=${paymentId}`)
       .then((res) => res.json())
       .then((data) => {
@@ -81,7 +75,6 @@ const DueEntry = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          
           setSearchDatas(data);
           setIsLoading(false);
         });

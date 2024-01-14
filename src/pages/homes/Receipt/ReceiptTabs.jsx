@@ -2,6 +2,7 @@ import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import Receipt from "./Receipt";
 import DoctorAppointment from "./DoctorAppointment";
 import DueEntry from "./DueEntry";
+import OthersPayment from "./OthersPayment";
 
 const ReceiptTabs = () => {
   return (
@@ -23,6 +24,9 @@ const ReceiptTabs = () => {
             <Tab className="tab tab-bordered text-[#38BDF8] text-[20px] border-none focus:outline-none ">
               Due Entry
             </Tab>
+            <Tab className="tab tab-bordered text-[#38BDF8] text-[20px] border-none focus:outline-none ">
+              Others
+            </Tab>
           </TabList>
         </div>
 
@@ -34,6 +38,9 @@ const ReceiptTabs = () => {
         </TabPanel>
         <TabPanel>
           <DueEntry />
+        </TabPanel>
+        <TabPanel>
+          <OthersPayment />
         </TabPanel>
       </Tabs>
     </div>
