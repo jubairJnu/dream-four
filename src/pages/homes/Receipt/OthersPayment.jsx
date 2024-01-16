@@ -63,7 +63,7 @@ const OthersPayment = () => {
         {
           user: UserName,
           email: userEmail,
-          paid,
+          paid: parseFloat(paid),
           date: formattedDate,
         },
       ],

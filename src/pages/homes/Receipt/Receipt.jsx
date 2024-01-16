@@ -51,10 +51,9 @@ const Receipt = () => {
   const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-   
 
     const convert = numberToWords.toWords(paidField);
-  
+
     setcoverted(convert);
   };
   //
@@ -191,7 +190,6 @@ const Receipt = () => {
       refference,
     };
 
-    
     Swal.fire({
       title: "Are you sure?",
       text: "You cannot edit it!",
@@ -213,7 +211,7 @@ const Receipt = () => {
           .then((data) => {
             if (data.insertedId) {
               const orderId = data.OrderId; // Assuming your response contains the OrderId
-              
+
               setOrder(orderId);
               Swal.fire({
                 position: "top-end",
@@ -233,7 +231,6 @@ const Receipt = () => {
 
   // discount
   const discountFieldValue = watch("discount");
-
 
   return (
     <div className="container mx-auto mt-16  ">
@@ -262,18 +259,15 @@ const Receipt = () => {
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px] font-semibold">
-                    Phone Number*
+                    Phone Number <span className="text-sm">(Optional)</span>
                   </span>
                 </label>
                 <input
-                  {...register("phone", { required: true })}
+                  {...register("phone", { required: false })}
                   type="text"
                   placeholder="phone number"
                   className="input input-bordered input-primary "
                 />
-                {errors.phone && (
-                  <span className="text-red-500">Phone Number is required</span>
-                )}
               </div>
               {/* age */}
 
