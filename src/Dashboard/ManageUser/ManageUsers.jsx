@@ -30,6 +30,7 @@ const ManageUsers = () => {
               <th>Image</th>
               <th>Name</th>
               <th>Role</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -46,6 +47,7 @@ const ManageUsers = () => {
                   <p>{user?.name}</p>
                 </td>
                 <td>{user?.role}</td>
+                <td>{user?.status}</td>
                 <th>
                   <Link to={`/dashboard/manageuser/${user?._id}`}>
                     <button className="btn btn-outline btn-success ">

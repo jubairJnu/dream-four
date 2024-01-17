@@ -89,7 +89,6 @@ const IncomeLedger = () => {
       .then((data) => {
         setIncomes(data);
         setIsloading(false);
-        
       })
       .catch((error) => console.error(error));
   };
@@ -212,9 +211,9 @@ const IncomeLedger = () => {
                     <td className="hidden sm:table-cell">
                       {income?.service?.map((item) => item.name).join(", ")}{" "}
                     </td>
-                    <th>{paydetais?.date}</th>
-                    <th>{income?.refference}</th>
-                    <th>{income?.user}</th>
+                    <td>{paydetais?.date}</td>
+                    <td>{income?.refference}</td>
+                    <td>{paydetais?.user}</td>
                   </tr>
                 ))
               )}

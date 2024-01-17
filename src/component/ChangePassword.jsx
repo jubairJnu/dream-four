@@ -17,7 +17,8 @@ const ChangePassword = () => {
   const onSubmit = (data) => {
     setIsLoading(true);
     const { email, oldpass, newpass } = data;
-    const updatedPass = { email, oldpass, newpass: newpass.toString() };
+    const updatedPass = { email, oldpass, newpass };
+
     fetch(`${base_url}/change_password`, {
       method: "PATCH",
       headers: {
@@ -81,7 +82,6 @@ const ChangePassword = () => {
           <input
             {...register("newpass", {
               required: true,
-              valueAsNumber: true,
             })}
             type="password"
             className="input input-bordered w-full "

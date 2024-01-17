@@ -18,37 +18,34 @@ const ReceiptTable = () => {
     setIsModalOpen(false);
   };
 
- 
-
   //
 
   const handleView = (receipt, paymentDetails) => {
-    fetch(`${base_url}/all-receipt/${receipt._id}`)
+    fetch(`${base_url}/receipt/${receipt._id}`)
       .then((res) => res.json())
       .then((data) => {
-        
-        const selectedDate = paymentDetails.date; // Use the date from the first paymentInfo object
-        
+        console.log("data", data);
+        setselectedReceipt(data);
+        openModal();
+        // const selectedDate = paymentDetails.date; // Use the date from the first paymentInfo object
 
-        const selectedReceiptData = data?.data.orderDetails
-          .map((item) => {
-            const matchingPaymentInfo = item.paymentInfo.filter(
-              (info) => info.date === selectedDate
-            );
+        // const selectedReceiptData = data?.data.orderDetails
+        //   .map((item) => {
+        //     const matchingPaymentInfo = item.paymentInfo.filter(
+        //       (info) => info.date === selectedDate
+        //     );
 
-            // Include the item only if there's a matching paymentInfo for the selected date
-            if (matchingPaymentInfo.length > 0) {
-              return { ...item, paymentInfo: matchingPaymentInfo };
-            }
+        // Include the item only if there's a matching paymentInfo for the selected date
+        //   if (matchingPaymentInfo.length > 0) {
+        //     return { ...item, paymentInfo: matchingPaymentInfo };
+        //   }
 
-            return null; // Exclude the item if there's no matching paymentInfo
-          })
-          .filter(Boolean); // Remove null entries from the result
+        //   return null; // Exclude the item if there's no matching paymentInfo
+        // })
+        // .filter(Boolean); // Remove null entries from the result
 
-        setselectedReceipt(selectedReceiptData);
+        // setselectedReceipt(selectedReceiptData);
       });
-
-    openModal();
   };
 
   useEffect(() => {
@@ -56,7 +53,7 @@ const ReceiptTable = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-     
+
         setRecentReceipt(data);
       });
   }, []);
@@ -104,6 +101,7 @@ const ReceiptTable = () => {
 
                     <th>{paymentDetails?.date}</th>
                     <th>{paymentDetails?.user}</th>
+
                     <th className="hidden sm:table-cell">
                       <button
                         className="cursor-pointer"

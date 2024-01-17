@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const Balance = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
@@ -15,7 +17,7 @@ const Balance = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsloading(false);
-        
+
         setTransactions(data);
       });
   }, []);
@@ -29,7 +31,8 @@ const Balance = () => {
         (transaction) => transaction.type === "income"
       );
       const expenditureTransactions = transactions.filter(
-        (transaction) => transaction.type === "expenditure"
+        (transaction) =>
+          transaction.type === "expenditure" && transaction.approve === true
       );
 
       // Helper function to calculate the total amount from an array of transactions
@@ -58,6 +61,11 @@ const Balance = () => {
         ) : (
           <p className="font-semibold">{totalIncomes}</p>
         )}
+        <Link to="/dashboard/incomeledger">
+          <button className="flex items-center ml-auto">
+            Detaiils <MdOutlineKeyboardDoubleArrowRight />
+          </button>
+        </Link>
       </div>
       {/* Expenditure */}
       <div className="w-80 text-center bg-red-500 rounded-md text-white p-3 mx-auto mb-3 ">
@@ -68,6 +76,11 @@ const Balance = () => {
         ) : (
           <p className="font-semibold">{totalExpenditures}</p>
         )}
+        <Link to="/dashboard/expenditure">
+          <button className="flex items-center ml-auto">
+            Detaiils <MdOutlineKeyboardDoubleArrowRight />
+          </button>
+        </Link>
       </div>
 
       {/* remaining Balance */}
@@ -79,6 +92,11 @@ const Balance = () => {
         ) : (
           <p className="font-semibold">{totalBalance}</p>
         )}
+        <Link to="/dashboard/balance">
+          <button className="flex items-center ml-auto">
+            Detaiils <MdOutlineKeyboardDoubleArrowRight />
+          </button>
+        </Link>
       </div>
     </div>
   );

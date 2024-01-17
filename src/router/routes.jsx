@@ -24,6 +24,8 @@ import MedicineList from "../Dashboard/ManageMedicine/MedicineList";
 import UpdateReport from "../component/UpdateReport";
 import EditMedicine from "../Dashboard/ManageMedicine/EditMedicine";
 import BookDoctor from "../pages/homes/DoctorCorner/BookDoctor";
+import BalanceList from "../Dashboard/Balance/BalanceList";
+import ExpenditureAdd from "../Dashboard/Expenditure/ExpenditureAdd";
 
 const routes = createBrowserRouter([
   {
@@ -163,6 +165,22 @@ const routes = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <ExpenditureList />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "expenditure_entry",
+        element: (
+          <PrivateRoutes>
+            <ExpenditureAdd />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "balance",
+        element: (
+          <PrivateRoutes>
+            <BalanceList />
           </PrivateRoutes>
         ),
       },

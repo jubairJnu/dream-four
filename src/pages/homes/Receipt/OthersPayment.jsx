@@ -156,7 +156,7 @@ const OthersPayment = () => {
               <input
                 {...register("refference", { required: false })}
                 type="text"
-                placeholder="Amount"
+                placeholder="Details"
                 className="input input-bordered input-primary text-black"
               />
               {errors.refference && (

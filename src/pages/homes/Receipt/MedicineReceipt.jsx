@@ -25,6 +25,7 @@ const MedicineReceipt = () => {
   const [coverted, setcoverted] = useState([]);
   const [Order, setOrder] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isloading, setIsloading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -34,9 +35,11 @@ const MedicineReceipt = () => {
   } = useForm();
 
   useEffect(() => {
+    setIsloading(true);
     fetch(`${base_url}/all_medicines`)
       .then((res) => res.json())
       .then((data) => setServices(data));
+    setIsloading(false);
   }, []);
 
   // handle price in word
@@ -44,10 +47,9 @@ const MedicineReceipt = () => {
   const handlePriceWord = (event) => {
     const paidField = event.target.value;
     setpriceField(paidField);
-   
 
     const convert = numberToWords.toWords(paidField);
-    
+
     setcoverted(convert);
   };
   //
@@ -176,7 +178,6 @@ const MedicineReceipt = () => {
       refference,
     };
 
-  
     Swal.fire({
       title: "Are you sure?",
       text: "You cannot edit it!",
@@ -198,7 +199,7 @@ const MedicineReceipt = () => {
           .then((data) => {
             if (data.insertedId) {
               const orderId = data.OrderId; // Assuming your response contains the OrderId
-             
+
               setOrder(orderId);
               Swal.fire({
                 position: "top-end",
@@ -218,7 +219,6 @@ const MedicineReceipt = () => {
 
   // discount
   const discountFieldValue = watch("discount");
-
 
   return (
     <div className="container mx-auto mt-16  ">
@@ -247,18 +247,15 @@ const MedicineReceipt = () => {
               <div className="form-control md:ms-6 w-full">
                 <label className="label">
                   <span className="label-text md:text-[18px] font-semibold">
-                    Phone Number*
+                    Phone Number
                   </span>
                 </label>
                 <input
-                  {...register("phone", { required: true })}
+                  {...register("phone", { required: false })}
                   type="text"
                   placeholder="phone number"
                   className="input input-bordered input-primary "
                 />
-                {errors.phone && (
-                  <span className="text-red-500">this field is required</span>
-                )}
               </div>
             </div>
 
@@ -273,7 +270,11 @@ const MedicineReceipt = () => {
                 <Select
                   value={selectedServices}
                   onChange={handleServiceChange} // Move the onChange here
-                  options={options}
+                  options={
+                    isloading
+                      ? [{ value: "Loading...", label: "Loading..." }]
+                      : options
+                  }
                   isMulti
                   required
                   className="w-full  select-bordered select-primary "

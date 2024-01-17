@@ -153,6 +153,11 @@ const Dashboard = () => {
                       Appointment List
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink to="/dashboard/expenditure_entry">
+                      Expenditure Entry
+                    </NavLink>
+                  </li>
                 </div>
               )}
               {/* shopkeeper */}
@@ -193,7 +198,9 @@ const Dashboard = () => {
                     className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52"
                   >
                     <li className="bg-[#2048ca] rounded-md text-white">
-                      <Link to="/dashboard/change_password">Change Password</Link>
+                      <Link to="/dashboard/change_password">
+                        Change Password
+                      </Link>
                     </li>
                   </ul>
                 </details>
@@ -296,6 +303,11 @@ const Dashboard = () => {
                     Customer Report Entry
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink to="/dashboard/expenditure_entry">
+                    Expenditure Entry
+                  </NavLink>
+                </li>
               </div>
             )}
 
@@ -337,7 +349,7 @@ const Dashboard = () => {
                   className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52"
                 >
                   <li className="bg-[#2048ca] rounded-md text-white">
-                  <Link to="/dashboard/change_password">Change Password</Link>
+                    <Link to="/dashboard/change_password">Change Password</Link>
                   </li>
                 </ul>
               </details>
