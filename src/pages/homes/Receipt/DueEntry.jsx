@@ -85,9 +85,10 @@ const DueEntry = () => {
   const currentUserEmail = userInfo?.email;
 
   const currentUser = users.find((user) => user.email === currentUserEmail);
+  // console.log("email name", currentUser?.name, currentUser?.email);
 
   const handleSubmit = (event) => {
-    isLoading(true);
+    setIsLoading(true);
     event.preventDefault();
 
     const date = new Date();
@@ -112,8 +113,9 @@ const DueEntry = () => {
       inWord: coverted,
       date: formattedDate,
     };
+    // console.log(paymentInfo);
 
-    fetch(`${base_url}/due-amount`, {
+    fetch("http://localhost:5000/due-amount", {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -122,8 +124,9 @@ const DueEntry = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        isLoading(false);
-        if (data.data.insertedId) {
+        setIsLoading(false);
+
+        if (data.data.modifiedCount > 0) {
           const Toast = Swal.mixin({
             toast: true,
             position: "top-end",
@@ -192,7 +195,7 @@ const DueEntry = () => {
 
             <button className="btn-block bg-blue-500 px-2 py-2 mt-3 cursor-pointer text-white rounded-md mx-auto">
               {" "}
-              <input type="submit" />
+              <input type="submit" value="Submit" />
             </button>
             <ModalDue
               isOpen={isDueModalOpen}
