@@ -21,6 +21,7 @@ const DueEntry = () => {
   const [formData, setFormData] = useState([]);
   const [priceField, setpriceField] = useState([]);
   const [coverted, setcoverted] = useState([]);
+  const [disAmountValue, setDisAmountValue] = useState(0);
 
   useEffect(() => {
     fetch(`${base_url}/users`)
@@ -64,6 +65,7 @@ const DueEntry = () => {
 
   const handleOrderSearch = (e) => {
     const orderId = e.target.value;
+   
     if (orderId && orderId.length === 6) {
       setIsLoading(true);
       fetch(`${base_url}/search-orderid`, {
@@ -85,7 +87,20 @@ const DueEntry = () => {
   const currentUserEmail = userInfo?.email;
 
   const currentUser = users.find((user) => user.email === currentUserEmail);
-  // console.log("email name", currentUser?.name, currentUser?.email);
+ 
+
+  let disTotal; // Declare originalTotal outside the if block
+
+  if (
+    searchDatas &&
+    searchDatas.data &&
+    searchDatas.data.orderDetails &&
+    searchDatas.data.orderDetails.length > 0
+  ) {
+    // Get the original total
+    const originalTotal = searchDatas.data.orderDetails[0].total;
+    disTotal = originalTotal - disAmountValue;
+  }
 
   const handleSubmit = (event) => {
     setIsLoading(true);
@@ -103,19 +118,22 @@ const DueEntry = () => {
     const form = event.target;
     const OrderId = form.orderId.value;
     const paid = form.paid.value;
+    const discount = form.discount.value;
 
     const paymentInfo = {
       user: UserName,
       email: userEmail,
       OrderId,
       paid: parseInt(paid),
+      discount: parseInt(discount),
 
       inWord: coverted,
       date: formattedDate,
+      total: parseInt(disTotal),
     };
-    // console.log(paymentInfo);
+    
 
-    fetch("http://localhost:5000/due-amount", {
+    fetch(`${base_url}/due-amount`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -173,7 +191,7 @@ const DueEntry = () => {
 
             <div className="form-control w-full">
               <label className="label">
-                <span className="label-text">Paid Amount </span>
+                <span className="label-text">Paid Amount *</span>
               </label>
               <input
                 name="paid"
@@ -182,6 +200,27 @@ const DueEntry = () => {
                 onChange={handlePriceWord}
               />
             </div>
+            {/* discount */}
+
+            <div className="form-control w-full ">
+              <label className="label">
+                <span className="label-text">Discount </span>
+              </label>
+              <input
+                name="discount"
+                className="input input-bordered input-info w-full"
+                placeholder="discount"
+                onChange={(e) => setDisAmountValue(e.target.value)}
+              />
+
+              {/* <button
+                onClick={handleDisTotal}
+                className="btn btn-primary btn-sm mt-2"
+              >
+                Apply
+              </button> */}
+            </div>
+
             <p className="my-4 capitalize text-sm text-start">
               {" "}
               <span className="font-bold text-blue-700 text-sm text-start ">
@@ -229,7 +268,7 @@ const DueEntry = () => {
                 </p>
                 <p>
                   Discount:
-                  {searchDatas?.data?.orderDetails[0]?.paymentInfo[0]?.discount}
+                  {searchDatas?.data?.totalDiscount}
                 </p>
                 <p>
                   Due Amount:

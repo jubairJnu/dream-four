@@ -3,7 +3,7 @@ import ReactToPrint from "react-to-print";
 import logo from "../../../../public/logo.jpg";
 
 const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
-  console.log("select receipt from modal", selectedReceipt.data);
+ 
 
   const receiptRef = useRef();
   const calculateTotal = () => {
@@ -189,9 +189,9 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
 
                   {/* service */}
 
-                  <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
+                  <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 mt-2">
                     <p>
-                      <span className="me-5">SL.</span> Test Name
+                      <span className="me-10">SL.</span> Test Name
                     </p>
                     <p>Price</p>
                   </div>
@@ -408,9 +408,9 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
 
                   {/* service */}
 
-                  <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 ">
+                  <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 mt-2">
                     <p>
-                      <span className="me-5">SL.</span> Test Name
+                      <span className="me-10">SL.</span> Test Name
                     </p>
                     <p>Price</p>
                   </div>

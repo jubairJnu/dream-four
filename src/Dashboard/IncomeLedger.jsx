@@ -186,12 +186,14 @@ const IncomeLedger = () => {
         <table ref={tableRef} className="table ">
           {/* head */}
           <thead>
-            <tr className="md:text-[20px] bg-[#1653B2] text-white ">
-              <th>#</th>
+            <tr className="md:text-[14px] bg-[#1653B2] text-white ">
+              <th>SL</th>
+              <th>Date</th>
               <th>Order Id</th>
+              <th>Name</th>
+              <th>Address</th>
               <th>Amount</th>
               <th className="hidden sm:table-cell">Service</th>
-              <th>Date</th>
               <th>Refference</th>
               <th>User Name</th>
             </tr>
@@ -199,19 +201,21 @@ const IncomeLedger = () => {
           {isloading ? (
             <Loading />
           ) : (
-            <tbody>
+            <tbody className="text-[12px]">
               {Incomes?.map((income, index) =>
                 income.paymentInfo.map((paydetais) => (
                   <tr key={income._id}>
                     <th>{index + 1}</th>
+                    <td>{paydetais?.date}</td>
                     <td>{income?.OrderId}</td>
+                    <td>{income?.patient}</td>
+                    <td>{income?.address}</td>
                     <td>
                       <p>{paydetais?.paid}tk </p>
                     </td>
                     <td className="hidden sm:table-cell">
                       {income?.service?.map((item) => item.name).join(", ")}{" "}
                     </td>
-                    <td>{paydetais?.date}</td>
                     <td>{income?.refference}</td>
                     <td>{paydetais?.user}</td>
                   </tr>

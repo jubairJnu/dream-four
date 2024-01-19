@@ -3,8 +3,7 @@ import ReactToPrint from "react-to-print";
 import logo from "../../../../public/logo.jpg";
 
 const DueReciptPrint = ({ isOpen, onClose, selectedReceipt }) => {
-  // console.log("due", selectedReceipt?.data?.orderDetails[0]?.patient);
-  // console.log("formate", selectedReceipt?.data);
+  
 
   const calculateTotal = () => {
     if (!selectedReceipt || !selectedReceipt?.data?.orderDetails[0]?.service) {

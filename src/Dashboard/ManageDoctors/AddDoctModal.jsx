@@ -63,7 +63,7 @@ const AddDoctModal = ({ isOpen, onClose }) => {
         })
           .then((res) => res.json())
           .then((data) => {
-            // console.log('doctor', data);
+            
             if (data.message == "already exisit") {
               alert("Already Exists");
               onClose();

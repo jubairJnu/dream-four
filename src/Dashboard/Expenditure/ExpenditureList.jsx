@@ -87,7 +87,7 @@ const ExpenditureList = () => {
     }
   };
 
-  console.log({ checkedItems });
+  
 
   // handle submit
 
@@ -104,7 +104,7 @@ const ExpenditureList = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        console.log(data);
+        
         if (data.modifiedCount > 0) {
           const Toast = Swal.mixin({
             toast: true,

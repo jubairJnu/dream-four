@@ -1,9 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import ReactToPrint from "react-to-print";
 import logo from "../../../../public/logo.jpg";
 
 const ModalDue = ({ isOpen, onClose, formData, searchDatas }) => {
- 
   // calculate total paid
 
   const calculateTotal = () => {
@@ -162,6 +161,22 @@ const ModalDue = ({ isOpen, onClose, formData, searchDatas }) => {
                     </p>
                   </div>
                 </div>
+                <div className=" text-black flex justify-between text-[12px]   mb-3">
+                  <div></div>
+                  <div className="flex ">
+                    <p className="me-5 ">(-) Discount</p>
+
+                    <p className="">{formData?.discount}</p>
+                  </div>
+                </div>
+                <div className=" text-black flex justify-between text-[12px]   mb-3 ">
+                  <div></div>
+                  <div className="flex border-t-[1px] ">
+                    <p className="me-5  ">Grand Total</p>
+
+                    <p className="">{formData?.total}</p>
+                  </div>
+                </div>
 
                 {/* paid */}
 
@@ -173,7 +188,7 @@ const ModalDue = ({ isOpen, onClose, formData, searchDatas }) => {
                       Tk only
                     </p>
                   </div>
-                  <div className="flex border-t-[1px]">
+                  <div className="flex ">
                     <p className="me-5">Paid </p>
 
                     <p className="">{formData?.paid}</p>
@@ -289,9 +304,26 @@ const ModalDue = ({ isOpen, onClose, formData, searchDatas }) => {
                   <div className="flex ">
                     <p className="me-5 ">Total Amount</p>
 
-                    <p className="">
-                      {searchDatas?.data?.orderDetails[0]?.total}
-                    </p>
+                    <p className="">{formData?.total}</p>
+                  </div>
+                </div>
+
+                {/* paid */}
+
+                <div className=" text-black flex justify-between text-[12px]   mb-3">
+                  <div></div>
+                  <div className="flex ">
+                    <p className="me-5 ">(-) Discount</p>
+
+                    <p className="">{formData?.discount}</p>
+                  </div>
+                </div>
+                <div className=" text-black flex justify-between text-[12px]   mb-3 ">
+                  <div></div>
+                  <div className="flex border-t-[1px] ">
+                    <p className="me-5  ">Grand Total</p>
+
+                    <p className="">{formData?.total}</p>
                   </div>
                 </div>
 
@@ -305,7 +337,7 @@ const ModalDue = ({ isOpen, onClose, formData, searchDatas }) => {
                       Tk only
                     </p>
                   </div>
-                  <div className="flex border-t-[1px]">
+                  <div className="flex ">
                     <p className="me-5">Paid </p>
 
                     <p className="">{formData?.paid}</p>

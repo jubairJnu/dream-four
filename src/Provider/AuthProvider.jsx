@@ -21,8 +21,6 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  
-
   // login system
   const login = (email, password) => {
     setLoading(true);
@@ -38,7 +36,7 @@ const AuthProvider = ({ children }) => {
       .then((data) => {
         if (data.status === "invalid User") {
           setLoading(false);
-          setError("Invalid credentials");
+          setError("Invalid Credentials");
           setUser({ isAuthenticated: false });
         } else if (data.status === "valid User") {
           // Store user information in local storage
@@ -48,7 +46,7 @@ const AuthProvider = ({ children }) => {
           // Update state or perform other actions based on successful login
           setUser({ isAuthenticated: true });
           setUserInfo(data.user);
-          
+
           setLoading(false);
         }
       })

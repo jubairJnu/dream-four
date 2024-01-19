@@ -3,8 +3,6 @@ import ReactToPrint from "react-to-print";
 import logo from "../../public/logo.jpg";
 
 const Modal = ({ isOpen, onClose, formData, Order }) => {
- 
-
   const calculateTotal = () => {
     if (!formData || !formData?.service) {
       return 0;
@@ -173,9 +171,9 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 </div>
 
                 {/* services */}
-                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 font-semibold ">
+                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 font-semibold mt-2 ">
                   <p>
-                    <span className="me-5">SL.</span> Test Name
+                    <span className="me-10">SL.</span> Test Name
                   </p>
                   <p>Price</p>
                 </div>
@@ -369,9 +367,9 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                 </div>
 
                 {/* services */}
-                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 font-semibold ">
+                <div className="bg-white flex justify-between items-center text-black text-[12px] border-b-2 font-semibold mt-2">
                   <p>
-                    <span className="me-5">SL.</span> Test Name
+                    <span className="me-10">SL.</span> Test Name
                   </p>
                   <p>Price</p>
                 </div>

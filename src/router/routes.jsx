@@ -26,6 +26,7 @@ import EditMedicine from "../Dashboard/ManageMedicine/EditMedicine";
 import BookDoctor from "../pages/homes/DoctorCorner/BookDoctor";
 import BalanceList from "../Dashboard/Balance/BalanceList";
 import ExpenditureAdd from "../Dashboard/Expenditure/ExpenditureAdd";
+import DueList from "../Dashboard/dueLIst/DueList";
 
 const routes = createBrowserRouter([
   {
@@ -165,6 +166,14 @@ const routes = createBrowserRouter([
         element: (
           <PrivateRoutes>
             <ExpenditureList />
+          </PrivateRoutes>
+        ),
+      },
+      {
+        path: "due_list",
+        element: (
+          <PrivateRoutes>
+            <DueList />
           </PrivateRoutes>
         ),
       },

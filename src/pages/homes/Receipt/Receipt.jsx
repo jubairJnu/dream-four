@@ -141,7 +141,8 @@ const Receipt = () => {
   };
 
   const onSubmit = (data) => {
-    const { patient, phone, age, doctor, gender, paid, refference } = data;
+    const { patient, phone, age, doctor, gender, paid, refference, address } =
+      data;
 
     const date = new Date();
     const year = date.getFullYear();
@@ -171,6 +172,7 @@ const Receipt = () => {
       gender,
       age,
       doctor,
+      address,
       service: selectedServiceDetails,
 
       total: totalInprice,
@@ -457,9 +459,9 @@ const Receipt = () => {
                 <p className="text-red-500"> {errors.paid?.message} </p>
               </div>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-5">
               {/* conditionally required value */}
-              {discountFieldValue && (
+              {discountFieldValue ? (
                 <div className="form-control mt-2 w-1/2">
                   <label className="label">
                     <span className="label-text md:text-[18px] font-semibold">
@@ -478,15 +480,41 @@ const Receipt = () => {
                     </span>
                   )}
                 </div>
+              ) : (
+                <div className="form-control mt-2 w-1/2">
+                  <label className="label">
+                    <span className="label-text md:text-[18px] font-semibold">
+                      Refference
+                    </span>
+                  </label>
+                  <input
+                    {...register("refference", { required: false })}
+                    type="text"
+                    placeholder="Refference"
+                    className="input input-bordered input-primary"
+                  />
+                </div>
               )}
-
-              <div className="w-1/2 md:ms-6">
-                <p className="my-4 capitalize">
-                  {" "}
-                  <span className="font-bold text-blue-700 ">In Word:</span>
-                  {coverted} Tk Only{" "}
-                </p>
+              <div className="form-control mt-2 w-1/2">
+                <label className="label">
+                  <span className="label-text md:text-[18px] font-semibold">
+                    Address
+                  </span>
+                </label>
+                <input
+                  {...register("address", { required: false })}
+                  type="text"
+                  placeholder="address"
+                  className="input input-bordered input-primary"
+                />
               </div>
+            </div>
+            <div className="w-1/2 md:ms-6">
+              <p className="my-4 capitalize">
+                {" "}
+                <span className="font-bold text-blue-700 ">In Word:</span>
+                {coverted} Tk Only{" "}
+              </p>
             </div>
 
             <div className="flex justify-center">

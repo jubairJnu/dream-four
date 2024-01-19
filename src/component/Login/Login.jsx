@@ -3,16 +3,17 @@ import typing from "../../../public/typing.json";
 import { useContext } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { ScaleLoader } from "react-spinners";
 
 const Login = () => {
-  const { login, user } = useContext(AuthContext);
+  const { login, user, error, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogin = async (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    
+
     await login(email, password);
   };
   if (user?.isAuthenticated) {
@@ -26,9 +27,14 @@ const Login = () => {
       <div className="hero min-h-screen ">
         <div className="hero-content flex-col lg:flex-row-reverse ">
           <div className="card md:shrink-0 md:w-96 max-w-sm shadow-2xl bg-base-100">
-            <h1 className="md:text-5xl text-center md:p-4 font-bold">
-              Login now!
+            <h1 className="md:text-3xl text-center md:p-4 font-bold">
+              {loading ? (
+                <ScaleLoader color="#E81D62"></ScaleLoader>
+              ) : (
+                "Login now!"
+              )}
             </h1>
+            <p className="text-red-500 text-center"> {error} </p>
             <div className="card-body">
               {/* form */}
               <form onSubmit={handleLogin}>

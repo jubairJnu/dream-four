@@ -24,27 +24,8 @@ const ReceiptTable = () => {
     fetch(`${base_url}/receipt/${receipt._id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("data", data);
         setselectedReceipt(data);
         openModal();
-        // const selectedDate = paymentDetails.date; // Use the date from the first paymentInfo object
-
-        // const selectedReceiptData = data?.data.orderDetails
-        //   .map((item) => {
-        //     const matchingPaymentInfo = item.paymentInfo.filter(
-        //       (info) => info.date === selectedDate
-        //     );
-
-        // Include the item only if there's a matching paymentInfo for the selected date
-        //   if (matchingPaymentInfo.length > 0) {
-        //     return { ...item, paymentInfo: matchingPaymentInfo };
-        //   }
-
-        //   return null; // Exclude the item if there's no matching paymentInfo
-        // })
-        // .filter(Boolean); // Remove null entries from the result
-
-        // setselectedReceipt(selectedReceiptData);
       });
   };
 
@@ -67,9 +48,10 @@ const ReceiptTable = () => {
         {/* head */}
 
         <thead>
-          <tr className="md:text-[20px] bg-[#1653B2] text-white  ">
+          <tr className="md:text-[16px] bg-[#1653B2] text-white  ">
             <th>#</th>
             <th>Order Id</th>
+            <th>Name</th>
             <th>Amount</th>
             <th className="hidden sm:table-cell">Service</th>
             <th>Date</th>
@@ -81,12 +63,13 @@ const ReceiptTable = () => {
           <Loading />
         ) : (
           <>
-            <tbody>
+            <tbody className="text-[12px]">
               {lastReceipt?.map((receipts, index) =>
                 receipts?.paymentInfo?.map((paymentDetails) => (
                   <tr key={receipts._id}>
                     <th>{index + 1}</th>
                     <td>{receipts?.OrderId}</td>
+                    <td>{receipts?.patient}</td>
                     <td>
                       <p>{paymentDetails?.paid}tk </p>
                     </td>

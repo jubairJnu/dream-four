@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 
 import Swal from "sweetalert2";
 
@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Loading from "../../../component/Loading";
-import { AuthContext } from "../../../Provider/AuthProvider";
+
 import { useLoaderData, useNavigate } from "react-router-dom";
 
 const BookDoctor = () => {
@@ -41,7 +41,7 @@ const BookDoctor = () => {
       refference,
     } = data;
     const date = new Date();
-    console.log({ date });
+ 
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
     const day = date.getDate().toString().padStart(2, "0");

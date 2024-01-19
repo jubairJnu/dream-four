@@ -103,6 +103,14 @@ const Dashboard = () => {
                     </NavLink>
                   </li>
                   <li>
+                    <NavLink to="/dashboard/due_list">
+                      Due List
+                      <span className="indicator-item badge badge-secondary">
+                        New
+                      </span>
+                    </NavLink>
+                  </li>
+                  <li>
                     <NavLink to="/dashboard/appointment">
                       Appointment List
                     </NavLink>
@@ -135,6 +143,15 @@ const Dashboard = () => {
                   </li>
 
                   <li>
+                    <NavLink to="/dashboard/due_list">
+                      Due List
+                      <span className="indicator-item badge badge-secondary">
+                        New
+                      </span>
+                    </NavLink>
+                  </li>
+
+                  <li>
                     <NavLink to="/dashboard/appointment">
                       Appointment List
                     </NavLink>
@@ -156,6 +173,14 @@ const Dashboard = () => {
                   <li>
                     <NavLink to="/dashboard/expenditure_entry">
                       Expenditure Entry
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/dashboard/due_list">
+                      Due List
+                      <span className="indicator-item badge badge-secondary">
+                        New
+                      </span>
                     </NavLink>
                   </li>
                 </div>
@@ -257,6 +282,14 @@ const Dashboard = () => {
                   </NavLink>
                 </li>
                 <li>
+                  <NavLink to="/dashboard/due_list">
+                    Due List
+                    <span className="indicator-item badge badge-secondary">
+                      New
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
                   <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
                 </li>
                 <li>
@@ -285,6 +318,14 @@ const Dashboard = () => {
                 <li>
                   <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
                 </li>
+                <li>
+                  <NavLink to="/dashboard/due_list">
+                    Due List
+                    <span className="indicator-item badge badge-secondary">
+                      New
+                    </span>
+                  </NavLink>
+                </li>
                 <NavLink to="/dashboard/appointment">Appointment List</NavLink>
               </div>
             )}
@@ -306,6 +347,14 @@ const Dashboard = () => {
                 <li>
                   <NavLink to="/dashboard/expenditure_entry">
                     Expenditure Entry
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/dashboard/due_list">
+                    Due List
+                    <span className="indicator-item badge badge-secondary">
+                      New
+                    </span>
                   </NavLink>
                 </li>
               </div>
