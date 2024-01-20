@@ -35,12 +35,8 @@ const IncomeLedger = () => {
 
   const calculateTotalPrice = () => {
     const total = Incomes?.reduce((accumulator, income) => {
-      const paymentTotal = income.paymentInfo.reduce(
-        (paymentAccumulator, paymentDetail) => {
-          return paymentAccumulator + parseFloat(paymentDetail.paid);
-        },
-        0
-      );
+      // Access the paid property directly from paymentInfo
+      const paymentTotal = parseFloat(income.paymentInfo.paid);
       return accumulator + paymentTotal;
     }, 0);
     setTotalPrice(total);
@@ -89,6 +85,7 @@ const IncomeLedger = () => {
       .then((data) => {
         setIncomes(data);
         setIsloading(false);
+        console.log("income data", data);
       })
       .catch((error) => console.error(error));
   };
@@ -192,8 +189,8 @@ const IncomeLedger = () => {
               <th>Order Id</th>
               <th>Name</th>
               <th>Address</th>
-              <th>Amount</th>
               <th className="hidden sm:table-cell">Service</th>
+              <th>Amount</th>
               <th>Refference</th>
               <th>User Name</th>
             </tr>
@@ -202,28 +199,31 @@ const IncomeLedger = () => {
             <Loading />
           ) : (
             <tbody className="text-[12px]">
-              {Incomes?.map((income, index) =>
-                income.paymentInfo.map((paydetais) => (
-                  <tr key={income._id}>
-                    <th>{index + 1}</th>
-                    <td>{paydetais?.date}</td>
-                    <td>{income?.OrderId}</td>
-                    <td>{income?.patient}</td>
-                    <td>{income?.address}</td>
-                    <td>
-                      <p>{paydetais?.paid}tk </p>
-                    </td>
-                    <td className="hidden sm:table-cell">
-                      {income?.service?.map((item) => item.name).join(", ")}{" "}
-                    </td>
-                    <td>{income?.refference}</td>
-                    <td>{paydetais?.user}</td>
-                  </tr>
-                ))
-              )}
+              {Incomes?.map((income, index) => (
+                <tr key={income._id}>
+                  <th>{index + 1}</th>
+                  <td>{income?.paymentInfo?.date}</td>
+                  <td>{income?.OrderId}</td>
+                  <td>{income?.patient}</td>
+                  <td>{income?.address}</td>
+                 
+                  <td className="hidden sm:table-cell">
+                    {income?.service?.map((item) => item.name).join(", ")}{" "}
+                  </td>
+                  <td>
+                    <p>{income?.paymentInfo?.paid}tk </p>
+                  </td>
+                  <td>{income?.refference}</td>
+                  <td>{income?.paymentInfo?.user}</td>
+                </tr>
+              ))}
               <tr className="border-2 font-bold text-[16px]">
                 <td></td>
                 <td>Total</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>{totalPrice} tk</td>
               </tr>
             </tbody>
