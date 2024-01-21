@@ -163,6 +163,11 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <p className="font-semibold">Mobile </p>
                     <p>: {formData?.phone}</p>
                   </div>
+                  {/* address */}
+                  <div className="flex gap-[2px]">
+                    <p className="font-semibold">Address </p>
+                    <p>: {formData?.address}</p>
+                  </div>
                 </div>
                 {/* doctor */}
                 <div className="text-[12px] flex">
@@ -276,7 +281,8 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                       পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
                     </p>
                     <p className="text-[11px] text-center border-t-[1px]">
-                      Mobile: 01329-633401, 01329-633402, 01329-633403
+                      Mobile: 01329-633400, 01329-633401, 01329-633402,
+                      01329-633403
                     </p>
                     <p className="text-[11px] text-center">
                       Web: www.dreamfourhospital.com
@@ -289,7 +295,8 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                       পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
                     </p>
                     <p className="text-[11px] text-center border-t-[1px]">
-                      Mobile: 01329-633401, 01329-633402, 01329-633403
+                      Mobile: 01329-633400, 01329-633401, 01329-633402,
+                      01329-633403
                     </p>
                     <p className="text-[11px] text-center">
                       Web: www.dreamfourhospital.com
@@ -358,6 +365,11 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                   <div className="flex gap-[2px]">
                     <p className="font-semibold">Mobile </p>
                     <p>: {formData?.phone}</p>
+                  </div>
+                  {/* address */}
+                  <div className="flex gap-[2px]">
+                    <p className="font-semibold">Address </p>
+                    <p>: {formData?.address}</p>
                   </div>
                 </div>
                 {/* doctor */}

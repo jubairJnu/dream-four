@@ -3,8 +3,6 @@ import ReactToPrint from "react-to-print";
 import logo from "../../../../public/logo.jpg";
 
 const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
- 
-
   const receiptRef = useRef();
   const calculateTotal = () => {
     if (!selectedReceipt || !selectedReceipt?.data?.service) {
@@ -159,6 +157,7 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       </p>
                     </div>
                   </div>
+
                   {/* for age gender contact */}
                   <div className="text-[12px] flex items-center justify-between ">
                     <div className="flex gap-[2px]">
@@ -177,6 +176,12 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                     <div className="flex gap-[2px]">
                       <p className="font-semibold">Mobile </p>
                       <p>: {selectedReceipt && selectedReceipt?.data?.phone}</p>
+                    </div>
+                    <div className="flex gap-[2px]">
+                      <p className="font-semibold">Address </p>
+                      <p>
+                        : {selectedReceipt && selectedReceipt?.data?.address}
+                      </p>
                     </div>
                   </div>
 
@@ -305,7 +310,8 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                         পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
                       </p>
                       <p className="text-[11px] text-center border-t-[1px]">
-                        Mobile: 01329-633401, 01329-633402, 01329-633403
+                        Mobile: 01329-633400, 01329-633401, 01329-633402,
+                        01329-633403
                       </p>
                       <p className="text-[11px] text-center">
                         Web: www.dreamfourhospital.com
@@ -318,7 +324,8 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                         পুরুষ/মহিলা ইত্যাদি তথ্য সঠিক আছে কিনা দেখে নিন।
                       </p>
                       <p className="text-[11px] text-center border-t-[1px]">
-                        Mobile: 01329-633401, 01329-633402, 01329-633403
+                        Mobile: 01329-633400, 01329-633401, 01329-633402,
+                        01329-633403
                       </p>
                       <p className="text-[11px] text-center">
                         Web: www.dreamfourhospital.com
@@ -396,6 +403,12 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                     <div className="flex gap-[2px]">
                       <p className="font-semibold">Mobile </p>
                       <p>: {selectedReceipt && selectedReceipt?.data?.phone}</p>
+                    </div>
+                    <div className="flex gap-[2px]">
+                      <p className="font-semibold">Address </p>
+                      <p>
+                        : {selectedReceipt && selectedReceipt?.data?.address}
+                      </p>
                     </div>
                   </div>
 

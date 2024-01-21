@@ -213,20 +213,15 @@ const DueEntry = () => {
                 onChange={(e) => setDisAmountValue(e.target.value)}
               />
 
-              {/* <button
-                onClick={handleDisTotal}
-                className="btn btn-primary btn-sm mt-2"
-              >
-                Apply
-              </button> */}
+            
             </div>
 
             <p className="my-4 capitalize text-sm text-start">
-              {" "}
+              
               <span className="font-bold text-blue-700 text-sm text-start ">
                 In Word:
-              </span>{" "}
-              {coverted} Tk Only{" "}
+              </span>
+              {coverted} Tk Only
             </p>
             {/* discount */}
 
