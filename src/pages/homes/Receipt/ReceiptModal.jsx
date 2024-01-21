@@ -177,12 +177,15 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       <p className="font-semibold">Mobile </p>
                       <p>: {selectedReceipt && selectedReceipt?.data?.phone}</p>
                     </div>
-                    <div className="flex gap-[2px]">
-                      <p className="font-semibold">Address </p>
-                      <p>
-                        : {selectedReceipt && selectedReceipt?.data?.address}
-                      </p>
-                    </div>
+
+                    {selectedReceipt && selectedReceipt?.data?.address && (
+                      <div className="flex gap-[2px]">
+                        <p className="font-semibold">Address </p>
+                        <p>
+                          : {selectedReceipt && selectedReceipt?.data?.address}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {/* doctor */}
@@ -404,12 +407,15 @@ const ReceiptModal = ({ isOpen, onClose, selectedReceipt }) => {
                       <p className="font-semibold">Mobile </p>
                       <p>: {selectedReceipt && selectedReceipt?.data?.phone}</p>
                     </div>
-                    <div className="flex gap-[2px]">
-                      <p className="font-semibold">Address </p>
-                      <p>
-                        : {selectedReceipt && selectedReceipt?.data?.address}
-                      </p>
-                    </div>
+                    {/* address */}
+                    {selectedReceipt && selectedReceipt?.data?.address && (
+                      <div className="flex gap-[2px]">
+                        <p className="font-semibold">Address </p>
+                        <p>
+                          : {selectedReceipt && selectedReceipt?.data?.address}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {/* doctor */}

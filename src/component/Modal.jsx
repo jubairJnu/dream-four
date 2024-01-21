@@ -164,10 +164,13 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <p>: {formData?.phone}</p>
                   </div>
                   {/* address */}
-                  <div className="flex gap-[2px]">
-                    <p className="font-semibold">Address </p>
-                    <p>: {formData?.address}</p>
-                  </div>
+
+                  {formData?.address && (
+                    <div className="flex gap-[2px]">
+                      <p className="font-semibold">Address </p>
+                      <p>: {formData?.address}</p>
+                    </div>
+                  )}
                 </div>
                 {/* doctor */}
                 <div className="text-[12px] flex">
@@ -367,10 +370,12 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
                     <p>: {formData?.phone}</p>
                   </div>
                   {/* address */}
-                  <div className="flex gap-[2px]">
-                    <p className="font-semibold">Address </p>
-                    <p>: {formData?.address}</p>
-                  </div>
+                  {formData?.address && (
+                    <div className="flex gap-[2px]">
+                      <p className="font-semibold">Address </p>
+                      <p>: {formData?.address}</p>
+                    </div>
+                  )}
                 </div>
                 {/* doctor */}
                 <div className="text-[12px] flex">
