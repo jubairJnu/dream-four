@@ -29,6 +29,7 @@ const DueList = () => {
     fetch(`${base_url}/due_list/?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
+        console.log("due", data);
         setDueLists(data);
 
         setIsLoading(false);
@@ -113,7 +114,7 @@ const DueList = () => {
               {dueLists?.map((duelist, index) => (
                 <tr key={duelist._id}>
                   <td> {index + 1} </td>
-                  <td> {duelist?.date} </td>
+                  <td> {duelist?.paymentInfo[0]?.date} </td>
                   <td> {duelist?.OrderId} </td>
                   <td> {duelist?.patient} </td>
                   <td> {duelist?.age} </td>
