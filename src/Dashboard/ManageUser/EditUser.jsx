@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 const EditUser = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
   const singleUser = useLoaderData();
-  const { name, email, role, status, _id } = singleUser;
+  const { name, role, status, _id } = singleUser;
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -19,10 +19,10 @@ const EditUser = () => {
   // handleer
   const onSubmit = (data) => {
     setIsLoading(true);
-    const { name, email, status, role } = data;
+    const { name, status, role } = data;
     const updateUserInfo = {
       name,
-      email,
+
       status,
       role,
     };
@@ -78,19 +78,6 @@ const EditUser = () => {
           </div>
 
           <div className="flex gap-5 ">
-            <div className="form-control w-full ">
-              <label className="label">
-                <span className="label-text font-semibold  ">Email</span>
-              </label>
-              <input
-                {...register("email", {
-                  required: false,
-                })}
-                type="email"
-                defaultValue={email}
-                className="input input-bordered w-full "
-              />
-            </div>
             {/*  */}
             <div className="form-control w-full ">
               <label className="label">

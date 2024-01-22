@@ -2,14 +2,12 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 
 import Swal from "sweetalert2";
-const img_hosting_token = import.meta.env.VITE_IMG_KEY;
 
 const SignUp = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
   const [erro, setErro] = useState("");
 
   const { register, handleSubmit, reset } = useForm();
-  const img_hosting_url = `https://api.imgbb.com/1/upload?key=${img_hosting_token}`;
 
   const onSubmit = (data) => {
     const formData = new FormData();
@@ -93,18 +91,7 @@ const SignUp = () => {
                 className="input input-bordered "
               />
             </div>
-            <div className="mt-4">
-              <label className="label">
-                <span className="label-text font-semibold">
-                  Photo (optional){" "}
-                </span>
-              </label>
-              <input
-                {...register("image", { required: false })}
-                type="file"
-                className="file-input w-full"
-              />
-            </div>
+
             <div className="flex justify-center">
               <input
                 className="btn btn-primary mt-9 "

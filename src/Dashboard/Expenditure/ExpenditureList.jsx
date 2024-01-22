@@ -9,7 +9,7 @@ const ExpenditureList = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
 
   const [expenditures, setExpenditures] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
   const [checkedItems, setCheckedItems] = useState([]);
@@ -17,17 +17,7 @@ const ExpenditureList = () => {
   const { toPDF, targetRef } = usePDF({ filename: "Approve_Expenditure.pdf" });
 
   // handle
-  const handleAddExpenditure = () => {
-    openModal();
-  };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   const handleSubmit = (event) => {
     console.log(event);
   };
@@ -87,8 +77,6 @@ const ExpenditureList = () => {
     }
   };
 
-  
-
   // handle submit
 
   const handleSubmitApprove = (e) => {
@@ -104,7 +92,7 @@ const ExpenditureList = () => {
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        
+
         if (data.modifiedCount > 0) {
           const Toast = Swal.mixin({
             toast: true,
@@ -180,15 +168,6 @@ const ExpenditureList = () => {
         </button>
 
         {/* add */}
-        <button onClick={handleAddExpenditure} className="btn btn-error btn-sm">
-          Add expenditure
-        </button>
-
-        <ExpenditureEntryModal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          onSubmit={handleSubmit}
-        />
       </div>
 
       {/* table*/}

@@ -99,7 +99,7 @@ const Dashboard = () => {
                   </li>
                   <li>
                     <NavLink to="/dashboard/expenditure">
-                      Expenditure Entry
+                      Expenditure List
                     </NavLink>
                   </li>
                   <li>
@@ -132,13 +132,13 @@ const Dashboard = () => {
               {currentUser && currentUser.role === "owner" && (
                 <div>
                   <li>
-                    <NavLink to="/dashboard/managedoctor">
-                      Manage Doctor
+                    <NavLink to="/dashboard/incomeledger">
+                      Income Ledger
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/dashboard/incomeledger">
-                      Income Ledger
+                    <NavLink to="/dashboard/expenditure">
+                      Expenditure List
                     </NavLink>
                   </li>
 
@@ -278,7 +278,7 @@ const Dashboard = () => {
                 </li>
                 <li>
                   <NavLink to="/dashboard/expenditure">
-                    Expenditure Entry
+                    Expenditure List
                   </NavLink>
                 </li>
                 <li>
@@ -313,10 +313,12 @@ const Dashboard = () => {
             {currentUser && currentUser.role === "owner" && (
               <div>
                 <li>
-                  <NavLink to="/dashboard/managedoctor">Manage Doctor</NavLink>
+                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
                 </li>
                 <li>
-                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
+                  <NavLink to="/dashboard/expenditure">
+                    Expenditure List
+                  </NavLink>
                 </li>
                 <li>
                   <NavLink to="/dashboard/due_list">
