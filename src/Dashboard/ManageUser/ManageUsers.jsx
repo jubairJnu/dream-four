@@ -27,7 +27,7 @@ const ManageUsers = () => {
           <thead>
             <tr className="md:text-[20px] bg-[#1653B2] text-white ">
               <th>#</th>
-              <th>Image</th>
+              <th>Mail</th>
               <th>Name</th>
               <th>Role</th>
               <th>Status</th>
@@ -39,9 +39,7 @@ const ManageUsers = () => {
               <tr key={user._id}>
                 <th>{index + 1}</th>
                 <td>
-                  <div className="mask mask-squircle md:w-12 h-12">
-                    <img src={user?.image} alt="image" />
-                  </div>
+                  <p>{user?.email}</p>
                 </td>
                 <td>
                   <p>{user?.name}</p>

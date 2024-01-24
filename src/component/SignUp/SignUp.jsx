@@ -7,7 +7,12 @@ const SignUp = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
   const [erro, setErro] = useState("");
 
-  const { register, handleSubmit, reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
   const onSubmit = (data) => {
     const formData = new FormData();
@@ -66,6 +71,9 @@ const SignUp = () => {
                 placeholder="Your Name"
                 className="input input-bordered "
               />
+                {errors?.name && (
+                  <span className="text-red-500">this field is required</span>
+                )}
             </div>
 
             <div className="form-control">
@@ -78,6 +86,9 @@ const SignUp = () => {
                 placeholder="example@email.com "
                 className="input input-bordered "
               />
+              {errors?.email && (
+                <span className="text-red-500">this field is required</span>
+              )}
             </div>
 
             <div className="form-control">
@@ -90,6 +101,9 @@ const SignUp = () => {
                 placeholder="password"
                 className="input input-bordered "
               />
+                {errors?.password && (
+                  <span className="text-red-500">this field is required</span>
+                )}
             </div>
 
             <div className="flex justify-center">
