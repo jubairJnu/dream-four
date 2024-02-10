@@ -16,6 +16,7 @@ const Receipt = () => {
   const [services, setServices] = useState([]);
   const [isOtherOpen, setIsOtherOpen] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]); //add new start
+  const [isLoading, setIsLoading] = useState(false);
 
   const [discountType, setDiscountType] = useState("flat"); // add new end
   const [doctors, setDoctors] = useState([]);
@@ -202,6 +203,7 @@ const Receipt = () => {
       confirmButtonText: "Submit",
     }).then((result) => {
       if (result.isConfirmed) {
+        setIsLoading(true);
         fetch(`${base_url}/receipt-entry`, {
           method: "POST",
           headers: {
@@ -211,6 +213,7 @@ const Receipt = () => {
         })
           .then((res) => res.json())
           .then((data) => {
+            setIsLoading(false);
             if (data.insertedId) {
               const orderId = data.OrderId; // Assuming your response contains the OrderId
 
@@ -222,11 +225,28 @@ const Receipt = () => {
                 showConfirmButton: false,
                 timer: 1500,
               });
+              reset();
+              setFormData(newReceipt);
+              openModal();
+              setIsLoading(false);
+            } else {
+              const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.onmouseenter = Swal.stopTimer;
+                  toast.onmouseleave = Swal.resumeTimer;
+                },
+              });
+              Toast.fire({
+                icon: "error",
+                title: "Something Went Wrong please try again",
+              });
             }
           });
-        reset();
-        setFormData(newReceipt);
-        openModal();
       }
     });
   };
@@ -518,11 +538,20 @@ const Receipt = () => {
             </div>
 
             <div className="flex justify-center">
-              <input
-                className="btn btn-primary btn-sm mt-3 "
-                type="submit"
-                value="Submit"
-              />
+              {isLoading ? (
+                <input
+                  disabled
+                  className="btn btn-primary btn-sm mt-3 "
+                  type="submit"
+                  value="Submitting"
+                />
+              ) : (
+                <input
+                  className="btn btn-primary btn-sm mt-3 "
+                  type="submit"
+                  value="Submit"
+                />
+              )}
               <Modal
                 isOpen={isModalOpen}
                 onClose={closeModal}

@@ -71,9 +71,9 @@ const SignUp = () => {
                 placeholder="Your Name"
                 className="input input-bordered "
               />
-                {errors?.name && (
-                  <span className="text-red-500">this field is required</span>
-                )}
+              {errors?.name && (
+                <span className="text-red-500">this field is required</span>
+              )}
             </div>
 
             <div className="form-control">
@@ -101,9 +101,9 @@ const SignUp = () => {
                 placeholder="password"
                 className="input input-bordered "
               />
-                {errors?.password && (
-                  <span className="text-red-500">this field is required</span>
-                )}
+              {errors?.password && (
+                <span className="text-red-500">this field is required</span>
+              )}
             </div>
 
             <div className="flex justify-center">
