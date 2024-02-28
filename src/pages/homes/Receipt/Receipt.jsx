@@ -225,6 +225,13 @@ const Receipt = () => {
                 showConfirmButton: false,
                 timer: 1500,
               });
+              // due
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                html: '<p class="text-red-500 text-xl font-bold">Please Pay Your Due Amount!</p>',
+                footer: '<p class="text-warning">Pay within 2 March 2024</p>',
+              });
               reset();
               setFormData(newReceipt);
               openModal();

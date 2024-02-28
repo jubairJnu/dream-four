@@ -3,6 +3,7 @@ import { FaHome, FaUserCog } from "react-icons/fa";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { AuthContext } from "../Provider/AuthProvider";
 import Balance from "./Balance/Balance";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
@@ -16,6 +17,15 @@ const Dashboard = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleDue = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      html: '<p class="text-red-500 text-xl font-bold">Please Pay Your Due Amount!</p>',
+      footer: '<p class="text-warning">Pay within 2 March 2024</p>',
+    });
   };
 
   useEffect(() => {
@@ -93,7 +103,7 @@ const Dashboard = () => {
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink to="/dashboard/incomeledger">
+                    <NavLink onClick={handleDue} to="/dashboard/incomeledger">
                       Income Ledger
                     </NavLink>
                   </li>
@@ -132,7 +142,7 @@ const Dashboard = () => {
               {currentUser && currentUser.role === "owner" && (
                 <div>
                   <li>
-                    <NavLink to="/dashboard/incomeledger">
+                    <NavLink onClick={handleDue} to="/dashboard/incomeledger">
                       Income Ledger
                     </NavLink>
                   </li>
@@ -161,7 +171,7 @@ const Dashboard = () => {
               {currentUser && currentUser.role === "staff" && (
                 <div>
                   <li>
-                    <NavLink to="/dashboard/incomeledger">
+                    <NavLink onClick={handleDue} to="/dashboard/incomeledger">
                       Income Ledger
                     </NavLink>
                   </li>
@@ -277,7 +287,7 @@ const Dashboard = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/dashboard/expenditure">
+                  <NavLink onClick={handleDue} to="/dashboard/expenditure">
                     Expenditure List
                   </NavLink>
                 </li>
@@ -290,7 +300,9 @@ const Dashboard = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
+                  <NavLink onClick={handleDue} to="/dashboard/incomeledger">
+                    Income Ledger
+                  </NavLink>
                 </li>
                 <li>
                   <NavLink to="/dashboard/appointment">
@@ -313,7 +325,9 @@ const Dashboard = () => {
             {currentUser && currentUser.role === "owner" && (
               <div>
                 <li>
-                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
+                  <NavLink onClick={handleDue} to="/dashboard/incomeledger">
+                    Income Ledger
+                  </NavLink>
                 </li>
                 <li>
                   <NavLink to="/dashboard/expenditure">
@@ -334,7 +348,9 @@ const Dashboard = () => {
             {currentUser && currentUser.role === "staff" && (
               <div>
                 <li>
-                  <NavLink to="/dashboard/incomeledger">Income Ledger</NavLink>
+                  <NavLink onClick={handleDue} to="/dashboard/incomeledger">
+                    Income Ledger
+                  </NavLink>
                 </li>
                 <li>
                   <NavLink to="/dashboard/appointment">
@@ -381,7 +397,9 @@ const Dashboard = () => {
 
             <div className="divider"></div>
             <li>
-              <Link to="/dashboard">Dashboard</Link>
+              <Link onClick={handleDue} to="/dashboard">
+                Dashboard
+              </Link>
             </li>
             <li>
               <NavLink to="/">

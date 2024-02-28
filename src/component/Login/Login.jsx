@@ -5,6 +5,8 @@ import { AuthContext } from "../../Provider/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { ScaleLoader } from "react-spinners";
 
+import Swal from "sweetalert2";
+
 const Login = () => {
   const { login, user, error, loading } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -18,6 +20,13 @@ const Login = () => {
   };
   if (user?.isAuthenticated) {
     navigate("/");
+
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      html: '<p class="text-red-500 text-xl font-bold">Please Pay Your Due Amount!</p>',
+      footer: '<p class="text-warning">Pay within 2 March 2024</p>',
+    });
   }
 
   return (
