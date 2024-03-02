@@ -11,12 +11,19 @@ const Login = () => {
   const { login, user, error, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogin = async (event) => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      html: '<p class="text-red-500 text-xl font-bold">You Have No Access!!</p>',
+      footer: '<p class="text-warning">বকেয়া পরিশোধ করুন </p>',
+    });
+
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
 
-    await login(email, password);
+    // await login(email, password);
   };
   if (user?.isAuthenticated) {
     navigate("/");
@@ -24,8 +31,8 @@ const Login = () => {
     Swal.fire({
       icon: "error",
       title: "Oops...",
-      html: '<p class="text-red-500 text-xl font-bold">Please Pay Your Due Amount!</p>',
-      footer: '<p class="text-warning">Pay within 2 March 2024</p>',
+      html: '<p class="text-red-500 text-xl font-bold">You Have No Access!</p>',
+      footer: '<p class="text-warning">বকেয়া পরিশোধ করুন </p>',
     });
   }
 

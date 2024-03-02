@@ -194,68 +194,70 @@ const Receipt = () => {
     };
 
     Swal.fire({
-      title: "Are you sure?",
-      text: "You cannot edit it!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Submit",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true);
-        fetch(`${base_url}/receipt-entry`, {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify(newReceipt),
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            setIsLoading(false);
-            if (data.insertedId) {
-              const orderId = data.OrderId; // Assuming your response contains the OrderId
-
-              setOrder(orderId);
-              Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "Added Successfully",
-                showConfirmButton: false,
-                timer: 1500,
-              });
-              // due
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                html: '<p class="text-red-500 text-xl font-bold">Please Pay Your Due Amount!</p>',
-                footer: '<p class="text-warning">Pay within 2 March 2024</p>',
-              });
-              reset();
-              setFormData(newReceipt);
-              openModal();
-              setIsLoading(false);
-            } else {
-              const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                  toast.onmouseenter = Swal.stopTimer;
-                  toast.onmouseleave = Swal.resumeTimer;
-                },
-              });
-              Toast.fire({
-                icon: "error",
-                title: "Something Went Wrong please try again",
-              });
-            }
-          });
-      }
+      icon: "error",
+      title: "Oops...",
+      html: '<p class="text-red-500 text-xl font-bold">You Have No Access!!</p>',
+      footer: '<p class="text-warning">বকেয়া পরিশোধ করুন </p>',
     });
+
+    // Swal.fire({
+    //   title: "Are you sure?",
+    //   text: "You cannot edit it!",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   confirmButtonText: "Submit",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     setIsLoading(true);
+    //     fetch(`${base_url}/receipt-entry`, {
+    //       method: "POST",
+    //       headers: {
+    //         "content-type": "application/json",
+    //       },
+    //       body: JSON.stringify(newReceipt),
+    //     })
+    //       .then((res) => res.json())
+    //       .then((data) => {
+    //         setIsLoading(false);
+    //         if (data.insertedId) {
+    //           const orderId = data.OrderId; // Assuming your response contains the OrderId
+
+    //           setOrder(orderId);
+    //           Swal.fire({
+    //             position: "top-end",
+    //             icon: "success",
+    //             title: "Added Successfully",
+    //             showConfirmButton: false,
+    //             timer: 1500,
+    //           });
+    //           // due
+
+    //           reset();
+    //           setFormData(newReceipt);
+    //           openModal();
+    //           setIsLoading(false);
+    //         } else {
+    //           const Toast = Swal.mixin({
+    //             toast: true,
+    //             position: "top-end",
+    //             showConfirmButton: false,
+    //             timer: 3000,
+    //             timerProgressBar: true,
+    //             didOpen: (toast) => {
+    //               toast.onmouseenter = Swal.stopTimer;
+    //               toast.onmouseleave = Swal.resumeTimer;
+    //             },
+    //           });
+    //           Toast.fire({
+    //             icon: "error",
+    //             title: "Something Went Wrong please try again",
+    //           });
+    //         }
+    //       });
+    //   }
+    // });
   };
 
   // discount
