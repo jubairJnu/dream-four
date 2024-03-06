@@ -29,7 +29,7 @@ const DueList = () => {
     fetch(`${base_url}/due_list/?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("due", data);
+       
         setDueLists(data);
 
         setIsLoading(false);

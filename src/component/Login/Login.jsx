@@ -11,28 +11,30 @@ const Login = () => {
   const { login, user, error, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const handleLogin = async (event) => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      html: '<p class="text-red-500 text-xl font-bold">You Have No Access!!</p>',
-      footer: '<p class="text-warning">বকেয়া পরিশোধ করুন </p>',
-    });
-
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
 
-    // await login(email, password);
+    await login(email, password);
   };
   if (user?.isAuthenticated) {
     navigate("/");
 
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      html: '<p class="text-red-500 text-xl font-bold">You Have No Access!</p>',
-      footer: '<p class="text-warning">বকেয়া পরিশোধ করুন </p>',
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Successfully Login",
     });
   }
 

@@ -208,7 +208,8 @@ const IncomeLedger = () => {
                   <td>{income?.address}</td>
                  
                   <td className="hidden sm:table-cell">
-                    {income?.service?.map((item) => item.name).join(", ")}{" "}
+                    {income?.service?.map((item) => item.name).join(", ")}
+                    
                   </td>
                   <td>
                     <p>{income?.paymentInfo?.paid}tk </p>
