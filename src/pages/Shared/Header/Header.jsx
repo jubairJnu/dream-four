@@ -15,7 +15,7 @@ const Header = () => {
       icon: "error",
       title: "Oops...",
       html: '<p class="text-red-500 text-xl font-bold">Please Pay Your Due Amount!</p>',
-      footer: '<p class="text-warning">Pay within 2 March 2024</p>',
+      footer: '<p class="text-warning">Pay within 2 April 2024</p>',
     });
   };
 
@@ -77,12 +77,7 @@ const Header = () => {
                     Dashboard{" "}
                   </Link>{" "}
                 </li>
-                <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                  <Link onClick={handleDue} to="/receipt">
-                    {" "}
-                    Receipt Entry{" "}
-                  </Link>{" "}
-                </li>
+                <li className="mr-3 hover:bg-white rounded-md hover:font-semibold "></li>
               </>
             )}
           </ul>
@@ -118,8 +113,8 @@ const Header = () => {
               {currentUser && currentUser.role === "staff" && (
                 <div>
                   <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                    <Link onClick={handleDue} to="/receipt">
-                      {" "}
+                    <Link  to="/receipt">
+                     
                       Receipt Entry{" "}
                     </Link>{" "}
                   </li>
@@ -129,7 +124,7 @@ const Header = () => {
               {currentUser && currentUser.role === "shopkeeper" && (
                 <div>
                   <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                    <Link onClick={handleDue} to="/medicine_receipt">
+                    <Link  to="/medicine_receipt">
                       {" "}
                       Receipt Entry{" "}
                     </Link>{" "}
