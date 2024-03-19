@@ -48,7 +48,7 @@ const Modal = ({ isOpen, onClose, formData, Order }) => {
   };
 
   return (
-    <div className="fixed inset-4 flex items-center justify-start z-10 left-0 top-0   overflow-y-auto">
+    <div className="fixed inset-4 flex items-center justify-start z-[999] left-0 top-0   overflow-y-auto">
       <div
         className="modal modal-bottom"
         onClick={onClose}

@@ -343,17 +343,14 @@ const Receipt = () => {
                   </span>
                 </label>
                 <select
-                  defaultValue="pick One"
                   {...register("doctor", { required: false })}
                   className="select select-bordered select-primary"
                 >
-                  <option selected value=" " disabled>
-                    Pick One
-                  </option>
+                  <option value=" ">Select</option>
                   {doctors?.map((doctor) => (
                     <option key={doctor._id}>
                       {" "}
-                      {doctor.name} ({doctor?.specialist}){" "}
+                      {doctor?.name} ({doctor?.specialist}){" "}
                     </option>
                   ))}
                 </select>

@@ -109,7 +109,7 @@ const EditUser = () => {
               <option disabled value="">
                 Pick One
               </option>
-              <option value="admin"> Admin </option>
+              {/* <option value="admin"> Admin </option> */}
               <option value="owner"> Owner </option>
               <option value="staff"> Staff </option>
               <option value="shopkeeper"> Shopkeeper </option>

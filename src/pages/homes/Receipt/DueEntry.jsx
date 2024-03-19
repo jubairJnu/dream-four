@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
 import numberToWords from "number-to-words";
@@ -65,7 +66,7 @@ const DueEntry = () => {
 
   const handleOrderSearch = (e) => {
     const orderId = e.target.value;
-   
+
     if (orderId && orderId.length === 6) {
       setIsLoading(true);
       fetch(`${base_url}/search-orderid`, {
@@ -87,7 +88,6 @@ const DueEntry = () => {
   const currentUserEmail = userInfo?.email;
 
   const currentUser = users.find((user) => user.email === currentUserEmail);
- 
 
   let disTotal; // Declare originalTotal outside the if block
 
@@ -131,7 +131,6 @@ const DueEntry = () => {
       date: formattedDate,
       total: parseInt(disTotal),
     };
-    
 
     fetch(`${base_url}/due-amount`, {
       method: "PATCH",
@@ -191,12 +190,20 @@ const DueEntry = () => {
 
             <div className="form-control w-full">
               <label className="label">
-                <span className="label-text">Paid Amount *</span>
+                <span className="label-text">
+                  Paid Amount *{" "}
+                  <span className="text-[9px] text-purple-500">
+                    {" "}
+                    ("if havn't any payment input : 0"){" "}
+                  </span>{" "}
+                </span>
               </label>
               <input
+                type="number"
                 name="paid"
                 className="input input-bordered input-info w-full"
                 placeholder="Pay Now"
+                required
                 onChange={handlePriceWord}
               />
             </div>
@@ -212,12 +219,9 @@ const DueEntry = () => {
                 placeholder="discount"
                 onChange={(e) => setDisAmountValue(e.target.value)}
               />
-
-            
             </div>
 
             <p className="my-4 capitalize text-sm text-start">
-              
               <span className="font-bold text-blue-700 text-sm text-start ">
                 In Word:
               </span>

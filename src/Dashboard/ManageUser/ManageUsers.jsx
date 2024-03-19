@@ -15,7 +15,10 @@ const ManageUsers = () => {
   return (
     <div className="w-full ">
       <h1 className="text-center text-red-500 text-2xl">Manage User</h1>
-      <div className="flex justify-end md:mr-5 md:p-3 ">
+      <div className="flex justify-between md:mr-5 md:p-3 ">
+        <p className="text-xl font-semibold">
+          Total Users = {allusers?.length}
+        </p>
         <Link to="/dashboard/signup">
           <button className="btn btn-neutral btn-sm">Create User</button>
         </Link>
