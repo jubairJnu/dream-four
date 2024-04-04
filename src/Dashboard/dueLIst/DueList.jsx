@@ -8,6 +8,8 @@ const DueList = () => {
   const [dueLists, setDueLists] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  console.log(dueLists);
+
   const tableRef = useRef(null);
 
   // handle search
@@ -29,7 +31,6 @@ const DueList = () => {
     fetch(`${base_url}/due_list/?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
-       
         setDueLists(data);
 
         setIsLoading(false);
@@ -101,7 +102,8 @@ const DueList = () => {
               <th>Date</th>
               <th>Order Id</th>
               <th>Name</th>
-              <th className="hidden sm:table-cell">Age</th>
+              <th className="hidden sm:table-cell">Mobile</th>
+              <th className="hidden sm:table-cell">Ref</th>
               <th>Total</th>
               <th>Total Paid</th>
               <th>Due Amount</th>
@@ -117,7 +119,8 @@ const DueList = () => {
                   <td> {duelist?.paymentInfo[0]?.date} </td>
                   <td> {duelist?.OrderId} </td>
                   <td> {duelist?.patient} </td>
-                  <td> {duelist?.age} </td>
+                  <td> {duelist?.phone} </td>
+                  <td> {duelist?.refference} </td>
                   <td> {duelist?.total} </td>
                   <td> {duelist?.paidAmount} </td>
                   <td> {duelist?.total - duelist?.paidAmount} </td>
