@@ -16,14 +16,7 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    // await login(email, password);
-
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      html: '<p class="text-red-500 text-xl font-bold">You Have Lost Your Access!</p>',
-      footer: '<p class="text-green-500">Contact to admin</p>',
-    });
+    await login(email, password);
   };
   if (user?.isAuthenticated) {
     navigate("/");

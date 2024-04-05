@@ -2,22 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
 
-import Swal from "sweetalert2";
+
 
 const Header = () => {
   const base_url = import.meta.env.VITE_BASE_URL;
   const { user, logOut, userInfo } = useContext(AuthContext);
 
   const [users, setUsers] = useState([]);
-
-  const handleDue = () => {
-    Swal.fire({
-      icon: "error",
-      title: "Oops...",
-      html: '<p class="text-red-500 text-xl font-bold">Please Pay Your Due Amount!</p>',
-      footer: '<p class="text-warning">Pay within 2 April 2024</p>',
-    });
-  };
 
   useEffect(() => {
     fetch(`${base_url}/users`)
@@ -72,10 +63,7 @@ const Header = () => {
             {user?.isAuthenticated && userInfo?.email && (
               <>
                 <li className=" hover:bg-white rounded-md hover:font-semibold ">
-                  <Link onClick={handleDue} to="/dashboard">
-                    {" "}
-                    Dashboard{" "}
-                  </Link>{" "}
+                  <Link to="/dashboard"> Dashboard </Link>{" "}
                 </li>
                 <li className="mr-3 hover:bg-white rounded-md hover:font-semibold "></li>
               </>
@@ -104,7 +92,7 @@ const Header = () => {
           {user?.isAuthenticated && userInfo?.email && (
             <>
               <li className=" hover:bg-white rounded-md hover:font-semibold ">
-                <Link onClick={handleDue} to="/dashboard">
+                <Link  to="/dashboard">
                   {" "}
                   Dashboard{" "}
                 </Link>{" "}
@@ -113,10 +101,7 @@ const Header = () => {
               {currentUser && currentUser.role === "staff" && (
                 <div>
                   <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                    <Link  to="/receipt">
-                     
-                      Receipt Entry{" "}
-                    </Link>{" "}
+                    <Link to="/receipt">Receipt Entry </Link>{" "}
                   </li>
                 </div>
               )}
@@ -124,10 +109,7 @@ const Header = () => {
               {currentUser && currentUser.role === "shopkeeper" && (
                 <div>
                   <li className="mr-3 hover:bg-white rounded-md hover:font-semibold ">
-                    <Link  to="/medicine_receipt">
-                      {" "}
-                      Receipt Entry{" "}
-                    </Link>{" "}
+                    <Link to="/medicine_receipt"> Receipt Entry </Link>{" "}
                   </li>
                 </div>
               )}
