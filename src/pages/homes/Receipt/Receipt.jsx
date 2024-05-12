@@ -303,8 +303,8 @@ const Receipt = () => {
                 </label>
                 <input
                   {...register("age", { required: true })}
-                  type="number"
-                  placeholder="age"
+                  type="text"
+                  placeholder="6 M"
                   className="input input-bordered input-primary "
                 />
                 {errors.age && (
