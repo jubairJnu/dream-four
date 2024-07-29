@@ -204,7 +204,7 @@ const Receipt = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
-        fetch(`${base_url}/receipt-entry`, {
+        fetch(`${base_url}//receipt-entry`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -546,9 +546,10 @@ const Receipt = () => {
                 />
               ) : (
                 <input
+                  disabled
                   className="btn btn-primary btn-sm mt-3 "
                   type="submit"
-                  value="Submit"
+                  value="suspend"
                 />
               )}
               <Modal
