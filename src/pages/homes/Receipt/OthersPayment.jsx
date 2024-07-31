@@ -34,19 +34,14 @@ const OthersPayment = () => {
   const currentUser = users.find((user) => user.email === currentUserEmail);
 
   const onSubmit = (data) => {
-    const {
-      service,
-      paid,
+    const { service, paid, date, refference } = data;
+    // const date = new Date();
 
-      refference,
-    } = data;
-    const date = new Date();
-
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
-    const formattedDate = `${year}-${month}-${day}`;
+    // const year = date.getFullYear();
+    // const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    // const day = date.getDate().toString().padStart(2, "0");
+    // // Format the date as "YYYY-MM-DDTHH:mm:ss.sssZ"
+    // const formattedDate = `${year}-${month}-${day}`;
 
     const UserName = currentUser.name;
     const userEmail = currentUser.email;
@@ -64,10 +59,12 @@ const OthersPayment = () => {
           user: UserName,
           email: userEmail,
           paid: parseFloat(paid),
-          date: formattedDate,
+          date,
         },
       ],
     };
+
+    // console.log(newAppointment, "data");
 
     setIsLoading(true);
 
@@ -107,9 +104,9 @@ const OthersPayment = () => {
   //
 
   return (
-    <div>
+    <div className="px-5">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="md:flex justify-between ">
+        <div className=" grid grid-cols-1 md:grid-cols-2 justify-between gap-5">
           <div className="form-control w-full">
             <label className="label">
               <span className="label-text md:text-[18px] font-semibold">
@@ -128,43 +125,62 @@ const OthersPayment = () => {
               </span>
             )}
           </div>
-          <div className="flex">
-            <div className="form-control md:ms-6 w-full">
-              <label className="label">
-                <span className="label-text md:text-[18px] font-semibold">
-                  Amount *
-                </span>
-              </label>
-              <input
-                {...register("paid", { required: true })}
-                type="number"
-                placeholder="Amount"
-                className="input input-bordered input-primary text-black"
-              />
-              {errors.paid && (
-                <span className="text-red-500 text-sm text-start">
-                  this field is required
-                </span>
-              )}
-            </div>
-            <div className="form-control md:ms-6 w-full">
-              <label className="label">
-                <span className="label-text md:text-[18px] font-semibold">
-                  Remarks
-                </span>
-              </label>
-              <input
-                {...register("refference", { required: false })}
-                type="text"
-                placeholder="Details"
-                className="input input-bordered input-primary text-black"
-              />
-              {errors.refference && (
-                <span className="text-red-500 text-sm text-start">
-                  this field is required
-                </span>
-              )}
-            </div>
+
+          <div className="form-control md:ms-6 w-full">
+            <label className="label">
+              <span className="label-text md:text-[18px] font-semibold">
+                Amount *
+              </span>
+            </label>
+            <input
+              {...register("paid", { required: true })}
+              type="number"
+              placeholder="Amount"
+              className="input input-bordered input-primary text-black"
+            />
+            {errors.paid && (
+              <span className="text-red-500 text-sm text-start">
+                this field is required
+              </span>
+            )}
+          </div>
+          {/* date */}
+          <div className="form-control w-full">
+            <label className="label">
+              <span className="label-text md:text-[18px] font-semibold">
+                Income Date *
+              </span>
+            </label>
+            <input
+              {...register("date", { required: true })}
+              type="date"
+              className="input input-bordered w-full input-primary"
+            />
+            {errors.date && (
+              <span className="text-red-500 text-sm text-start">
+                this field is required
+              </span>
+            )}
+          </div>
+
+          {/* remarks */}
+          <div className="form-control md:ms-6 w-full">
+            <label className="label">
+              <span className="label-text md:text-[18px] font-semibold">
+                Remarks
+              </span>
+            </label>
+            <input
+              {...register("refference", { required: false })}
+              type="text"
+              placeholder="Details"
+              className="input input-bordered input-primary text-black"
+            />
+            {errors.refference && (
+              <span className="text-red-500 text-sm text-start">
+                this field is required
+              </span>
+            )}
           </div>
         </div>
 
@@ -177,7 +193,7 @@ const OthersPayment = () => {
             </div>
           ) : (
             <input
-              className="btn btn-primary btn-sm mt-3 "
+              className="btn btn-primary btn-block btn-sm mt-10 "
               type="submit"
               value="Submit"
               disabled={isLoading}

@@ -204,7 +204,7 @@ const Receipt = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         setIsLoading(true);
-        fetch(`${base_url}//receipt-entry`, {
+        fetch(`${base_url}/receipt-entry`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -540,16 +540,15 @@ const Receipt = () => {
               {isLoading ? (
                 <input
                   disabled
-                  className="btn btn-primary btn-sm mt-3 "
+                  className="btn btn-primary btn-block btn-sm mt-3 "
                   type="submit"
                   value="Submitting"
                 />
               ) : (
                 <input
-                  disabled
-                  className="btn btn-primary btn-sm mt-3 "
+                  className="btn btn-primary btn-block btn-sm mt-3 "
                   type="submit"
-                  value="suspend"
+                  value="Submit"
                 />
               )}
               <Modal
