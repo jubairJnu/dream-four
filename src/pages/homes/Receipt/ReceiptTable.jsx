@@ -8,7 +8,6 @@ const ReceiptTable = () => {
   const [selectedReceipt, setselectedReceipt] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const lastReceipt = recentReceipt.slice(-5).reverse();
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -64,7 +63,7 @@ const ReceiptTable = () => {
         ) : (
           <>
             <tbody className="text-[12px]">
-              {lastReceipt?.map((receipts, index) =>
+              {recentReceipt?.map((receipts, index) =>
                 receipts?.paymentInfo?.map((paymentDetails) => (
                   <tr key={receipts._id}>
                     <th>{index + 1}</th>

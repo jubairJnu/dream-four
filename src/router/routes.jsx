@@ -41,9 +41,7 @@ const routes = createBrowserRouter([
         path: "doctor_appointment/:id",
         element: <BookDoctor />,
         loader: ({ params }) =>
-          fetch(
-            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctor/${params.id}`
-          ),
+          fetch(`https://dream-four-server.vercel.app/doctor/${params.id}`),
       },
       {
         path: "login",
@@ -109,9 +107,7 @@ const routes = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/user/${params.id}`
-          ),
+          fetch(`https://dream-four-server.vercel.app/user/${params.id}`),
       },
       {
         path: "managedoctor",
@@ -129,9 +125,7 @@ const routes = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctor/${params.id}`
-          ),
+          fetch(`https://dream-four-server.vercel.app/doctor/${params.id}`),
       },
       {
         path: "manageservice",
@@ -149,9 +143,7 @@ const routes = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/service/${params.id}`
-          ),
+          fetch(`https://dream-four-server.vercel.app/service/${params.id}`),
       },
       {
         path: "signup",
@@ -217,9 +209,7 @@ const routes = createBrowserRouter([
           </PrivateRoutes>
         ),
         loader: ({ params }) =>
-          fetch(
-            `https://dream-four-hospital-4c43bb12e925.herokuapp.com/medicine/${params.id}`
-          ),
+          fetch(`https://dream-four-server.vercel.app/medicine/${params.id}`),
       },
       {
         path: "appointment",
@@ -228,10 +218,7 @@ const routes = createBrowserRouter([
             <AppointmentList />
           </PrivateRoutes>
         ),
-        loader: () =>
-          fetch(
-            "https://dream-four-hospital-4c43bb12e925.herokuapp.com/doctors"
-          ),
+        loader: () => fetch("https://dream-four-server.vercel.app/doctors"),
       },
       {
         path: "incomeledger",
@@ -240,8 +227,7 @@ const routes = createBrowserRouter([
             <IncomeLedger />
           </PrivateRoutes>
         ),
-        loader: () =>
-          fetch("https://dream-four-hospital-4c43bb12e925.herokuapp.com/users"),
+        loader: () => fetch("https://dream-four-server.vercel.app/users"),
       },
     ],
   },
