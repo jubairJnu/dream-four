@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   return (
     <footer className="  mt-2 p-4   bg-[#1653B2] text-neutral-content">
@@ -51,9 +53,14 @@ const Footer = () => {
             </div>
           </nav>
         </div>
-        
       </div>
-      <h2 className="text-center">Developed And Maintenance by Novus IT</h2>
+      <Link
+        to="https://jubair-abdullah.vercel.app/"
+        target="_blank"
+        className="text-center"
+      >
+        Developed And Maintenance by Novus IT
+      </Link>
     </footer>
   );
 };

@@ -546,6 +546,7 @@ const Receipt = () => {
                 />
               ) : (
                 <input
+                  disabled
                   className="btn btn-primary btn-block btn-sm mt-3 "
                   type="submit"
                   value="Submit"
