@@ -16,7 +16,7 @@ const Login = () => {
     const email = form.email.value;
     const password = form.password.value;
 
-    // await login(email, password);
+    await login(email, password);
   };
   if (user?.isAuthenticated) {
     navigate("/");
@@ -80,7 +80,7 @@ const Login = () => {
                   />
                 </div>
                 <div className="form-control mt-6">
-                  <button className="btn btn-primary disabled">Suspend</button>
+                  <button className="btn btn-primary ">Login</button>
                 </div>
               </form>
             </div>
